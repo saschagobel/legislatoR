@@ -41,8 +41,9 @@ Please note that for some legislatures or legislative periods, datasets may only
 
 The relational quality of legislatoR means that all datasets can be joined with the *Core* dataset via one of two keys - the Wikipedia page ID or the Wikidata ID, which uniquely identify individual politicians. The figure below illustrates this structure and some of the package content.
 
-
-<div style="text-align:center"><img src ="images/data-structure.png" /></div>
+<p align="center">
+  <img width="200" src="images/data-structure.png">
+</p>
 
 ## Installation
 The current development version of legislatoR (0.0.0.9000) is only available through GitHub. To install the package in `R`, type:
