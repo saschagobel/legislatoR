@@ -1,4 +1,4 @@
-# legislatoR: Political, sociodemographic, and Wikipedia related data on political elites
+# legislatoR: Political, sociodemographic, and Wikipedia related data on political elites <img src="images/logo.png" width="48" align="right" />
 legislatoR is a fully relational individual-level data package for the software environment R. It comprises political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. The current development version (0.0.0.9000) includes 22,917 elected politicians from all legislative sessions of the Austrian Nationalrat, the German Bundestag, the Irish Dáil, the French Assemblée, and the United States Congress (House and Senate).
 
 ## Motivation
