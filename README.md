@@ -1,4 +1,4 @@
-# legislatoR: Political, sociodemographic, and <img src="images/logo.png" width="160" align="right" /> <br /> Wikipedia related data on political elites 
+# legislatoR: Political, sociodemographic, and <img src="images/logo.png" width="160" align="right" /> <br /> Wikipedia-related data on political elites 
 
 legislatoR is a fully relational individual-level data package for the software environment R. It comprises political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. The current development version (0.0.0.9000) includes 22,917 elected politicians from all legislative sessions of the Austrian Nationalrat, the German Bundestag, the Irish Dáil, the French Assemblée, and the United States Congress (House and Senate).
 
@@ -65,13 +65,13 @@ ger_politicians <- get_core(legislature = "germany")
 
 # assign only data for the 8th legislative session into the environment
 ger_politicians_subset <- semi_join(x = get_core(legislature = "germany"),
-									y = filter(get_political(legislature = "germany"), session == 8), 
-									by = "pageid")
+				    y = filter(get_political(legislature = "germany"), session == 8), 
+			            by = "pageid")
 
 # Join ger_politicians_subset with respective History dataset
 ger_history <- left_join(x = ger_politicians_subset, 
-						 y = get_history(legislature = "germany"), 
-						 by = "pageid")
+               		 y = get_history(legislature = "germany"), 
+		         by = "pageid")
 ```
 
 For each dataset, there is a help file with details on content and usage examples.
