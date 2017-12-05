@@ -49,7 +49,7 @@ The relational quality of legislatoR means that all datasets can be joined with 
 The current development version of legislatoR (0.0.0.9000) is only available through GitHub. To install the package in `R`, type:
 
 ```r
-devtools::install_github("saschagobel/`legislatoR`")
+devtools::install_github("saschagobel/legislatoR")
 ```
 
 ## Usage
