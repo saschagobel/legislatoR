@@ -34,14 +34,15 @@ The datasets are all legislature-specific. To access a dataset in R the legislat
 
 | Legislature          | Code        | Legislature      | Code       | Legislature          | Code          |
 | -------------------- |:-----------:| ---------------- |:----------:| -------------------- |:-------------:|
-| Austrian Nationalrat | `austria`   | German Bundestag | `germany`  | United States House  | `ushouse`     |
-| French Assemblée     | `france`    | Irish Dáil       | `ireland`  | United States Senate | `ussenate`    | 
+| Austrian Nationalrat | `austria`   | German Bundestag | `germany`  | United States House  | `ussh`     |
+| French Assemblée     | `france`    | Irish Dáil       | `ireland`  | United States Senate | `usas`    | 
  
 Please note that for some legislatures or legislative periods, datasets may only hold data on a small subset of politicians, yield a substantial amount of missings for specific variables, or lack specific variables altogether. Successive versions of legislatoR may fill some of these gaps.
 
 The relational quality of legislatoR means that all datasets can be joined with the *Core* dataset via one of two keys - the Wikipedia page ID or the Wikidata ID, which uniquely identify individual politicians. The figure below illustrates this structure and some of the package content.
 
-<img src="images/data-structure.png" width="100" align="center" />
+
+<div style="text-align:center"><img src ="images/data-structure.png" /></div>
 
 ## Installation
 The current development version of legislatoR (0.0.0.9000) is only available through GitHub. To install the package in `R`, type:
