@@ -42,7 +42,7 @@ Please note that for some legislatures or legislative periods, datasets may only
 The relational quality of legislatoR means that all datasets can be joined with the *Core* dataset via one of two keys - the Wikipedia page ID or the Wikidata ID, which uniquely identify individual politicians. The figure below illustrates this structure and some of the package content.
 
 <p align="center">
-  <img width="400" src="images/data-structure.png">
+  <img width="500" src="images/data-structure.png">
 </p>
 
 ## Installation
