@@ -51,7 +51,7 @@ get_traffic <- function(legislature) {
     stop ("legislatoR does not contain data for this legislature at the moment. Please try one of 'austria', 'france', 'germany', 'ireland', 'usah', or 'usas'.")
   if (is.null(curl::nslookup("www.github.com", error = FALSE)))
     stop ("legislatoR failed to establish a connection to GitHub. Please check your Internet connection and whether GitHub is online.")
-  ghurl <- base::paste0("https://github.com/saschagobel/legislatoR/blob/master/data-raw/", legislature, "_traffic?raw=true")
+  ghurl <- base::paste0("https://github.com/saschagobel/legislatoR-data/blob/master/data/", legislature, "_traffic?raw=true")
   connect <- base::url(ghurl)
   on.exit(close(connect))
   dataset <- base::readRDS(connect)
