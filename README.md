@@ -113,7 +113,7 @@ legislatoR was predominantly built using automated data extraction techniques. S
 ## Citation
 Thank you for using legislatoR! Please consider citing:
 
-GÃ¶bel, Sascha and Simon Munzert. (2017). legislatoR: Political, sociodemographic, and Wikipedia-related data on political elites. Source: https://github.com/saschagobel.
+Göbel, Sascha and Simon Munzert. (2017). legislatoR: Political, sociodemographic, and Wikipedia-related data on political elites. Source: https://github.com/saschagobel.
 
 ## Support
 The work on this package was in part funded by the Daimler and Benz Foundation (Funding period 2017/18; project "Citizen and Elite Activity on the Wikipedia Market Place of Political Information").
