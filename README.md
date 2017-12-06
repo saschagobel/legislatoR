@@ -50,10 +50,12 @@ devtools::install_github("saschagobel/legislatoR")
 
 
 After having installed the package, a working Internet connection is required in order to access the data in R. This is because the data are not installed with the package, but are stored on legislatoR's GitHub repository. The package provides dataset-specific function calls to fetch the data from the repository. These functions are named after the datasets and preceded by `get_`. To fetch  the *Core* dataset, use the `get_core` function, for the *Political* dataset, use the `get_political` function, and so on (see [above](#content-and-data-structure) for dataset names). The datasets are all legislature-specific. To access a dataset in R the legislature's code must be passed as an argument to the respective dataset's function call. The legislature codes are:
+
 | Legislature          | Code        | Legislature      | Code       | Legislature          | Code          |
 | -------------------- |:-----------:| ---------------- |:----------:| -------------------- |:-------------:|
 | Austrian Nationalrat | `austria`   | German Bundestag | `germany`  | United States House  | `usah`        |
 | French Assemblée     | `france`    | Irish Dáil       | `ireland`  | United States Senate | `usas`        | 
+
 Data can be joined and subsetted while being fetched from the repository and memory is only allocated by the parts of a dataset assigned into the environment. The data fetching, joining and subsetting stages are illustrated in the code below.
 
 ```r
