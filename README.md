@@ -3,7 +3,7 @@
 legislatoR is a fully relational individual-level data package for the software environment R. It comprises political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. The current development version (0.0.0.9000) includes 22,917 elected politicians from all legislative sessions of the Austrian Nationalrat, the German Bundestag, the Irish Dáil, the French Assemblée, and the United States Congress (House and Senate).
 
 ## Motivation
-Researchers, students, analysts, journalists, and the public continue to rely on individual-level data on political elites for various kinds of analyses, whether theory-driven or motivated by real-world problems. As a consequence, the past has likely seen recurrent data collection efforts with the same purpose. This practice is highly inefficient. Student assistants, interns or volunteers work on tedious data collection tasks likely accomplished by others already. Financial limitations or time restrictions often force analysts to limit their analyses to a subset of politicians. The frequent compromise is between broad (many politicians) but shallow (few variables) or narrow (few politicians) but deep (many variables) data. Existing data structures are either limited in scope, hidden behind paywalls, or simply not accessible to those who are not super tech-savvy. legislatoR strives to be a free, efficient, and accessible one stop shop for broad and deep data on political elites, facilitate data integration, enable replication efforts, and preserve data that may one of these days cease to exist on some of the numerous sources on the Web.
+Researchers, students, analysts, journalists, and the public continue to rely on individual-level data on political elites for various kinds of analyses, whether theory-driven or motivated by real-world problems. As a consequence, the past has likely seen recurrent data collection efforts with the same purpose. This practice is highly inefficient. Student assistants, interns, or volunteers work on tedious data collection tasks likely accomplished by others already. Financial limitations or time restrictions often force analysts to limit their analyses to a subset of politicians. The frequent compromise is between broad (many politicians) but shallow (few variables) or narrow (few politicians) but deep (many variables) data. Existing data structures are either limited in scope, hidden behind paywalls, or simply not accessible to those who are not super tech-savvy. legislatoR strives to be a free, efficient, and accessible one stop shop for broad and deep data on political elites, facilitate data integration, enable replication efforts, and preserve data that may one of these days cease to exist on some of the numerous sources on the Web.
 
 ## Content and data structure
 For each legislature, the package currently holds nine datasets: 
@@ -21,21 +21,14 @@ For each legislature, the package currently holds nine datasets:
 The datasets contain the following variables (see the respective R help files for further details):
 
 - *Core*: Wikipedia page ID, Wikidata ID, Wikipedia URL, full name, sex, ethnicity, religion, date of birth and death, place of birth and death.
-- *Political*: legislative session, party affiliation, constituency, start and end date of legislative session, period of service.
+- *Political*: Wikipedia page ID, legislative session, party affiliation, constituency, start and end date of legislative session, period of service.
 - *History*: Wikipedia page ID, Wikipedia revision and previous revision ID, editor name/IP and ID, revision date and time, revision size, revision comment.
 - *Traffic*: Wikipedia page ID, date, user traffic.
-- *Social*: Wikidata ID, Twitter handle, Facebook handle, Youtube ID, Instagram handle, Google Plus ID, LinkedIn ID, personal website URL.
+- *Social*: Wikidata ID, Twitter handle, Facebook handle, Youtube ID, Google Plus ID, Instagram handle, LinkedIn ID, personal website URL.
 - *Facial*: Wikipedia page ID, Wikipedia portrait URL, smile intensity, expressed sadness, expressed neutrality, expressed disgust, expressed anger, expressed surprise, expressed fear, expressed happiness, beauty from female and male perspective, dark circles, spots, acne, healthy skin, image quality.
-- *Office*: A range of offices such as ... with start and end time.
-- *Occupation*: A range of professions such as ... with start and end time.
-- *IDs*: A range of IDs such as parliamentary website IDs, Library of Congress or German National Library IDs, Notable Names Database or Project Vote Smart IDs, etc.
-
-The datasets are all legislature-specific. To access a dataset in R the legislature's code must be passed as an argument to the respective dataset's function call (see [below](#usage) for details on function calls). The legislature codes are:
-
-| Legislature          | Code        | Legislature      | Code       | Legislature          | Code          |
-| -------------------- |:-----------:| ---------------- |:----------:| -------------------- |:-------------:|
-| Austrian Nationalrat | `austria`   | German Bundestag | `germany`  | United States House  | `ussh`     |
-| French Assemblée     | `france`    | Irish Dáil       | `ireland`  | United States Senate | `usas`    | 
+- *Office*: Wikidata ID, a range of offices such as attorney general, chief justice, mayor, party chair, secretary of state, etc.
+- *Occupation*: Wikidata ID, a range of professions such as accountant, farmer, historian, judge, mechanic, police officer, salesperson, teacher, etc.
+- *IDs*: Wikidata ID, a range of IDs such as parliamentary website IDs, Library of Congress or German National Library IDs, Notable Names Database or Project Vote Smart IDs, etc.
  
 Please note that for some legislatures or legislative periods, datasets may only hold data on a small subset of politicians, yield a substantial amount of missings for specific variables, or lack specific variables altogether. Successive versions of legislatoR may fill some of these gaps.
 
@@ -53,7 +46,15 @@ devtools::install_github("saschagobel/legislatoR")
 ```
 
 ## Usage
-After having installed the package, a working Internet connection is required in order to access the data in R. This is because the data are not installed with the package, but are stored on legislatoR's GitHub repository. The package provides dataset-specific function calls to fetch the data from the repository. These functions are named after the datasets and preceded by `get_`. To fetch  the *Core* dataset, use the `get_core` function, for the *Political* dataset, use the `get_political` function, and so on (see [above](#content-and-data-structure) for dataset names). The legislature for which a dataset shall be fetched must be specified as an argument using the respective legislature's code (see [above](#content-and-data-structure) for legislature codes). Data can be joined and subsetted while being fetched from the repository and memory is only allocated by the parts of a dataset assigned into the environment. The data fetching, joining and subsetting stages are illustrated in the code below.
+
+
+
+After having installed the package, a working Internet connection is required in order to access the data in R. This is because the data are not installed with the package, but are stored on legislatoR's GitHub repository. The package provides dataset-specific function calls to fetch the data from the repository. These functions are named after the datasets and preceded by `get_`. To fetch  the *Core* dataset, use the `get_core` function, for the *Political* dataset, use the `get_political` function, and so on (see [above](#content-and-data-structure) for dataset names). The datasets are all legislature-specific. To access a dataset in R the legislature's code must be passed as an argument to the respective dataset's function call. The legislature codes are:
+| Legislature          | Code        | Legislature      | Code       | Legislature          | Code          |
+| -------------------- |:-----------:| ---------------- |:----------:| -------------------- |:-------------:|
+| Austrian Nationalrat | `austria`   | German Bundestag | `germany`  | United States House  | `usah`        |
+| French Assemblée     | `france`    | Irish Dáil       | `ireland`  | United States Senate | `usas`        | 
+Data can be joined and subsetted while being fetched from the repository and memory is only allocated by the parts of a dataset assigned into the environment. The data fetching, joining and subsetting stages are illustrated in the code below.
 
 ```r
 # load and attach legislatoR and dplyr
