@@ -2,7 +2,7 @@
 #'
 #' Fetches core sociodemographic data for legislators of the specified legislature from the GitHub repository. Requires a working Internet connection.
 #'
-#' @param legislature A character string specifying the legislature for which data shall be fetched from the GitHub repository. Currently one of \sQuote{austria}, \sQuote{france}, \sQuote{germany}, \sQuote{ireland}, \sQuote{ushouse}, or \sQuote{ussenate}.
+#' @param legislature A character string specifying the legislature for which data shall be fetched from the GitHub repository. Currently one of \sQuote{austria}, \sQuote{france}, \sQuote{germany}, \sQuote{ireland}, \sQuote{usah}, or \sQuote{usas}.
 #' @return A data frame with columns as specified above.
 #' @format Data frame with columns (might vary by legislature):
 #' \itemize{

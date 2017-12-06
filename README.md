@@ -1,5 +1,7 @@
 # legislatoR: Political, sociodemographic, and <img src="images/logo.jpg" width="160" align="right" /> <br /> Wikipedia-related data on political elites 
 
+[![Github All Releases](https://img.shields.io/github/downloads/saschagobel/legislatoR/total.svg)](https://github.com/saschagobel/legislatoR)
+
 legislatoR is a fully relational individual-level data package for the software environment R. It comprises political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. The current development version (0.0.0.9000) includes 22,917 elected politicians from all legislative sessions of the Austrian Nationalrat, the German Bundestag, the Irish Dáil, the French Assemblée, and the United States Congress (House and Senate).
 
 ## Motivation
@@ -54,7 +56,7 @@ After having installed the package, a working Internet connection is required in
 | Legislature          | Code        | Legislature      | Code       | Legislature          | Code          |
 | -------------------- |:-----------:| ---------------- |:----------:| -------------------- |:-------------:|
 | Austrian Nationalrat | `austria`   | German Bundestag | `germany`  | United States House  | `usah`        |
-| French Assemblée     | `france`    | Irish Dáil       | `ireland`  | United States Senate | `usas`        | 
+| French AssemblÃ©e     | `france`    | Irish DÃ¡il       | `ireland`  | United States Senate | `usas`        | 
 
 Data can be joined and subsetted while being fetched from the repository and memory is only allocated by the parts of a dataset assigned into the environment. The data fetching, joining and subsetting stages are illustrated in the code below.
 
@@ -108,14 +110,14 @@ legislatoR was predominantly built using automated data extraction techniques. S
 ## Citation
 Thank you for using legislatoR! Please consider citing:
 
-Göbel, Sascha and Simon Munzert. (2017). legislatoR: Political, sociodemographic, and Wikipedia-related data on political elites. Source: https://github.com/saschagobel.
+GÃ¶bel, Sascha and Simon Munzert. (2017). legislatoR: Political, sociodemographic, and Wikipedia-related data on political elites. Source: https://github.com/saschagobel.
 
 ## Support
 The work on this package was in part funded by the Daimler and Benz Foundation (Funding period 2017/18; project "Citizen and Elite Activity on the Wikipedia Market Place of Political Information").
 
 ## Author information
 
-**Sascha Göbel** (corresponding author and repository maintainer) <br />
+**Sascha GÃ¶bel** (corresponding author and repository maintainer) <br />
 University of Konstanz <br />
 Graduate School of Decision Sciences and Center for Data and Methods <br />
 Box 85 <br />
