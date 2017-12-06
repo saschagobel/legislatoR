@@ -54,12 +54,12 @@ After having installed the package, a working Internet connection is required in
 | Legislature          | Code        | Legislature      | Code       | Legislature          | Code          |
 | -------------------- |:-----------:| ---------------- |:----------:| -------------------- |:-------------:|
 | Austrian Nationalrat | `austria`   | German Bundestag | `germany`  | United States House  | `usah`        |
-| French AssemblÃ©e     | `france`    | Irish DÃ¡il       | `ireland`  | United States Senate | `usas`        | 
+| French Assemblée     | `france`    | Irish Dáil       | `ireland`  | United States Senate | `usas`        | 
 
 Data can be joined and subsetted while being fetched from the repository and memory is only allocated by the parts of a dataset assigned into the environment. The data fetching, joining and subsetting stages are illustrated in the code below.
 
 ```r
-# load and attach legislatoR and dplyr
+# load and attach legislatoR and dplyr packages
 library(legislatoR)
 library(dplyr)
 
@@ -71,10 +71,15 @@ ger_politicians_subset <- semi_join(x = get_core(legislature = "germany"),
 				    y = filter(get_political(legislature = "germany"), session == 8), 
 			            by = "pageid")
 
-# Join ger_politicians_subset with respective History dataset
+# join ger_politicians_subset with respective History dataset
 ger_history <- left_join(x = ger_politicians_subset, 
                		 y = get_history(legislature = "germany"), 
 		         by = "pageid")
+
+# assign only birthdate for members of the political party 'SPD' into the environment
+ger_birthdates_SdP <- semi_join(x = select(get_core(legislature = "germany"), pageid, birth),
+                                y = filter(get_political(legislature = "germany"), party == "SPD"),
+                                by = "pageid")$birth
 ```
 
 For each dataset, there is a help file with details on content and usage examples.
@@ -115,7 +120,7 @@ The work on this package was in part funded by the Daimler and Benz Foundation (
 
 ## Author information
 
-**Sascha GÃ¶bel** (corresponding author and repository maintainer) <br />
+**Sascha Göbel** (corresponding author and repository maintainer) <br />
 University of Konstanz <br />
 Graduate School of Decision Sciences and Center for Data and Methods <br />
 Box 85 <br />
