@@ -14,5 +14,6 @@ LazyData: true
 Depends:
     R (>= 3.4.1)
 Imports:
-    curl (>= 3.0)
+    curl (>= 3.0),
+    dplyr (>= 0.7.4)
 RoxygenNote: 6.0.1

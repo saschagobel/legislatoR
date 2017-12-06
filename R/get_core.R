@@ -11,7 +11,7 @@
 #' \item{wikititle: A legislator's undirected Wikipedia title. Append \sQuote{wikipedia.org/wiki/} in front for a working URL (of class \sQuote{character}).}
 #' \item{name: A legislator's full name (of class \sQuote{character}).}
 #' \item{sex: A legislator's sex (of class \sQuote{character}).}
-#' \item{ethnicity: A legislator's ethnicity. Asian, black, or white (of class \sQuote{character}).}
+#' \item{ethnicity: A legislator's ethnicity. Asian, black, hispanic, native, pacific islander, or white (of class \sQuote{character}).}
 #' \item{religion: A legislator's religious denomination. (of class \sQuote{character}).}
 #' \item{birth: A legislator's date of birth (of class \sQuote{POSIXct}).}
 #' \item{death: A legislator's date of death (of class \sQuote{POSIXct}).}
@@ -19,45 +19,36 @@
 #' \item{deathplace: Comma separated latitude and longitude of a legislator's place of death (of class \sQuote{character}).}
 #' }
 #' @examples
-#' \dontrun{
-#' ## load data into memory
-#' at <- austria
+#' \donttest{## assign entire core dataset into the environment
+#' at_elites <- get_core(legislature = "austria")
 #'
-#' ## load only data for members of the 12th legislative period into memory
-#' at_12 <- austria[austria$session == 12,]
+#' ## assign only data for the 12th legislative session into the environment
+#' at_elites_subset <- dplyr::semi_join(x = get_core(legislature = "austria"),
+#'                                      y = dplyr::filter(get_political(legislature = "austria"),
+#'                                                                      session == 8),
+#'                                      by = "pageid")
 #'
-#' ## load only birth dates for members of the political party 'SdP' into memory
-#' at_sdp_birth <- austria[austria$party == "SdP", "birthdate"]
+#' ## join at_elites_subset with respective history dataset
+#' at_history <- dplyr::left_join(x = at_elites_subset,
+#'                                y = get_history(legislature = "austria"),
+#'                                by = "pageid")
 #'
-#' ## add traffic data to at_12 (requires package 'dplyr')
-#' at_12_traffic <- left_join(x = at_12, y = austria_traffic, by = "pageid")
-#'
-#' ## add revision history data to at_12 (requires package 'dplyr')
-#' at_12_history <- left_join(x = at_12, y = austria_history, by = "pageid")
-#'
-#' ## retrieve locations from birthplace coordinates (requires package 'ggmap')
-#' birth_lat <- str_split(austria_birthplace$birthplace, pattern = ",") %>%
-#'   lapply(., `[`, 1) %>%
-#'   unlist %>%
-#'   as.numeric
-#' birth_lon <- str_split(austria_birthplace$birthplace, pattern = ",") %>%
-#'   lapply(., `[`, 2) %>%
-#'   unlist %>%
-#'   as.numeric
-#' birth_location <- rep(NA, times = length(birth_lat))
-#' for (i in 1:length(birth_lat)) {
-#'   birth_location[i] <- revgeocode(c(birth_lon[i], birth_lat[i]))
-#'   Sys.sleep(4)
-#' }
+#' ## assign only birthdate for members of the political party 'SdP' into the environment
+#' at_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "austria"),
+#'                                                         pageid, birth),
+#'                                       y = dplyr::filter(get_political(legislature = "austria"),
+#'                                                                       party == "SdP"),
+#'                                       by = "pageid")$birth
 #' }
 #' @source
-#' Wikipedia, \url{https://de.wikipedia.org/} \cr
-#' Wikipedia API, \url{https://de.wikipedia.org/w/api.php} \cr
+#' Wikipedia, \url{https://wikipedia.org/} \cr
+#' Wikipedia API, \url{https://wikipedia.org/w/api.php} \cr
 #' Wikidata API, \url{https://www.wikidata.org/} \cr
 #' Wikimedia Commons, \url{https://commons.wikimedia.org/} \cr
 #' Face++ Cognitive Services API, \url{https://www.faceplusplus.com/}
 #' @export
 #' @importFrom curl nslookup
+#' @import dplyr
 get_core <- function(legislature) {
   if (!(legislature %in% c("austria", "france", "germany", "ireland", "usah", "usas")))
     stop ("legislatoR does not contain data for this legislature at the moment. Please try one of 'austria', 'france', 'germany', 'ireland', 'usah', or 'usas'.")
@@ -69,4 +60,3 @@ get_core <- function(legislature) {
   dataset <- base::readRDS(connect)
   return(dataset)
 }
-

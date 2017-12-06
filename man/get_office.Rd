@@ -11,13 +11,13 @@
 \item{...}
 }}
 \source{
-Wikipedia API, \url{https://de.wikipedia.org/w/api.php}
+Wikipedia API, \url{https://wikipedia.org/w/api.php}
 }
 \usage{
 get_office(legislature)
 }
 \arguments{
-\item{legislature}{A character string specifying the legislature for which data shall be fetched from the GitHub repository. Currently one of \sQuote{austria}, \sQuote{france}, \sQuote{germany}, \sQuote{ireland}, \sQuote{ushouse}, or \sQuote{ussenate}.}
+\item{legislature}{A character string specifying the legislature for which data shall be fetched from the GitHub repository. Currently one of \sQuote{austria}, \sQuote{france}, \sQuote{germany}, \sQuote{ireland}, \sQuote{usah}, or \sQuote{usas}.}
 }
 \value{
 A data frame with columns as specified above.
@@ -26,35 +26,25 @@ A data frame with columns as specified above.
 Fetches political and other offices of legislators' for the specified legislature from the GitHub repository. Requires a working Internet connection.
 }
 \examples{
-\dontrun{
-## load data into memory
-at <- austria
+\donttest{## assign entire core dataset into the environment
+at_elites <- get_core(legislature = "austria")
 
-## load only data for members of the 12th legislative period into memory
-at_12 <- austria[austria$session == 12,]
+## assign only data for the 12th legislative session into the environment
+at_elites_subset <- dplyr::semi_join(x = get_core(legislature = "austria"),
+                                     y = dplyr::filter(get_political(legislature = "austria"),
+                                                                     session == 8),
+                                     by = "pageid")
 
-## load only birth dates for members of the political party 'SdP' into memory
-at_sdp_birth <- austria[austria$party == "SdP", "birthdate"]
+## join at_elites_subset with respective history dataset
+at_history <- dplyr::left_join(x = at_elites_subset,
+                               y = get_history(legislature = "austria"),
+                               by = "pageid")
 
-## add traffic data to at_12 (requires package 'dplyr')
-at_12_traffic <- left_join(x = at_12, y = austria_traffic, by = "pageid")
-
-## add revision history data to at_12 (requires package 'dplyr')
-at_12_history <- left_join(x = at_12, y = austria_history, by = "pageid")
-
-## retrieve locations from birthplace coordinates (requires package 'ggmap')
-birth_lat <- str_split(austria_birthplace$birthplace, pattern = ",") \%>\%
-  lapply(., `[`, 1) \%>\%
-  unlist \%>\%
-  as.numeric
-birth_lon <- str_split(austria_birthplace$birthplace, pattern = ",") \%>\%
-  lapply(., `[`, 2) \%>\%
-  unlist \%>\%
-  as.numeric
-birth_location <- rep(NA, times = length(birth_lat))
-for (i in 1:length(birth_lat)) {
-  birth_location[i] <- revgeocode(c(birth_lon[i], birth_lat[i]))
-  Sys.sleep(4)
-}
+## assign only birthdate for members of the political party 'SdP' into the environment
+at_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "austria"),
+                                                        pageid, birth),
+                                      y = dplyr::filter(get_political(legislature = "austria"),
+                                                                      party == "SdP"),
+                                      by = "pageid")$birth
 }
 }
