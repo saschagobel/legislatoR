@@ -755,8 +755,8 @@ saveRDS(usas_social, "./data/usas_social")
 # retrieve and format facial data -------------------------------------------------------
 
 # specify face++ api authentification
-auth <- authFacepp(api_key = "LnIXPA8P75jh64RXINklkpvfUXVB-Vsy",
-                   api_secret = "tdzlvAx_MFjJRi3FZXgrpwHW_BjXb9dC")
+auth <- authFacepp(api_key = "",
+                   api_secret = "")
 
 # austrian nationalrat
 austria_images <- imageUrl(pageid = unique(austria$pageid), project = "de.wikipedia")
