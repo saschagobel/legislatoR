@@ -1079,9 +1079,10 @@ wikiTraffic <- function(data, project) {
   traffic <- NULL
   for (i in 1:length(title)) {
     cat(".")
+    er <- FALSE
     while(is.null(traffic)) {
       traffic <- try(article_pageviews(project = project,
-                                       article = title[1],
+                                       article = title[i],
                                        user_type = "user",
                                        start = "2015070100",
                                        end = "2017103100") %>%
@@ -1089,23 +1090,25 @@ wikiTraffic <- function(data, project) {
                         silent = TRUE
       )
       if (class(traffic) == "try-error") {
-        traffic <- NULL
+        traffic <- data.frame(article = NA, agent = NA, date = NA, views = NA, stringsAsFactors = FALSE)
+        er <- TRUE
       }
     }
-    traffic$article <- pageid[i]
-    names(traffic)[c(1,4)] <- c("pageid", "traffic")
-    traffic <- suppressMessages(pad(traffic, interval = "day"))
-    traffic[,1:3] <- na.locf(traffic[,1:3])
-    traffic[is.na(traffic[4]), 4] <- 0
-    if (i == 1) {
-      traffic_list <- list(traffic)
-    } else {
-      traffic_list <- c(traffic_list, list(traffic))
+    if (!isTRUE(er)) {
+      traffic$article <- pageid[i]
+      names(traffic)[c(1,4)] <- c("pageid", "traffic")
+      traffic <- suppressMessages(pad(traffic, interval = "day"))
+      traffic[,1:3] <- na.locf(traffic[,1:3])
+      traffic[is.na(traffic[4]), 4] <- 0
+      if (i == 1) {
+        traffic_list <- list(traffic)
+      } else {
+        traffic_list <- c(traffic_list, list(traffic))
+      }
     }
     traffic <- NULL
   }
   traffic <- bind_rows(traffic_list)
-  Sys.sleep(1)
   return(traffic)
 }
 
