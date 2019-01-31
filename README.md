@@ -10,15 +10,15 @@ The data package covers the following countries and time periods:
 
 | Country                              | Legislative sessions        | Politicians (unique) |
 | ------------------------------------ | --------------------------- | -------------------- |
-| Austria (Nationalrat)                | all 26 (1920--2017)         | 1,853                | 
-| Canada (House of Commons)            | all 42 (1867--2015)         | 4,410                |
-| Czech Republic (Poslanecka Snemovna) | all 8 (1992--2017)          | 1,020                |
-| France (Assemblée)                   | all 15 (1958--2017)         | 3,603                |
-| Germany (Bundestag)                  | all 19 (1949--2017)         | 4,075                |
-| Ireland (Dail)                       | all 32 (1918--2016)         | 1,355                |
-| Scotland (Parliament)                | all 5 (1999--2016)          | 305                  |
-| United Kingdom (House of Commons)    | 38--57 (1945-2017)          | 3,400                |
-| United States (House and Senate)     | all 116 (1789--2019)        | 12,512               |
+| Austria (Nationalrat)                | all 26 (1920-2017)         | 1,853                | 
+| Canada (House of Commons)            | all 42 (1867-2015)         | 4,410                |
+| Czech Republic (Poslanecka Snemovna) | all 8 (1992-2017)          | 1,020                |
+| France (Assemblée)                   | all 15 (1958-2017)         | 3,603                |
+| Germany (Bundestag)                  | all 19 (1949-2017)         | 4,075                |
+| Ireland (Dail)                       | all 32 (1918-2016)         | 1,355                |
+| Scotland (Parliament)                | all 5 (1999-2016)          | 305                  |
+| United Kingdom (House of Commons)    | 38-57 (1945-2017)          | 3,400                |
+| United States (House and Senate)     | all 116 (1789-2019)        | 12,512               |
 | **9**                                | **283**                     | **32,533**           |
 
 For each legislature, the package currently holds nine datasets: 
@@ -28,10 +28,10 @@ For each legislature, the package currently holds nine datasets:
 3.  *History* (full revision records of individual Wikipedia biographies)
 4.  *Traffic* (daily user traffic on individual Wikipedia biographies from July 2015 to December 2018)
 5.  *Social* (social media handles and personal website URLs)
-6.  *Portraits* (URLs to individual Wikipedia portraits)
-7.  *Offices* (public offices)
-8.  *Professions* (professions)
-9.  *IDs* (a range of identifiers linking a politician to another file, database, or website)
+6.  *Portrait* (URLs to individual Wikipedia portraits)
+7.  *Office* (public offices)
+8.  *Profession* (professions)
+9.  *ID* (a range of identifiers linking a politician to another file, database, or website)
  
 The datasets contain the following variables (see the respective R help files for further details):
 
@@ -107,7 +107,7 @@ For each dataset, there is a help file with details on content and usage example
 ```
 
 ## News
-See [here](News.md) for details on package updates.
+See [here](NEWS.md) for details on package updates.
 
 ## Sources
 legislatoR was predominantly built using automated data extraction techniques. See the [source code](source) for more details. The package was assembled using the following Web sources or tools:
