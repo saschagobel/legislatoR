@@ -1,9 +1,8 @@
 Package: legislatoR
 Title: Political, Sociodemographic, and Wikipedia Related Data on Political Elites
-Description: Fully relational individual-level data package comprising political, 
-    sociodemographic, and Wikipedia-related data on elected politicians across the 
-    globe.
-Version: 0.0.0.9000
+Description: Data package comprising political, sociodemographic, and Wikipedia-related 
+    data on elected politicians across the globe.
+Version: 0.1.0
 Authors@R: c(
     person("Sascha", "Goebel", email = "sascha.goebel@uni-konstanz.de", role = c("aut", "cre")),
     person("Simon", "Munzert", email = "munzert@hertie-school.org", role = "aut"))

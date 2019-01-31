@@ -1,14 +1,14 @@
-#' Fetch 'Offices' dataset
+#' Fetch 'Professions' dataset
 #'
-#' Fetches political and other offices of legislators' for the specified legislature. Requires a working Internet connection.
+#' Fetches occupational data of legislators' for the specified legislature. Requires a working Internet connection.
 #'
 #' @param legislature A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.
 #' @return A data frame with columns as specified above.
 #' @format Data frame in wide format with columns (might vary by legislature):
 #' \itemize{
 #' \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
-#' \item{office_1: political or other office held by a legislator (of class \sQuote{logical}).}
-#' \item{office_2: ... (of class \sQuote{logical}).}
+#' \item{occupation_1: occupation a legislator practiced or was trained in (of class \sQuote{logical}).}
+#' \item{occupation_2: ... (of class \sQuote{logical}).}
 #' \item{...}
 #' }
 #' @examples
@@ -38,12 +38,12 @@
 #' @export
 #' @importFrom curl nslookup
 #' @import dplyr
-get_office <- function(legislature) {
+get_profession <- function(legislature) {
   if (!(legislature %in% c("aut", "can", "cze", "fra", "deu", "irl", "sco", "gbr", "usa_house", "usa_senate")))
     stop ("legislatoR does not contain data for this legislature at the moment. Please try one of 'aut', 'can', 'cze', 'fra', 'deu', 'irl', 'usa_house', or 'usa_senate'.")
   if (is.null(curl::nslookup("www.github.com", error = FALSE)))
     stop ("legislatoR failed to establish a connection to GitHub. Please check your Internet connection and whether GitHub is online.")
-  ghurl <- base::paste0("https://github.com/saschagobel/legislatoR-data/blob/master/data/", legislature, "_office?raw=true")
+  ghurl <- base::paste0("https://github.com/saschagobel/legislatoR-data/blob/master/data/", legislature, "_occupation?raw=true")
   connect <- base::url(ghurl)
   on.exit(close(connect))
   dataset <- base::readRDS(connect)

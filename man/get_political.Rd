@@ -2,52 +2,57 @@
 % Please edit documentation in R/get_political.R
 \name{get_political}
 \alias{get_political}
-\title{Legislators political data.}
+\title{Fetch 'Political' dataset}
 \format{Data frame in long format with columns (might vary by legislature):
 \itemize{
 \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
-\item{session: Legislative period (of class \sQuote{character}).}
-\item{party: A legislator's party affiliation (of class \sQuote{character}).}
+\item{session: Legislative period (of class \sQuote{integer}).}
+\item{party: A legislator's party affiliation (of class \sQuote{character}). See \url{https://github.com/saschagobel/legislatoR} for the full form of abbreviated party names and english translations of non-english party names}
 \item{constituency: A legislator's constituency (of class \sQuote{character}).}
+\item{constituency2: A legislator's constituency (upper level, if applicable, of class \sQuote{character}).}
+\item{constituency_id: ID of a legislator's constituency (of class \sQuote{character}).}
 \item{session_start: Date the legislative period started (of class \sQuote{Date}).}
 \item{session_end: Date the legislative period ended (of class \sQuote{Date}).}
-\item{service: A legislator's period of service in days during the respective session (of class \sQuote{difftime})}
+\item{service: A legislator's period of service in days during the respective session (of class \sQuote{integer})}
+\item{government (or similar): Indicator of a legislator's majority status in parliament (of class \sQuote{logical}). Further columns with extensions of this might exist.}
+\item{leader (or similar): Indicator of a legislator's leader status in parliament (of class \sQuote{logical}). Further columns with extensions of this might exist.}
 }}
 \source{
 Wikipedia, \url{https://wikipedia.org/} \cr
+Czech Republic Parliamentary Members Archive \url{http://public.psp.cz/sqw/fsnem.sqw?zvo=1}
 }
 \usage{
 get_political(legislature)
 }
 \arguments{
-\item{legislature}{A character string specifying the legislature for which data shall be fetched from the GitHub repository. Currently one of \sQuote{austria}, \sQuote{france}, \sQuote{germany}, \sQuote{ireland}, \sQuote{usah}, or \sQuote{usas}.}
+\item{legislature}{A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
 }
 \value{
 A data frame with columns as specified above.
 }
 \description{
-Fetches political data for legislators of the specified legislature from the GitHub repository. Requires a working Internet connection.
+Fetches political data for legislators of the specified legislature. Requires a working Internet connection.
 }
 \examples{
 \donttest{## assign entire core dataset into the environment
-at_elites <- get_core(legislature = "austria")
+aut_politicians <- get_core(legislature = "aut")
 
 ## assign only data for the 12th legislative session into the environment
-at_elites_subset <- dplyr::semi_join(x = get_core(legislature = "austria"),
-                                     y = dplyr::filter(get_political(legislature = "austria"),
+aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
+                                           y = dplyr::filter(get_political(legislature = "aut"),
                                                                      session == 8),
-                                     by = "pageid")
+                                           by = "pageid")
 
-## join at_elites_subset with respective history dataset
-at_history <- dplyr::left_join(x = at_elites_subset,
-                               y = get_history(legislature = "austria"),
-                               by = "pageid")
+## join aut_politicians_subset with respective history dataset
+aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
+                                            y = get_history(legislature = "aut"),
+                                            by = "pageid")
 
 ## assign only birthdate for members of the political party 'SdP' into the environment
-at_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "austria"),
-                                                        pageid, birth),
-                                      y = dplyr::filter(get_political(legislature = "austria"),
-                                                                      party == "SdP"),
-                                      by = "pageid")$birth
+aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
+                                                         pageid, birth),
+                                       y = dplyr::filter(get_political(legislature = "aut"),
+                                                                       party == "SdP"),
+                                       by = "pageid")$birth
 }
 }

@@ -13,8 +13,8 @@ suppressWarnings(if (!require("pacman")) install.packages("pacman"))
 
 # load packages and install if not installed --------------------------------------------
 pacman::p_load(stringr, lubridate, magrittr, plyr, dplyr, eeptools, RSelenium, httr,
-               rvest, toOrdinal, mpoly, gtools, data.table, zoo, jsonlite, R.utils,
-               WikidataR, tibble, pageviews, wikipediatrend, padr,
+               rvest, toOrdinal, mpoly, data.table, zoo, jsonlite, R.utils,
+               WikidataR, tibble, pageviews, wikipediatrend, padr, gtools,readxl,
                install = TRUE,
                update = FALSE)
 
