@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^GLOSSARY\.md$
 ^README\.md$
 ^NEWS\.md$
 ^images$
