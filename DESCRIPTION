@@ -11,7 +11,7 @@ BugReports: https://github.com/saschagoebel/legislatoR/issues
 License: CC0
 LazyData: true
 Depends:
-    R (>= 3.4.1)
+    R (>= 3.4.0)
 Imports:
     curl (>= 3.0),
     dplyr (>= 0.7.4)
