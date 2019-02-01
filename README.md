@@ -1,5 +1,7 @@
 ﻿# legislatoR: Political, sociodemographic, and <img src="images/logo.jpg" width="160" align="right" /> <br /> Wikipedia-related data on political elites 
 
+[![Travis-CI Build Status](https://travis-ci.org/saschagobel/legislatoR.svg?branch=master)](https://travis-ci.org/saschagobel/legislatoR)
+
 legislatoR is a data package for the software environment R. It comprises political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. This version (0.1.0) includes 32,533 current and former elected politicians from nine countries' legislatures.
 
 ## Motivation

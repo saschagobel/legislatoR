@@ -4,4 +4,4 @@
 ^NEWS\.md$
 ^images$
 ^source$
-
+^\.travis\.yml$
