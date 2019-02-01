@@ -113,8 +113,8 @@ See [here](NEWS.md) for details on package updates.
 legislatoR was predominantly built using automated data extraction techniques. See the [source code](source) for more details. The package was assembled using the following Web sources or tools:
 
 [Face++ Cognitive Services API](https://www.faceplusplus.com/) <br />
-[Czech Republic Parliamentary Members Archive](http://public.psp.cz/sqw/fsnem.sqw?zvo=1)
-[Germany Bundestag Open Data](https://www.bundestag.de/service/opendata)
+[Czech Republic Parliamentary Members Archive](http://public.psp.cz/sqw/fsnem.sqw?zvo=1) <br />
+[Germany Bundestag Open Data](https://www.bundestag.de/service/opendata) <br />
 [Wikimedia Commons](https://commons.wikimedia.org/) <br />
 [Wikimedia API](https://wikimedia.org/) <br />
 [Wikidata API](https://www.wikidata.org/) <br />
