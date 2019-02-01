@@ -15,4 +15,5 @@ Depends:
 Imports:
     curl (>= 3.0),
     dplyr (>= 0.7.4)
-RoxygenNote: 6.0.1
+Encoding: UTF-8
+RoxygenNote: 6.1.1
