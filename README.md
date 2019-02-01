@@ -115,7 +115,7 @@ For each dataset, there is a help file with details on content and usage example
 See [here](NEWS.md) for details on package updates.
 
 ## Glossary
-See [here](GLOSSARY.md) for the full form of abbreviated country codes and party names and english translations of non-english party names.
+See [here](GLOSSARY.md) for the full form of abbreviated country codes and party names and English translations of non-English party names.
 
 ## Sources
 legislatoR was predominantly built using automated data extraction techniques. See the [source code](source) for more details. The package was assembled using the following Web sources or tools:
