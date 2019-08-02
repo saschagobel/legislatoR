@@ -52,7 +52,7 @@ The datasets contain the following variables (see the respective R help files fo
 - *IDs*: Wikidata ID, IDs for integration with various political science datsets as well as a range of other IDs such as parliamentary website IDs, Library of Congress or German National Library IDs, Notable Names Database or Project Vote Smart IDs, etc.
 
 
-Note that for some legislatures or legislative periods, datasets may only hold data on a subset of observation. In successive versions of legislatoR, we try to fill some of these gaps.
+Note that for some legislatures or legislative periods, datasets may only hold data on a subset of observations. In successive versions of legislatoR, we try to fill some of these gaps.
 
 legislatoR comes as a relational database. This means that all datasets can be joined with the Core dataset via one of two keys - the Wikipedia page ID or the Wikidata ID. These keys uniquely identify individual politicians. The figure below illustrates this structure and some of the package's content.
 
