@@ -3,7 +3,6 @@
 [![Travis-CI Build Status](https://travis-ci.org/saschagobel/legislatoR.svg?branch=master)](https://travis-ci.org/saschagobel/legislatoR)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/legislatoR)](https://cran.r-project.org/package=legislatoR)
-[![GitHub release version](https://img.shields.io/github/release/saschagobel/legislatoR.svg?style=flat)](https://github.com/saschagobel/legislatoR/releases)
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=R%20data%20package%20with%20political,%20sociodemographic,%20and%20Wikipedia-related%20data%20for%20more%20than%2030K%20current%20and%20former%20elected%20politicians%20from%20nine%20countries'%20legislatures&url=https://github.com/saschagobel/legislatoR&hashtags=rpackage,legislators,politicians,wikipedia,rstats)
 
 legislatoR is a data package for the software environment R. It comprises political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. This version (0.2.0) includes 42,534 current and former elected politicians from nine countries' legislatures.
