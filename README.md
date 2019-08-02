@@ -16,15 +16,15 @@ The data package covers the following countries and time periods:
 
 | Country                              | Legislative sessions        | Politicians (unique) | Integrated with    |
 | ------------------------------------ | --------------------------- | -------------------- | ------------------ |
-| Austria (Nationalrat)                | all 26 (1920-2017)          | 1,853                |                    |
-| Canada (House of Commons)            | all 42 (1867-2015)          | 4,410                |                    |
-| Czech Republic (Poslanecka Snemovna) | all 8 (1992-2017)           | 1,020                |                    |
-| France (Assemblée)                   | all 15 (1958-2017)          | 3,933                |                    |
-| Germany (Bundestag)                  | all 19 (1949-2017)          | 4,075                | [BTVote data](https://dataverse.harvard.edu/dataverse/btvote) (Bergmann et al. 2018),<br /> [ParlSpeech data](https://dataverse.harvard.edu/dataverse/ParlSpeech) (Rauh et al. 2017) |
-| Ireland (Dail)                       | all 32 (1918-2016)          | 1,355                |			 |
-| Scotland (Parliament)                | all 5 (1999-2016)           | 305                  | 			 |
-| United Kingdom (House of Commons)    | all 57 (1801-2017)          | 13,071               | [EggersSpirling data](https://github.com/ArthurSpirling/EggersSpirlingDatabase) (starting from <br /> 38th session, Eggers/Spirling 2014) | 
-| United States (House and Senate)     | all 116 (1789-2019)         | 12,512               | [Voteview data](https://voteview.com/data) (Lewis et al. 2019), <br /> [Congressional Bills Project data](http://www.congressionalbills.org/) (Adler/Wilkserson 2018) |
+| Austria (Nationalrat)                | all 26<br /> (1920-2017)          | 1,853                |                    |
+| Canada (House of Commons)            | all 42<br /> (1867-2015)          | 4,410                |                    |
+| Czech Republic (Poslanecka Snemovna) | all 8<br /> (1992-2017)           | 1,020                |                    |
+| France (Assemblée)                   | all 15<br /> (1958-2017)          | 3,933                |                    |
+| Germany (Bundestag)                  | all 19<br /> (1949-2017)          | 4,075                | [BTVote data](https://dataverse.harvard.edu/dataverse/btvote) (Bergmann et al. 2018),<br /> [ParlSpeech data](https://dataverse.harvard.edu/dataverse/ParlSpeech) (Rauh et al. 2017) |
+| Ireland (Dail)                       | all 32<br /> (1918-2016)          | 1,355                |			 |
+| Scotland (Parliament)                | all 5<br /> (1999-2016)           | 305                  | 			 |
+| United Kingdom (House of Commons)    | all 57<br /> (1801-2017)          | 13,071               | [EggersSpirling data](https://github.com/ArthurSpirling/EggersSpirlingDatabase) (starting from <br /> 38th session, Eggers/Spirling 2014) | 
+| United States (House and Senate)     | all 116<br /> (1789-2019)         | 12,512               | [Voteview data](https://voteview.com/data) (Lewis et al. 2019), <br /> [Congressional Bills Project data](http://www.congressionalbills.org/) (Adler/Wilkserson 2018) |
 | **9**                                | **320**                     | **42,534**           | **5** 		 |
 
 For each legislature, the package holds nine datasets: 
