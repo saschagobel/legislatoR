@@ -2,7 +2,7 @@
 # legislatoR
 # Sascha Göbel and Simon Munzert
 # Script: functions
-# December 2017
+# August 2019
 # ---------------------------------------------------------------------------------------
 
 
@@ -25,11 +25,11 @@ debugEnc <- function(string) {
   replacements <- c(debugtab[[1]][-1,9]) %>%
     c("\u010d", "\U0153", "-", "i", "g", "\u0161", "c", "c", "c", "\u0159",
       "\u011b", "\u017d", "\u017e", "\u0160", "\u0148", "\u010c", "\u0158", "\u016f", "\u0165", "\u010f", "\u0164",
-      "\u2013", ., "'", "\"")
+      "\u2013", "\u2014", ., "'", "\"")
   patterns <- str_replace_all(debugtab[[1]][-1,11], "  |%C3", "") %>%
     c("%C4%8D", "%C5%93", "_%E2%80%A0_", "%C4%B1", "%C4%9F", "%C5%A1", "%C4%87", "%C4%8D", "%C4%87", "%C5%99",
       "%C4%9B", "%C5%BD", "%C5%BE", "%C5%A0", "%C5%88", "%C4%8C", "%C5%98", "%C5%AF", "%C5%A5", "%C4%8F", "%C5%A4",
-      "%E2%80%93", ., "%27", "%22")
+      "%E2%80%93", "%E2%80%94", ., "%27", "%22")
   string <- str_replace_all(string, "%C3", "")
   for (i in seq_along(patterns)) {
     #string <- gsub(patterns[i], replacements[i], string, perl=TRUE)
@@ -61,7 +61,7 @@ wikiIDs <- function(url, corp = NULL) {
                     wikidataid = rep(as.character(NA), length(title)))
   k <- 1
   cat("|")
-  # cat(k) # for debug purposes
+   cat(k) # for debug purposes
   for (i in 1:length(url)) {
     # for (i in 201:300) {
     id <- NULL
@@ -83,8 +83,8 @@ wikiIDs <- function(url, corp = NULL) {
     if (!is.null(check)) {
        ids[i,2] <- check
     }
-   # k <- k + 1   # for debug purposes
-   # cat(k, ", ")
+    k <- k + 1   # for debug purposes
+    cat(k, ", ")
     cat(".")
   }
   return(ids)
@@ -540,10 +540,10 @@ faceEst <- function(data, auth) {
       #faces[faces$pageid == pageid[i],][,1:18] <- c(ethnicity,smile,emotion,beauty,skin,quality)
       faces[faces$pageid == pageid[i],][,1] <- c(ethnicity)
       face <- NULL
-      Sys.sleep(4)
+      Sys.sleep(5)
     } else {
       face <- NULL
-      Sys.sleep(4)
+      Sys.sleep(5)
     }
   }
   return(faces)
@@ -2269,17 +2269,117 @@ collectorScotland <- function(source) {
 #### UNITED KINGDOM WIKIPEDIA INFORMATION EXTRACTION ====================================
 collectorUk <- function(source) {
   source <- mixedsort(list.files(source, full.names = TRUE), decreasing = TRUE)
-  duration <- list(c("1945-07-05","1950-02-23"),c("1950-02-23","1951-10-25"),
-                   c("1951-10-25","1955-05-26"),c("1955-05-26","1959-10-08"),
-                   c("1959-10-08","1964-10-15"),c("1964-10-15","1966-03-31"),
-                   c("1966-03-31","1970-06-18"),c("1970-06-18","1974-02-28"),
-                   c("1974-02-28","1974-10-10"),c("1974-10-10","1979-05-03"),
-                   c("1979-05-03","1983-06-09"),c("1983-06-09","1987-06-11"),
-                   c("1987-06-11","1992-04-09"),c("1992-04-09","1997-05-01"),
-                   c("1997-05-01","2001-06-07"),c("2001-06-07","2005-05-05"),
-                   c("2005-05-05","2010-05-06"),c("2010-05-06","2015-05-07"),
-                   c("2015-05-07","2017-06-08"),c("2017-06-08","2022-05-07"))
-  query <- c("//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[2]/a[1]|
+  duration <- list(c("1801-01-01", "1802-07-05"), c("1802-07-05", "1806-10-29"),
+                   c("1806-10-29", "1807-05-04"), c("1807-05-04", "1812-10-05"),
+                   c("1812-10-05", "1818-08-04"), c("1818-08-04", "1820-03-06"),
+                   c("1820-03-06", "1826-06-07"), c("1826-06-07", "1830-07-29"),
+                   c("1830-07-29", "1831-04-28"), c("1831-04-28", "1832-12-08"),
+                   c("1832-12-08", "1835-01-06"),
+                   c("1852-07-07", "1857-03-27"), c("1857-03-27", "1859-04-28"),
+                   c("1868-11-17", "1874-01-31"), c("1874-01-31", "1880-03-31"),
+                   c("1880-03-31", "1885-11-24"), c("1885-11-24", "1886-07-01"),
+                   c("1886-07-01", "1892-07-04"), c("1892-07-04", "1895-07-13"),
+                   c("1895-07-13", "1900-09-26"), c("1900-09-26", "1906-01-12"),
+                   c("1906-01-12", "1910-01-15"), c("1910-01-15", "1910-12-03"),
+                   c("1910-12-03", "1918-12-14"), c("1918-12-14", "1922-11-15"),
+                   c("1922-11-15", "1923-12-06"), c("1923-12-06", "1924-10-29"),
+                   c("1924-10-29", "1929-05-30"), c("1929-05-30", "1931-10-27"),
+                   c("1931-10-27", "1935-11-14"), c("1935-11-14", "1945-07-05"),
+                   c("1945-07-05","1950-02-23"), c("1950-02-23","1951-10-25"),
+                   c("1951-10-25","1955-05-26"), c("1955-05-26","1959-10-08"),
+                   c("1959-10-08","1964-10-15"), c("1964-10-15","1966-03-31"),
+                   c("1966-03-31","1970-06-18"), c("1970-06-18","1974-02-28"),
+                   c("1974-02-28","1974-10-10"), c("1974-10-10","1979-05-03"),
+                   c("1979-05-03","1983-06-09"), c("1983-06-09","1987-06-11"),
+                   c("1987-06-11","1992-04-09"), c("1992-04-09","1997-05-01"),
+                   c("1997-05-01","2001-06-07"), c("2001-06-07","2005-05-05"),
+                   c("2005-05-05","2010-05-06"), c("2010-05-06","2015-05-07"),
+                   c("2015-05-07","2017-06-08"), c("2017-06-08","2022-05-07"))
+  # CONTINUE WITH 25 - here i = 19
+  query <- c("", "", "", "", "", "", "", "", "", "",
+             "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[7]/b/span/a[1]|
+             //h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[7]/b/a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1][not(contains(., 'Independent'))]|
+             //table[@class = 'wikitable']/tbody/tr/td[2]/i/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[1]//a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1][not(contains(., 'Independent'))]|
+             //table[@class = 'wikitable']/tbody/tr/td[2]/i/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[1]//a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[1]//a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[1]//a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[1]/a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[1]/a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1][not(contains(., 'Party'))] |
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]", 
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1][not(contains(., 'Party'))] |
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]", 
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1][not(contains(., 'Federation'))] |
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]", 
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1][not(contains(., 'Parnellite'))] |
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]", 
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1][not(contains(., 'Party'))] |
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]", 
+             "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[2]/a[1][not(contains(., 'Party'))] |
+             //h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1][not(contains(., 'Party'))] |
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]",
+             "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[2]//a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]", # 31 -
+             "//table[3]/tbody/tr/td[2]/a[1]|
+             //table[3]/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]",
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]",
+             "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[2]/a[1]|
+             //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]", # 36
+             "//table[@class = 'wikitable']/tbody/tr/td[2]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
+             //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]", # 37
+             "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[2]/a[1]|
              //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
              //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[1]/a[1]|
              //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[1]/a[1]",
@@ -2302,7 +2402,87 @@ collectorUk <- function(source) {
              "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/a[1]",
              "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/span//a[1]",
              "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[6]/span//a[1]")
-  query_party <- c("//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[3]|
+  query_party <- c("", "", "", "", "", "", "", "", "", "",
+                   "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[8]/a[1]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[2]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='4']/ancestor::tr/following-sibling::tr[3]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]", 
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]", 
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]", 
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]",
+                   "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[3]|
+                   //h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]",
+                   "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[3]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]",
+                   "//table[3]/tbody/tr/td[3]|
+                   //table[3]/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]",
+                   "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[3]|
+                   //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]",
+                   "//table[@class = 'wikitable']/tbody/tr/td[3]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
+                   //table[@class = 'wikitable']/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]", # 37
+                   "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[3]|
                    //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='2']/ancestor::tr/following-sibling::tr[1]/td[2]|
                    //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[1]/td[2]|
                    //h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[@rowspan='3']/ancestor::tr/following-sibling::tr[2]/td[2]",
@@ -2325,7 +2505,30 @@ collectorUk <- function(source) {
                    "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/a[2]",
                    "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/a[1]",
                    "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[6]/a[1]")
-  query_constituency <- c("//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+  query_constituency <- c("", "", "", "", "", "", "", "", "", "",
+                          "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[1]/b/a[1]|
+                          //h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[1]/b/span/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[3]/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
+                          "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]", # 37
+                          "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[1]/a[1]",
                           "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[1]/a[1]",
                           "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[1]/a[1]",
                           "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[1]/a[1]",
@@ -2345,8 +2548,42 @@ collectorUk <- function(source) {
                           "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[1]/a[1]",
                           "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[1]/a[1]",
                           "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[1]/a[1]")
-  query_multiplier <- c("//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[1]")
-  query_be <- c("//h3/span/a[contains(text(), '38th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '37th')]]",
+  query_multiplier <- c("", "", "", "", "", "", "", "", "", "",
+                        "",
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[3]/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[3]/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[3]/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[3]/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]",
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]",
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]",
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]",
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[3]/tbody/tr/td[3]/ancestor::tr/td[1]", "",
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[3]/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]", 
+                        "//h2/span[contains(text(), 'Composition')]/ancestor::h2/following-sibling::table[3]/tbody/tr/td[3]/ancestor::tr/td[1]")
+  query_be <- c("", "", "", "", "", "", "", "", "", "",
+                "", "", "", "", "", "", "", "", "", "",
+                "//h3/span/a[contains(text(), '27th')]/ancestor::tr/following-sibling::tr/td[6]/a[preceding::a[contains(text(), '27th')]]",
+                "//h3/span/a[contains(text(), '28th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '27th')]]",
+                "//h3/span/a[contains(text(), '29th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '28th')]]",
+                "//h3/span/a[contains(text(), '30th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '29th')]]",
+                "//h3/span/a[contains(text(), '31st')]/ancestor::tr/following-sibling::tr/td[6]/a[preceding::a[contains(text(), '31st')]]",
+                "//h3/span/a[contains(text(), '32nd')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '31st')]]",
+                "//h3/span/a[contains(text(), '33rd')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '32nd')]]",
+                "//h3/span/a[contains(text(), '34th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '33rd')]]",
+                "//h3/span/a[contains(text(), '35th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '34th')]]",
+                "//h3/span/a[contains(text(), '36th')]/ancestor::tr/following-sibling::tr/td[6]/a[preceding::a[contains(text(), '36th')]]",
+                "//h3/span/a[contains(text(), '37th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '36th')]]",
+                "//h3/span/a[contains(text(), '38th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '37th')]]",
                 "//h3/span/a[contains(text(), '39th')]/ancestor::tr/following-sibling::tr/td[6]/a[preceding::a[contains(text(), '39th')]]",
                 "//h3/span/a[contains(text(), '40th')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '39th')]]",
                 "//h3/span/a[contains(text(), '41st')]/ancestor::tr/following-sibling::tr/td[6]/a[following::a[contains(text(), '40th')]]",
@@ -2366,7 +2603,20 @@ collectorUk <- function(source) {
                 "//h3/span[contains(text(), '15 Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[6]/a",
                 "//h3/span[contains(text(), '17 Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[6]/a",
                 "//h3/span[contains(text(), 'present Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[6]/a")
-  query_be_party <- c("//h3/span/a[contains(text(), '38th')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '37th')]]",
+  query_be_party <- c("", "", "", "", "", "", "", "", "", "",
+                      "", "", "", "", "", "", "", "", "", "",
+                      "//h3/span/a[contains(text(), '27th')]/ancestor::tr/following-sibling::tr/td[8]/a[preceding::a[contains(text(), '27th')]]",
+                      "//h3/span/a[contains(text(), '28th')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '27th')]]",
+                      "//h3/span/a[contains(text(), '29th')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '28th')]]",
+                      "//h3/span/a[contains(text(), '30th')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '29th')]]",
+                      "//h3/span/a[contains(text(), '31st')]/ancestor::tr/following-sibling::tr/td[8]/a[preceding::a[contains(text(), '31st')]]",
+                      "//h3/span/a[contains(text(), '32nd')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '31st')]]",
+                      "//h3/span/a[contains(text(), '33rd')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '32nd')]]",
+                      "//h3/span/a[contains(text(), '34th')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '33rd')]]",
+                      "//h3/span/a[contains(text(), '35th')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '34th')]]",
+                      "//h3/span/a[contains(text(), '36th')]/ancestor::tr/following-sibling::tr/td[8]/a[preceding::a[contains(text(), '36th')]]",
+                      "//h3/span/a[contains(text(), '37th')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '36th')]]",
+                      "//h3/span/a[contains(text(), '38th')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '37th')]]",
                       "//h3/span/a[contains(text(), '39th')]/ancestor::tr/following-sibling::tr/td[8]/a[preceding::a[contains(text(), '39th')]]",
                       "//h3/span/a[contains(text(), '40th')]/ancestor::tr/following-sibling::tr/td[8]/a[1][following::a[contains(text(), '39th')]]",
                       "//h3/span/a[contains(text(), '41st')]/ancestor::tr/following-sibling::tr/td[8]/a[following::a[contains(text(), '40th')]]",
@@ -2386,7 +2636,20 @@ collectorUk <- function(source) {
                       "//h3/span[contains(text(), '15 Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[8]/a",
                       "//h3/span[contains(text(), '17 Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[8]/a",
                       "//h3/span[contains(text(), 'present Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[8]/a")
-  query_be_constituency <- c("//h3/span/a[contains(text(), '38th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '37th')]]",
+  query_be_constituency <- c("", "", "", "", "", "", "", "", "", "",
+                             "", "", "", "", "", "", "", "", "", "",
+                             "//h3/span/a[contains(text(), '27th')]/ancestor::tr/following-sibling::tr/td[1]/a[preceding::a[contains(text(), '27th')]]",
+                             "//h3/span/a[contains(text(), '28th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '27th')]]",
+                             "//h3/span/a[contains(text(), '29th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '28th')]]",
+                             "//h3/span/a[contains(text(), '30th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '29th')]]",
+                             "//h3/span/a[contains(text(), '31st')]/ancestor::tr/following-sibling::tr/td[1]/a[preceding::a[contains(text(), '31st')]]",
+                             "//h3/span/a[contains(text(), '32nd')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '31st')]]",
+                             "//h3/span/a[contains(text(), '33rd')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '32nd')]]",
+                             "//h3/span/a[contains(text(), '34th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '33rd')]]",
+                             "//h3/span/a[contains(text(), '35th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '34th')]]",
+                             "//h3/span/a[contains(text(), '36th')]/ancestor::tr/following-sibling::tr/td[1]/a[preceding::a[contains(text(), '36th')]]",
+                             "//h3/span/a[contains(text(), '37th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '36th')]]",
+                             "//h3/span/a[contains(text(), '38th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '37th')]]",
                              "//h3/span/a[contains(text(), '39th')]/ancestor::tr/following-sibling::tr/td[1]/a[preceding::a[contains(text(), '39th')]]",
                              "//h3/span/a[contains(text(), '40th')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '39th')]]",
                              "//h3/span/a[contains(text(), '41st')]/ancestor::tr/following-sibling::tr/td[1]/a[following::a[contains(text(), '40th')]]",
@@ -2406,7 +2669,20 @@ collectorUk <- function(source) {
                              "//h3/span[contains(text(), '15 Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[1]/a",
                              "//h3/span[contains(text(), '17 Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[1]/a",
                              "//h3/span[contains(text(), 'present Parliament')]/ancestor::h3/following-sibling::table[1]/tbody/tr/td[1]/a")
-  query_be_service <- c("//h3/span/a[contains(text(), '38th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '37th')]]",
+  query_be_service <- c("", "", "", "", "", "", "", "", "", "",
+                        "", "", "", "", "", "", "", "", "", "",
+                        "//h3/span/a[contains(text(), '27th')]/ancestor::tr/following-sibling::tr/td[2][preceding::a[contains(text(), '27th')]]",
+                        "//h3/span/a[contains(text(), '28th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '27th')]]",
+                        "//h3/span/a[contains(text(), '29th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '28th')]]",
+                        "//h3/span/a[contains(text(), '30th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '29th')]]",
+                        "//h3/span/a[contains(text(), '31st')]/ancestor::tr/following-sibling::tr/td[2][preceding::a[contains(text(), '31st')]]",
+                        "//h3/span/a[contains(text(), '32nd')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '31st')]]",
+                        "//h3/span/a[contains(text(), '33rd')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '32nd')]]",
+                        "//h3/span/a[contains(text(), '34th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '33rd')]]",
+                        "//h3/span/a[contains(text(), '35th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '34th')]]",
+                        "//h3/span/a[contains(text(), '36th')]/ancestor::tr/following-sibling::tr/td[2][preceding::a[contains(text(), '36th')]]",
+                        "//h3/span/a[contains(text(), '37th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '36th')]]",
+                        "//h3/span/a[contains(text(), '38th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '37th')]]",
                         "//h3/span/a[contains(text(), '39th')]/ancestor::tr/following-sibling::tr/td[2][preceding::a[contains(text(), '39th')]]",
                         "//h3/span/a[contains(text(), '40th')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '39th')]]",
                         "//h3/span/a[contains(text(), '41st')]/ancestor::tr/following-sibling::tr/td[2][following::a[contains(text(), '40th')]]",
@@ -2444,9 +2720,9 @@ collectorUk <- function(source) {
   # assign empty lists to store session speficic legislator service in days
   services <- rep(list(NA), times = length(source))
   # assign session specific manual replacement index for services
-  replace_idx <- c(list(c(88,347,540,506,273,38,249,212,548,247,537,92,163,18,618,453,244,216,303,
-                          261,323,364,324,430,331,2,156,4,451,492,243,39,466,55,187,441,153,283,291,
-                          245,24,473,579,328,83,101,145,407,208,20,528)),
+  replace_idx <- c(rep(list(c(0)),31),list(c(88,347,540,506,273,38,249,212,548,247,537,92,163,18,618,453,244,216,303,
+                                             261,323,364,324,430,331,2,156,4,451,492,243,39,466,55,187,441,153,283,291,
+                                             245,24,473,579,328,83,101,145,407,208,20,528)),
                    list(c(595,614,377,285,444,109,7,108,51,66,447,256,354,101,195,514)),
                    list(c(621,541,213,570,445,425,323,19,375,409,554,2,11,575,517,163,410,211,
                           282,20,90,287,276,319,448,303,444,162,113,63,8,552,188,289,544,33,326,
@@ -2480,9 +2756,9 @@ collectorUk <- function(source) {
                    list(c(436,495,433,576,30,631,468,503,149,549)),
                    list(c(331,619)))
   # assign session specific manual replacement for services
-  replacement <- c(list(c(1617,1477,1350,1344,1330,1323,1239,1227,1190,1183,1029,993,980,974,973,958,937,882,875,
-                          874,812,798,671,586,518,518,510,509,503,502,420,385,383,382,336,334,256,232,231,
-                          222,217,210,161,138,133,132,118,118,90,89,88)),
+  replacement <- c(rep(list(c(0)),31),list(c(1617,1477,1350,1344,1330,1323,1239,1227,1190,1183,1029,993,980,974,973,958,937,882,875,
+                                             874,812,798,671,586,518,518,510,509,503,502,420,385,383,382,336,334,256,232,231,
+                                             222,217,210,161,138,133,132,118,118,90,89,88)),
                    list(c(483,476,450,422,406,357,280,280,279,266,252,244,217,70,61,41)),
                    list(c(1239,1197,1190,1188,1183,1176,1153,1122,1120,1106,1106,1099,1099,1092,1092,
                           1071,902,896,868,866,847,840,840,832,770,756,749,749,693,616,614,566,538,
@@ -2515,71 +2791,245 @@ collectorUk <- function(source) {
                    list(c(1617,1491,1379,1092,1036,1029,938,938,938,924,924,924,693,588,420,399,364,301,252)),
                    list(c(167,273,321,368,406,494,537,547,627,627)),
                    list(c(371,329)))
+  replace_idx2 <- c(rep(list(c(0)), 20), list(c(75)), list(c(0)), list(c(0)), list(c(246)),
+                    list(c(83,105)), list(c(0)), list(c(0)), list(c(35)), list(c(0)), list(c(6)), list(c(54)))
+  replacement2 <- c(rep(list(c(0)), 20), list(c("18 November 1902")), list(c(0)), list(c(0)), list(c("11 February 1911")),
+                    list(c("27 March 1920", "19 March 1919")), list(c(0)), list(c(0)), list(c("26 April 1927")),
+                    list(c(0)), list(c("17 June 1935")), list(c("10 June 1942")))
+  remove_table <- c(list(c(1,32,45,51,90,93,164,211,232,241,244,267,300,307,314,331,336,391,427,470,
+                           484,509,514,535,591,618,677)), 
+                    list(c(1,32,89,90,138,164,211,232,241,267,300,307,314,336,391,427,428,470,484,509,
+                           514,535,591,618,677)), 
+                    list(c(1,32,89,92,158,161,208,229,238,264,297,304,311,328,333,388,424,462,476,501,
+                           506,528,561,584,611,676)),
+                    list(c(1,32,88,89,135,161,208,229,238,264,297,304,311,333,388,424,425,
+                           462,476,494,501,506,528,584,611,676)), 
+                    list(c(1,32,89,92,158,161,208,229,238,264,297,304,311,328,333,388,424,462,
+                           476, 501,506,528,584,611,676)), 
+                    list(c(1,32,88,89,135,161,208,229,238,264,297,304,311,333,388,424,425,462,476,
+                           501,506,522,528,584,611,630,676)), 
+                    list(c(1,2,33,34,91,92,95,161,164,165,211,212,233,234,243,244,270,271,
+                           310,311,318,319,336,341,342,397,398,434,435,473,474,488,489,514,515,519,
+                           520,542,543,599,600,627,628,633,646,693,694)), 
+                    list(c(1,2,32,33,89,90,91,99,135,141,162,163,209,210,218,231,232,241,242,266,267,
+                           308,309,317,332,338,339,385,394,395,432,433,434,445,470,471,485,486,511,
+                           512,517,518,541,542,598,599,626,627,690,691,694)), 
+                    list(c(1,2,32,33,90,91,94,99,141,159,162,163,209,210,218,231,232,241,242,266,267,
+                           308,309,316,317,332,333,338,339,394,395,432,433,445,470,471,485,486,511,
+                           512,517,518,541,542,598,599,626,627,690,691,694)), 
+                    list(c(1,2,32,33,89,90,91,135,141,162,163,209,210,218,231,232,241,242,266,267,
+                           308,309,316,317,332,338,339,394,395,432,433,434,445,470,471,485,486,511,
+                           512,517,518,541,542,598,599,626,627,690,691,694)))
+  ext_by_table <- c("//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][2]","//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][2]","//table[@class = 'wikitable'][3]",
+                    "//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][2]","//table[@class = 'wikitable'][3]","//table[@class = 'wikitable'][4]","//table[@class = 'wikitable'][5]",
+                    "//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][1]",
+                    "//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][1]","//table[@class = 'wikitable'][1]")
+  cut_by_table <- c(list(c(1:71)),list(c(1:219)),list(c(1:54)),list(c(1:214)),list(c(1:211)),
+                    list(c(1:67)),list(c(1:178)),list(c(1:165)),list(c(1:61)),list(c(1:64)),
+                    list(c(444:502)),list(c(3:221)),list(c(371:460)),list(c(396:573)),list(c(199:393)),
+                    list(c(3:196)),list(c(407:444)),list(c(225:403)),list(c(119:221)),list(c(3:115)))
+  col_by_table_1 <- c(rep(5, 10), rep(6, 10))
+  col_by_table_2 <- c(rep(0, 10), rep(8, 10))
+  col_by_table_3 <- c(rep(2, 10), rep(1, 10))
+  col_by_table_4 <- c(rep(1, 10), rep(2, 10))
   for (i in 1:length(htmls)) {
-    # read html file
-    htmls[[i]] <-  read_html(source[i], encoding = "UTF-8")
-    # locate legislator biography URLs in html via XPath query, extract and complete URL
-    urls[[i]] <- html_nodes(x = htmls[[i]], xpath = query[i]) %>%
-      html_attr("href") %>%
-      str_c("https://", "en",".wikipedia.org", .)
-    # locate legislator names in html via query, extract names
-    names[[i]] <- html_nodes(x = htmls[[i]], xpath = query[i]) %>%
-      html_text()
-    # locate legislator party affiliations in html via query_party, extract and format party affiliation
-    parties[[i]] <- html_nodes(x = htmls[[i]], xpath = query_party[i]) %>%
-      html_text() %>%
-      str_replace_all("\\r|\\n", "")
-    constituencies[[i]] <- html_nodes(x = htmls[[i]], xpath = query_constituency[i]) %>%
-      html_text() %>%
-      str_replace_all("\\r|\\n", "")
-    session_start[[i]] <- duration[[i]][1]
-    session_end[[i]] <- duration[[i]][2]
-    services[[i]] <- round(rep(difftime(time1 = session_end[[i]][1], time2 = session_start[[i]][1], units = "days"),
-                               length(urls[[i]])))
-    services[[i]] <- replace(services[[i]], replace_idx[[i]], replacement[[i]])
-    if (i %in% c(1)) {# 38
-      multipliers1[[i]] <- html_nodes(x = htmls[[i]], xpath = query_multiplier[i]) %>%
-        html_attr("rowspan") %>%
-        as.numeric() %>%
-        na.replace(1)
-      constituencies[[i]] <- rep(constituencies[[i]], times = multipliers1[[i]])
+    if (i %in% c(11:51)) {
+      # read html file
+      htmls[[i]] <-  read_html(source[i], encoding = "UTF-8")
+      # locate legislator biography URLs in html via XPath query, extract and complete URL
+      urls[[i]] <- html_nodes(x = htmls[[i]], xpath = query[i]) %>%
+        html_attr("href") %>%
+        str_c("https://", "en",".wikipedia.org", .)
+      if (i == 15) {
+        urls[[i]] <- c(urls[[i]][1:368], "", urls[[i]][369:651])
+      }
+      if (i == 12) {
+        urls[[i]] <- c(urls[[i]][1:302], "", urls[[i]][303:653])
+      }
+      # locate legislator names in html via query, extract names
+      names[[i]] <- html_nodes(x = htmls[[i]], xpath = query[i]) %>%
+        html_text()
+      if (i == 15) {
+        names[[i]] <- c(names[[i]][1:368], "George Errington", names[[i]][369:651])
+      }
+      if (i == 12) {
+        names[[i]] <- c(names[[i]][1:302], "John Green", names[[i]][303:653])
+      }
+      # locate legislator party affiliations in html via query_party, extract and format party affiliation
+      parties[[i]] <- html_nodes(x = htmls[[i]], xpath = query_party[i]) %>%
+        html_text() %>%
+        str_replace_all("\\r|\\n", "")
+      constituencies[[i]] <- html_nodes(x = htmls[[i]], xpath = query_constituency[i]) %>%
+        html_text() %>%
+        str_replace_all("\\r|\\n", "")
+      if (i %in% c(1:31)) {
+        services[[i]] <- rep(NA, length(urls[[i]]))
+        session_start[[i]] <- duration[[i]][1]
+        session_end[[i]] <- duration[[i]][2]
+      } else {
+        session_start[[i]] <- duration[[i]][1]
+        session_end[[i]] <- duration[[i]][2]
+        services[[i]] <- round(rep(difftime(time1 = session_end[[i]][1], time2 = session_start[[i]][1], units = "days"),
+                                   length(urls[[i]])))
+        services[[i]] <- replace(services[[i]], replace_idx[[i]], replacement[[i]])
+      }
+      if (i %in% c(12:23,25:32)) {# 31:38
+        if (i == 27) {
+          constituencies[[i]] <- c(constituencies[[i]][1:105], "Cambridge", constituencies[[i]][106:594])
+        }
+        multipliers1[[i]] <- html_nodes(x = htmls[[i]], xpath = query_multiplier[i]) %>%
+          html_attr("rowspan") %>%
+          as.numeric() %>%
+          na.replace(1)
+        constituencies[[i]] <- rep(constituencies[[i]], times = multipliers1[[i]])
+      }
     }
-    # add legislators elected at by-elections
-    if (i %in% c(1)) {#38
+    if (i %in% c(1:10)) {
+      html_table2 <- trace(rvest:::html_table.xml_node, quote({ 
+        values      <- lapply(lapply(cells, html_node, "a"), html_attr, name = "href")
+        values[[1]] <- html_text(cells[[1]])
+      }), at = 14)
+      htmls[[i]] <-  read_html(source[i], encoding = "UTF-8")
+      table_a <- html_nodes(x = htmls[[i]], xpath = "//table[@class = 'wikitable']") %>%
+        html_table(fill = TRUE) %>%
+        extract2(1)
+      table_a <- table_a[-remove_table[[i]],]
+      urls[[i]] <- table_a$X2 %>%
+        str_c("https://", "en",".wikipedia.org", .)
+      untrace(rvest:::html_table.xml_node)
+      table_b <- html_nodes(x = htmls[[i]], xpath = "//table[@class = 'wikitable']") %>%
+        html_table(fill = TRUE) %>%
+        extract2(1)
+      table_b <- table_b[-remove_table[[i]],]
+      names[[i]] <- table_b$X2 %>%
+        str_replace_all("\\[.+| died.+| Died.+| appointed.+| Appointed.+|seat Vacant|seat vacant| elected.+| resigned.+| Resigned.+| became.+| void.+|  Void.+| sat for.+| Sat for.+| election.+| Election.+| 18.+| took office.+| raised to.+| unseated on.+|( )?Replaced.+| succeeded.+| expelled.+| ennobled.+| Ennobled.+| Expelled.+| assassinated.+| –", "") %>%
+        str_trim
+      parties[[i]] <- table_b$X3
+      constituencies[[i]] <- table_b$X1 %>%
+        str_replace_all("\\(two.+|\\(three.+|\\(four.+|\\(seat.+", "") %>%
+        str_trim
+      services[[i]] <- rep(NA, length(urls[[i]]))
+      session_start[[i]] <- duration[[i]][1]
+      session_end[[i]] <- duration[[i]][2]
+    }
+    if (i %in% c(1:2)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections14.html")
+    }
+    if (i %in% c(3:5)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections13.html")
+    }
+    if (i %in% c(6:10)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections12.html")
+    }
+    if (i %in% c(11)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections11.html")
+    }
+    if (i %in% c(12)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections10.html")
+    }
+    if (i %in% c(13)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections9.html")
+    }
+    if (i %in% c(14:16)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections8.html")
+    }
+    if (i %in% c(17:20)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections7.html")
+    }
+    if (i %in% c(21:24)) {
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections6.html")
+    }
+    if (i %in% c(25:29)) {# 31-35
+      if (i == 25) {
+        urls[[i]] <- urls[[i]][-168]
+        names[[i]] <- names[[i]][-168]
+        services[[i]] <- services[[i]][-168]
+      }
       by_elections <- read_html("./data/htmls/uk_by_elections/by_elections1.html")
     }
-    if (i %in% c(2:10)) {#39-
+    # add legislators elected at by-elections
+    if (i %in% c(30:32)) {#38
       by_elections <- read_html("./data/htmls/uk_by_elections/by_elections2.html")
     }
-    if (i %in% c(11:17)) {#48-
+    if (i %in% c(33:41)) {#39-
       by_elections <- read_html("./data/htmls/uk_by_elections/by_elections3.html")
     }
-    if (i %in% c(18:20)) {#48-
+    if (i %in% c(42:48)) {#48-
       by_elections <- read_html("./data/htmls/uk_by_elections/by_elections4.html")
     }
-    be_urls <- html_nodes(x = by_elections, xpath = query_be[i]) %>%
-      html_attr("href") %>%
-      str_c("https://", "en",".wikipedia.org", .)
-    be_names <- html_nodes(x = by_elections, xpath = query_be[i]) %>%
-      html_text()
-    # locate legislator party affiliations in html via query_party, extract and format party affiliation
-    be_parties <- html_nodes(x = by_elections, xpath = query_be_party[i]) %>%
-      html_text() %>%
-      str_replace_all("\\r|\\n", "")
-    be_constituencies <- html_nodes(x = by_elections, xpath = query_be_constituency[i]) %>%
-      html_text() %>%
-      str_replace_all("\\r|\\n", "")
-    be_services <- html_nodes(x = by_elections, xpath = query_be_service[i]) %>%
-      html_text() %>%
-      str_extract("^.+[[:digit:]]{4}") %>%
-      dmy() %>%
-      difftime(time1 = duration[[i]][2], time2 = .)
+    if (i %in% c(49:51)) {#48-
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections5.html")
+    }
+    if (i %in% c(21:51)) {
+      be_urls <- html_nodes(x = by_elections, xpath = query_be[i]) %>%
+        html_attr("href") %>%
+        str_c("https://", "en",".wikipedia.org", .)
+      be_names <- html_nodes(x = by_elections, xpath = query_be[i]) %>%
+        html_text()
+      # locate legislator party affiliations in html via query_party, extract and format party affiliation
+      be_parties <- html_nodes(x = by_elections, xpath = query_be_party[i]) %>%
+        html_text() %>%
+        # remove the two additionals, for 37
+        str_replace_all("\\r|\\n", "")
+      if (i %in% 31) {
+        be_parties <- be_parties[-c(57,194)]
+      }
+      be_constituencies <- html_nodes(x = by_elections, xpath = query_be_constituency[i]) %>%
+        html_text() %>%
+        str_replace_all("\\r|\\n", "")
+      if (i %in% 31) {
+        be_constituencies <- be_constituencies[-c(57,194)]
+      }
+      # remove the two additionals, for 37
+      be_services <- html_nodes(x = by_elections, xpath = query_be_service[i]) %>%
+        html_text()
+      if (i %in% c(21,24,25,28,30,31)) {
+        be_services <- replace(be_services, replace_idx2[[i]], replacement2[[i]])
+      }
+      be_services <- be_services %>%
+        str_extract("^.+[[:digit:]]{4}") %>%
+        dmy() %>%
+        difftime(time1 = duration[[i]][2], time2 = .)
+      if (i %in% 31) {
+        be_services <- be_services[-c(57,194)]
+      }
+    } else {
+      html_table2 <- trace(rvest:::html_table.xml_node, quote({ 
+        values      <- lapply(lapply(cells, html_node, "a"), html_attr, name = "href")
+        values[[1]] <- html_text(cells[[1]])
+      }), at = 14)
+      table_a <- html_nodes(x = by_elections, xpath = ext_by_table[i]) %>%
+        html_table(fill = TRUE) %>%
+        extract2(1)
+      table_a <- table_a[cut_by_table[[i]],]
+      be_urls <- table_a[,col_by_table_1[i]] %>%
+        str_c("https://", "en",".wikipedia.org", .)
+      untrace(rvest:::html_table.xml_node)
+      table_b <- html_nodes(x = by_elections, xpath = ext_by_table[i]) %>%
+        html_table(fill = TRUE) %>%
+        extract2(1)
+      table_b <- table_b[cut_by_table[[i]],]
+      be_names <- table_b[,col_by_table_1[i]] %>%
+        str_trim
+      if (i %in% c(11:20)) {
+        be_parties <- table_b[,col_by_table_2[i]] 
+      } else {
+        be_parties <- rep(NA, length(be_urls))
+      }
+      be_constituencies <- table_b[,col_by_table_3[i]]  %>%
+        str_replace_all("[[:digit:]]", "") %>%
+        str_trim
+      be_services <- table_b[,col_by_table_4[i]] %>%
+        str_extract("^.+ [[:digit:]]{4}") %>%
+        str_replace_all("–[[:digit:]] |–[[:digit:]][[:digit:]] ", "") %>%
+        dmy() %>%
+        difftime(time1 = duration[[i]][2], time2 = .)
+    }
     urls[[i]] <- c(urls[[i]], be_urls)
     names[[i]] <- c(names[[i]], be_names)
     parties[[i]] <- c(parties[[i]], be_parties)
     constituencies[[i]] <- c(constituencies[[i]], be_constituencies)
     services[[i]] <- c(services[[i]], be_services)
-    
   }
   urls <- lapply(urls, data.table) %>%
     lapply(rename, url = V1)
@@ -2598,9 +3048,7 @@ collectorUk <- function(source) {
   urls <- mapply(cbind, urls, names, parties, constituencies, 
                  services, session_start, 
                  session_end, SIMPLIFY = FALSE)
-  urls <-  as.numeric(as.roman(str_extract(source, "[[:digit:]]+"))) %>%
+  urls <-  c(1:11,16,17,20:57) %>%
     mapply(function(urls, x) mutate(urls, term = x), urls, ., SIMPLIFY=FALSE) %>%
-    mapply(function(., x) mutate(., country = x), ., rep("GBR", times = 20), SIMPLIFY=FALSE)
+    mapply(function(., x) mutate(., country = x), ., rep("GBR", times = 51), SIMPLIFY=FALSE)
 }
-
-

@@ -7,6 +7,11 @@
 \itemize{
 \item{wikidataid: Wikidata ID identifying a legislator's Wikidata entry (of class \sQuote{character}).}
 \item{parlid: Parliamentary website ID  (of class \sQuote{character}).}
+\item{btvote: ID for BTVote datasets on all roll call votes taken in the German Bundestag from 1949 to 2013 (of class \sQuote{character}).}
+\item{parlspeech: ID for ParlSpeech datasets containing full-text vectors of plenary speeches (of class \sQuote{character}).}
+\item{eggersspirling: ID for Eggers and Spirling British political development database (of class \sQuote{character}).}
+\item{bioguide: ID for the Voteview congressional roll-call votes database (of class \sQuote{character}).}
+\item{icpsr: ID for congressional bills project database (of class \sQuote{character}).}
 \item{sycomore: Sycomore database of French MPs (of class \sQuote{character}).}
 \item{libcon: Library of Congress ID (of class \sQuote{character}).}
 \item{gnd: German National Library ID (of class \sQuote{character}).}

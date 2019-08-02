@@ -6,31 +6,31 @@
 [![GitHub release version](https://img.shields.io/github/release/saschagobel/legislatoR.svg?style=flat)](https://github.com/saschagobel/legislatoR/releases)
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=R%20data%20package%20with%20political,%20sociodemographic,%20and%20Wikipedia-related%20data%20for%20more%20than%2030K%20current%20and%20former%20elected%20politicians%20from%20nine%20countries'%20legislatures&url=https://github.com/saschagobel/legislatoR&hashtags=rpackage,legislators,politicians,wikipedia,rstats)
 
-legislatoR is a data package for the software environment R. It comprises political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. This version (0.1.0) includes 32,533 current and former elected politicians from nine countries' legislatures.
+legislatoR is a data package for the software environment R. It comprises political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. This version (0.2.0) includes 42,534 current and former elected politicians from nine countries' legislatures.
 
 ## Motivation
-Researchers, students, analysts, journalists, and the public continue to rely on individual-level data on political elites for various kinds of analyses, whether theory-driven or motivated by real-world problems. As a consequence, the past has likely seen recurrent data collection efforts with the same purpose. This practice is highly inefficient. Student assistants, interns, or volunteers work on tedious data collection tasks likely accomplished by others already. Financial limitations or time restrictions often force analysts to limit their analyses to a subset of politicians. The frequent compromise is between broad (many politicians) but shallow (few variables) or narrow (few politicians) but deep (many variables) data. Existing data structures are either limited in scope, hidden behind paywalls, or simply not accessible to those who are not super tech-savvy. legislatoR is a free, efficient, and accessible one stop shop for broad and deep data on political elites, facilitates data integration, and supports replication efforts.
+Researchers, students, analysts, journalists, and the public continue to rely on individual-level data on political elites for various kinds of analyses, whether theory-driven or motivated by real-world problems. As a consequence, the past has likely seen recurrent data collection efforts with the same purpose. Financial limitations or time restrictions often force analysts to limit their analyses to a subset of politicians, though. The frequent compromise is between many politicians but few variables or few politicians but many variables. Existing data structures are often limited in scope, hidden behind paywalls, or simply not accessible to those who are not super tech-savvy. legislatoR is an open-source, targeted, fast, and easily accessible one stop shop for comprehensive data on political elites. Data comes in a rectangular/spreadsheet format familiar to social scientists and ready for immediate analysis. It facilitates data integration, and supports replication efforts.
 
 ## Content and data structure
 The data package covers the following countries and time periods:
 
-| Country                              | Legislative sessions        | Politicians (unique) |
-| ------------------------------------ | --------------------------- | -------------------- |
-| Austria (Nationalrat)                | all 26 (1920-2017)         | 1,853                | 
-| Canada (House of Commons)            | all 42 (1867-2015)         | 4,410                |
-| Czech Republic (Poslanecka Snemovna) | all 8 (1992-2017)          | 1,020                |
-| France (Assemblée)                   | all 15 (1958-2017)         | 3,603                |
-| Germany (Bundestag)                  | all 19 (1949-2017)         | 4,075                |
-| Ireland (Dail)                       | all 32 (1918-2016)         | 1,355                |
-| Scotland (Parliament)                | all 5 (1999-2016)          | 305                  |
-| United Kingdom (House of Commons)    | 38-57 (1945-2017)          | 3,400                |
-| United States (House and Senate)     | all 116 (1789-2019)        | 12,512               |
-| **9**                                | **283**                     | **32,533**           |
+| Country                              | Legislative sessions        | Politicians (unique) | Integrated with    |
+| ------------------------------------ | --------------------------- | -------------------- | ------------------ |
+| Austria (Nationalrat)                | all 26 (1920-2017)          | 1,853                |                    |
+| Canada (House of Commons)            | all 42 (1867-2015)          | 4,410                |                    |
+| Czech Republic (Poslanecka Snemovna) | all 8 (1992-2017)           | 1,020                |                    |
+| France (Assemblée)                   | all 15 (1958-2017)          | 3,933                |                    |
+| Germany (Bundestag)                  | all 19 (1949-2017)          | 4,075                | [BTVote data](https://dataverse.harvard.edu/dataverse/btvote) (Bergmann et al. 2018), [ParlSpeech data](https://dataverse.harvard.edu/dataverse/ParlSpeech) (Rauh et al. 2017) |
+| Ireland (Dail)                       | all 32 (1918-2016)          | 1,355                |			 |
+| Scotland (Parliament)                | all 5 (1999-2016)           | 305                  | 			 |
+| United Kingdom (House of Commons)    | all 57 (1801-2017)          | 13,071               | [EggersSpirling data](https://github.com/ArthurSpirling/EggersSpirlingDatabase) (starting from 38th session, Eggers/Spirling 2014) | 
+| United States (House and Senate)     | all 116 (1789-2019)         | 12,512               | [Voteview data](https://voteview.com/data) (Lewis et al. 2019), [Congressional Bills Project data](http://www.congressionalbills.org/) (Adler/Wilkserson 2018) |
+| **9**                                | **320**                     | **42,534**           | **5** 		 |
 
-For each legislature, the package currently holds nine datasets: 
+For each legislature, the package holds nine datasets: 
 
-1.  *Core* (basic sociodemographic data)
-2.  *Political* (basic political data)
+1.  *Core* (sociodemographic data)
+2.  *Political* (political data)
 3.  *History* (full revision records of individual Wikipedia biographies)
 4.  *Traffic* (daily user traffic on individual Wikipedia biographies from July 2015 to December 2018)
 5.  *Social* (social media handles and personal website URLs)
@@ -49,18 +49,19 @@ The datasets contain the following variables (see the respective R help files fo
 - *Portraits*: Wikipedia page ID, Wikipedia portrait URL.
 - *Offices*: Wikidata ID, a range of offices such as attorney general, chief justice, mayor, party chair, secretary of state, etc.
 - *Professions*: Wikidata ID, a range of professions such as accountant, farmer, historian, judge, mechanic, police officer, salesperson, teacher, etc.
-- *IDs*: Wikidata ID, a range of IDs such as parliamentary website IDs, Library of Congress or German National Library IDs, Notable Names Database or Project Vote Smart IDs, etc.
- 
-Please note that for some legislatures or legislative periods, datasets may only hold data on a small subset of politicians, yield a substantial amount of missings for specific variables, or lack specific variables altogether. In successive versions of legislatoR, we try to fill some of these gaps.
+- *IDs*: Wikidata ID, IDs for integration with various political science datsets as well as a range of other IDs such as parliamentary website IDs, Library of Congress or German National Library IDs, Notable Names Database or Project Vote Smart IDs, etc.
 
-legislatoR comes as a relational database, which means that all datasets can be joined with the *Core* dataset via one of two keys - the Wikipedia page ID or the Wikidata ID, which uniquely identify individual politicians. The figure below illustrates this structure and some of the package's content.
+
+Note that for some legislatures or legislative periods, datasets may only hold data on a subset of observation. In successive versions of legislatoR, we try to fill some of these gaps.
+
+legislatoR comes as a relational database. This means that all datasets can be joined with the Core dataset via one of two keys - the Wikipedia page ID or the Wikidata ID. These keys uniquely identify individual politicians. The figure below illustrates this structure and some of the package's content.
 
 <p align="center">
   <img width="500" src="images/data-structure.png">
 </p>
 
 ## Installation
-legislatoR is currently only available through GitHub. To install the package in `R`, type:
+legislatoR is available through GitHub. To install the package in `R`, type:
 
 ```r
 devtools::install_github("saschagobel/legislatoR")
@@ -119,16 +120,7 @@ See [here](NEWS.md) for details on package updates.
 See [here](GLOSSARY.md) for the full form of abbreviated country codes and party names and English translations of non-English party names.
 
 ## Sources
-legislatoR was predominantly built using automated data extraction techniques. See the [source code](source) for more details. The package was assembled using the following Web sources or tools:
-
-[Face++ Cognitive Services API](https://www.faceplusplus.com/) <br />
-[Czech Republic Parliamentary Members Archive](http://public.psp.cz/sqw/fsnem.sqw?zvo=1) <br />
-[Germany Bundestag Open Data](https://www.bundestag.de/service/opendata) <br />
-[Wikimedia Commons](https://commons.wikimedia.org/) <br />
-[Wikimedia API](https://wikimedia.org/) <br />
-[Wikidata API](https://www.wikidata.org/) <br />
-[Wikipedia](https://de.wikipedia.org/) <br />
-[Wikipedia API](https://en.wikipedia.org/w/api.php) 
+legislatoR was predominantly built using automated data extraction techniques. See the [source code](source) and [this list](SOURCES.md) of Web sources for more details.
 
 ## Citation
 Thank you for using legislatoR! Please consider citing:
