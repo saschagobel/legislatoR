@@ -1,4 +1,4 @@
-﻿# Glossary
+# Glossary
 
 #### Country codes
 * AUT - Austria
@@ -8,6 +8,7 @@
 * DEU - Germany
 * IRL - Ireland
 * SCO - Scotland
+* ESP - Spain
 * GBR - United Kingdom
 * USA - United States of America
 
