@@ -2,21 +2,22 @@
 % Please edit documentation in R/get_traffic.R
 \name{get_traffic}
 \alias{get_traffic}
-\title{Fetch Wikipedia 'Traffic' dataset}
-\format{Data frame with columns (might vary by legislature):
+\title{Fetch Wikipedia 'Traffic' table}
+\format{Data frame with columns:
 \itemize{
 \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
 \item{date: Date for which user traffic is recorded, from 2015-07-01 to 2018-12-31 UTC (of class \sQuote{POSIXct}).}
 \item{traffic: Daily non-unique user visits (of class \sQuote{numeric}).}
 }}
 \source{
-Wikimedia API, \url{https://wikimedia.org/api.php}
+Wikimedia API, \url{https://wikimedia.org/api/rest_v1/}
+\url{http://petermeissner.de:8880/}
 }
 \usage{
 get_traffic(legislature)
 }
 \arguments{
-\item{legislature}{A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
+\item{legislature}{A character string specifying the three-letter country code of the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{esp}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
 }
 \value{
 A data frame with columns as specified above.

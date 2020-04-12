@@ -2,8 +2,8 @@
 % Please edit documentation in R/get_office.R
 \name{get_office}
 \alias{get_office}
-\title{Fetch 'Offices' dataset}
-\format{Data frame in wide format with columns (might vary by legislature):
+\title{Fetch 'Offices' table}
+\format{Data frame in wide format with columns (varies by legislature):
 \itemize{
 \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
 \item{office_1: political or other office held by a legislator (of class \sQuote{logical}).}
@@ -17,13 +17,13 @@ Wikidata API, \url{https://www.wikidata.org/}
 get_office(legislature)
 }
 \arguments{
-\item{legislature}{A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
+\item{legislature}{A character string specifying the three-letter country code of the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{esp}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
 }
 \value{
 A data frame with columns as specified above.
 }
 \description{
-Fetches political and other offices of legislators' for the specified legislature. Requires a working Internet connection.
+Fetches political and other offices of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
 \donttest{## assign entire core dataset into the environment

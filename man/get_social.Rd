@@ -2,8 +2,8 @@
 % Please edit documentation in R/get_social.R
 \name{get_social}
 \alias{get_social}
-\title{Fetch 'Social' dataset}
-\format{Data frame with columns (might vary by legislature):
+\title{Fetch 'Social' table}
+\format{Data frame with columns (varies by legislature):
 \itemize{
 \item{wikidataid: Wikidata ID identifying a legislator's Wikidata entry (of class \sQuote{character}).}
 \item{twitter: Twitter handle (of class \sQuote{character}).}
@@ -21,7 +21,7 @@ Wikidata API, \url{https://www.wikidata.org/}
 get_social(legislature)
 }
 \arguments{
-\item{legislature}{A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
+\item{legislature}{A character string specifying the three-letter country code of the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{esp}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
 }
 \value{
 A data frame with columns as specified above.

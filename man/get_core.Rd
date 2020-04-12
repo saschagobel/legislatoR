@@ -2,11 +2,11 @@
 % Please edit documentation in R/get_core.R
 \name{get_core}
 \alias{get_core}
-\title{Fetch 'Core' dataset}
-\format{Data frame with columns (might vary by legislature):
+\title{Fetch 'Core' table}
+\format{Data frame with columns (varies by legislature):
 \itemize{
 \item{country: ISO 3166-1 alpha-3 three-letter country code (of class \sQuote{character}).}
-\item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
+\item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer} or \sQuote{character}).}
 \item{wikidataid: Wikidata ID identifying a legislator's Wikidata entry (of class \sQuote{character}).}
 \item{wikititle: A legislator's undirected Wikipedia title (of class \sQuote{character}).}
 \item{name: A legislator's full name (of class \sQuote{character}).}
@@ -30,13 +30,13 @@ Germany Bundestag Open Data, \url{https://www.bundestag.de/service/opendata}
 get_core(legislature)
 }
 \arguments{
-\item{legislature}{A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
+\item{legislature}{A character string specifying the three-letter country code of the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{esp}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
 }
 \value{
 A data frame with columns as specified above.
 }
 \description{
-Fetches basic sociodemographic data for legislators of the specified legislature. Requires a working Internet connection.
+Fetches sociodemographic data of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
 \donttest{## assign entire core dataset into the environment

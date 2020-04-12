@@ -1,13 +1,13 @@
-#' Fetch 'Core' dataset
+#' Fetch 'Core' table
 #'
-#' Fetches basic sociodemographic data for legislators of the specified legislature. Requires a working Internet connection.
+#' Fetches sociodemographic data of legislators for the specified legislature. Requires a working Internet connection.
 #'
-#' @param legislature A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.
+#' @param legislature A character string specifying the three-letter country code of the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{esp}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.
 #' @return A data frame with columns as specified above.
-#' @format Data frame with columns (might vary by legislature):
+#' @format Data frame with columns (varies by legislature):
 #' \itemize{
 #' \item{country: ISO 3166-1 alpha-3 three-letter country code (of class \sQuote{character}).}
-#' \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
+#' \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer} or \sQuote{character}).}
 #' \item{wikidataid: Wikidata ID identifying a legislator's Wikidata entry (of class \sQuote{character}).}
 #' \item{wikititle: A legislator's undirected Wikipedia title (of class \sQuote{character}).}
 #' \item{name: A legislator's full name (of class \sQuote{character}).}
@@ -52,13 +52,25 @@
 #' @importFrom curl nslookup
 #' @import dplyr
 get_core <- function(legislature) {
-  if (!(legislature %in% c("aut", "can", "cze", "fra", "deu", "irl", "sco", "gbr", "usa_house", "usa_senate")))
-    stop ("legislatoR does not contain data for this legislature at the moment. Please try one of 'aut', 'can', 'cze', 'fra', 'deu', 'irl', 'usa_house', or 'usa_senate'.")
-  if (is.null(curl::nslookup("www.github.com", error = FALSE)))
-    stop ("legislatoR failed to establish a connection to GitHub. Please check your Internet connection and whether GitHub is online.")
-  ghurl <- base::paste0("https://github.com/saschagobel/legislatoR-data/blob/master/data/", legislature, "_core?raw=true")
-  connect <- base::url(ghurl)
+  if (length(legislature) > 1) {
+    stop ("\n\nNo more than one legislature can be called at once. Please provide only one valid three-letter country code.")
+  }
+  if (!(legislature %in% c("aut", "can", "cze",
+                           "esp", "fra", "deu",
+                           "irl", "sco", "gbr",
+                           "usa_house", "usa_senate"))) {
+    stop (paste0("\n\nPlease provide a valid three-letter country code. legislatoR does not recognize the country code or does not contain data for ",
+                 paste0(
+                   paste0("\"", legislature, "\""),
+                   collapse = ", "),
+                 ". Use `legislatoR::cld_content()` to see country codes of available legislatures."))
+  }
+  if (is.null(curl::nslookup("www.github.com", error = FALSE))) {
+    stop ("\n\nlegislatoR cannot establish a connection to GitHub. Please check your Internet connection and whether GitHub is online.")
+  }
+  ghurl <- paste0("https://github.com/saschagobel/legislatoR-data/blob/master/data/", legislature, "_core?raw=true")
+  connect <- url(ghurl)
   on.exit(close(connect))
-  dataset <- base::readRDS(connect)
+  dataset <- readRDS(connect)
   return(dataset)
 }

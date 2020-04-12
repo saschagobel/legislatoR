@@ -4,29 +4,31 @@
 \name{legislatoR}
 \alias{legislatoR}
 \alias{legislatoR-package}
-\title{legislatoR.}
+\title{legislatoR}
 \description{
-A data package comprising political, sociodemographic, and Wikipedia-related data on elected politicians across the globe. Currently includes 32,533 elected politicians from 283 legislative session of the Austrian Nationalrat, the Canadian House of Commons, the Czech Poslanecka Snemovna, the French Assemblee, the German Bundestag, the Irish Dail, the Scottish Parliament, the House of Commons of the United Kingdom, and the United States Congress (House and Senate).
+Facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 45,000 contemporary and historical politicians from ten countries.
 }
 \section{legislatoR functions}{
 
 
-\code{\link{get_core}}: fetches basic sociodemographic data.\cr
+\code{\link{cld_content}}: returns a named list of legislatures and sessions available in the CLD.\cr
 
-\code{\link{get_political}}: fetches basic political data.\cr
+\code{\link{get_core}}: fetches sociodemographic data of legislators.\cr
 
-\code{\link{get_traffic}}: fetches full revision records of individual Wikipedia biographies.\cr
+\code{\link{get_political}}: fetches political data of legislators.\cr
 
-\code{\link{get_history}}: fetches daily user traffic on individual Wikipedia biographies from July 2015 to December 2018.\cr
+\code{\link{get_history}}: fetches full revision histories of legislators' Wikipedia biographies.\cr
 
-\code{\link{get_social}}: fetches social media handles and personal website URLs.\cr
+\code{\link{get_traffic}}: fetches daily user traffic on legislators' Wikipedia biographies.\cr
 
-\code{\link{get_portrait}}: fetches URLs to individual Wikipedia Commons portraits.\cr
+\code{\link{get_social}}: fetches social media handles and website URLs of legislators.\cr
 
-\code{\link{get_ids}}: fetches public offices.\cr
+\code{\link{get_portrait}}: fetches portrait urls of legislators.\cr
 
-\code{\link{get_office}}: fetches professions.\cr
+\code{\link{get_office}}: fetches political and other offices of legislators.\cr
 
-\code{\link{get_profession}} fetches a range of identifiers linking a politician to another file, database, or website.
+\code{\link{get_profession}} fetches occupational data of legislators.\cr
+
+\code{\link{get_ids}}: fetches a range of IDs of legislators.\cr
 }
 

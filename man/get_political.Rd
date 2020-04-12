@@ -2,8 +2,8 @@
 % Please edit documentation in R/get_political.R
 \name{get_political}
 \alias{get_political}
-\title{Fetch 'Political' dataset}
-\format{Data frame in long format with columns (might vary by legislature):
+\title{Fetch 'Political' table}
+\format{Data frame in long format with columns (varies by legislature):
 \itemize{
 \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
 \item{session: Legislative period (of class \sQuote{integer}).}
@@ -20,18 +20,19 @@
 \source{
 Wikipedia, \url{https://wikipedia.org/} \cr
 Czech Republic Parliamentary Members Archive \url{http://public.psp.cz/sqw/fsnem.sqw?zvo=1}
+Spain Parliamentary Members Archive \url{http://www.congreso.es/portal/page/portal/Congreso/Congreso/Diputados}
 }
 \usage{
 get_political(legislature)
 }
 \arguments{
-\item{legislature}{A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
+\item{legislature}{A character string specifying the three-letter country code of the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{esp}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
 }
 \value{
 A data frame with columns as specified above.
 }
 \description{
-Fetches political data for legislators of the specified legislature. Requires a working Internet connection.
+Fetches political data of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
 \donttest{## assign entire core dataset into the environment

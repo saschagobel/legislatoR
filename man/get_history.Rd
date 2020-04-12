@@ -2,8 +2,8 @@
 % Please edit documentation in R/get_history.R
 \name{get_history}
 \alias{get_history}
-\title{Fetch Wikipedia 'History' dataset}
-\format{Data frame with columns (might vary by legislature):
+\title{Fetch Wikipedia 'History' table}
+\format{Data frame with columns:
 \itemize{
 \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
 \item{revid: Wikipedia edit ID (of class \sQuote{integer}).}
@@ -21,7 +21,7 @@ Wikipedia API, \url{https://wikipedia.org/w/api.php}
 get_history(legislature)
 }
 \arguments{
-\item{legislature}{A character string specifying the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
+\item{legislature}{A character string specifying the three-letter country code of the legislature for which data shall be fetched. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{esp}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}.}
 }
 \value{
 A data frame with columns as specified above.

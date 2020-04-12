@@ -1,7 +1,8 @@
-﻿* Additional religious affiliations from http://www.adherents.com/adh_congress.html <br />
+* Additional religious affiliations from http://www.adherents.com/adh_congress.html <br />
 * [Face++ Cognitive Services API](https://www.faceplusplus.com/) <br />
 * [Czech Republic Parliamentary Members Archive](http://public.psp.cz/sqw/fsnem.sqw?zvo=1) <br />
 * [Germany Bundestag Open Data](https://www.bundestag.de/service/opendata) <br />
+* [Spain Parliamentary Members Archive](http://www.congreso.es/portal/page/portal/Congreso/Congreso/Diputados) <br />
 * Additional Twitter handles from https://github.com/oduwsdl/US-Congress <br />
 * Additional Twitter handles provided by Bruno Castanho Silva and Sven-Oliver Proksch <br />
 * [Wikimedia Commons](https://commons.wikimedia.org/) <br />

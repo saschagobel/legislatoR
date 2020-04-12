@@ -1,0 +1,221 @@
+---
+title: "Introducing legislatoR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introducing legislatoR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+```{r include = FALSE}
+LOCAL <- identical(Sys.getenv("LOCAL"), "TRUE")
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE, message = FALSE)
+```
+
+<img style='background:white; border:none; box-shadow:none;' src='sticker.jpg' width='175' align='right' />
+
+###### Sascha Göbel and Simon Munzert -- April, 2020 
+
+**legislatoR** facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 45,000 contemporary and historical politicians from ten countries. Information is stored in nine topically distinguished tables for each country and arranged in a relational fashion.
+
+This vignette provides an introduction on how to use **legislatoR** to access and make the most of the information stored in the CLD.
+
+## General access to the CLD 
+Basic access to the CLD works through table-specific functions. Functions are named after the table they fetch and preceded by "get_". The table below lists data tables and corresponding function calls. Alternatively, you can call `?legislatoR()` to get an overview of all the functions in **legislatoR**.
+
+| Table       | Function            | Description                                                           | Key                |
+| :---------- | :------------------ | :-------------------------------------------------------------------- | :----------------- |  
+| Core        | `get_core()`        | Fetches sociodemographic data of legislators                          | pageid, wikidataid |
+| Political   | `get_political()`   | Fetches political data of legislators                                 | pageid             |
+| History     | `get_history()`     | Fetches full revision histories of legislators' Wikipedia biographies | pageid             |
+| Traffic     | `get_traffic()`     | Fetches daily user traffic on legislators' Wikipedia biographies      | pageid             |
+| Social      | `get_social()`      | Fetches social media handles and website URLs of legislators          | wikidataid         |
+| Portraits   | `get_portrait()`    | Fetches portrait urls of legislators                                  | pageid             |
+| Offices     | `get_office()`      | Fetches political and other offices of legislators                    | wikidataid         |
+| Professions | `get_profession()`  | Fetches occupational data of legislators                              | wikidataid         |
+| IDs         | `get_ids()`         | Fetches a range of IDs of legislators                                 | wikidataid         |
+
+Every "get_" function has a "legislature" argument that takes a character string specifying the three-letter country code of the legislature for which a table shall be fetched. The table below lists all legislatures available in the CLD together with their three-letter country code. Alternatively, you can call `?cld_content()` to get an overview of the CLD's scope and valid three-letter country codes. This will also show you the sessions available for each legislature.
+
+| Legislature                          | Code                     |
+| :----------------------------------- | :----------------------- | 
+| Austria (Nationalrat)                | `aut`                    |
+| Canada (House of Commons)            | `can`                    |
+| Czech Republic (Poslanecka Snemovna) | `cze`                    |
+| France (Assemblée)                   | `fra`                    | 
+| Germany (Bundestag)                  | `deu`                    | 
+| Ireland (Dail)                       | `irl`                    |
+| Scotland (Parliament)                | `sco`                    |
+| Spain (Congreso de los Diputados)    | `esp`                    |
+| United Kingdom (House of Commons)    | `gbr`                    |
+| United States (House and Senate)     | `usa_house`/`usa_senate` |
+
+Here are some examples for fetching full tables for different countries. All tables come in a tidy (long) format. Every row represents a politician and every column a variable.
+
+```{r eval = LOCAL}
+library(legislatoR)
+library(tibble)
+
+# get "Core" table for the United States House ------------------------------------------
+usa_house_core <- get_core(legislature = "usa_house")
+glimpse(usa_house_core)
+
+# get "Political" table for the German Bundestag ----------------------------------------
+deu_political <- get_political(legislature = "deu")
+glimpse(deu_political)
+
+# get "IDs" table for the Spanish Congreso ----------------------------------------------
+esp_ids <- get_ids(legislature = "esp")
+glimpse(esp_ids)
+```
+
+## Targeted access to the CLD 
+**legislatoR** also facilitates more targeted access to the CLD than by simply downloading whole tables. Two legislator-specific keys, the Wikipedia page and the Wikidata ID, link all tables to the "Core" table. This allows for mutating and filtering joins using a popular grammar of data manipulation implemented in the 'dplyr' package. The table above lists the relevant key for each data table in the CLD. Here are some examples for combining and subsetting data from different tables. We always start from the "Core" table since it identifies legislators by name and country and never holds a legislator twice.
+
+```{r eval = LOCAL}
+library(dplyr)
+
+# combine "Core" and "Political" tables for the Irish Dail ------------------------------
+irl_join <- left_join(x = get_core(legislature = "irl"), 
+                      y = get_political(legislature = "irl"), 
+                      by = "pageid")
+glimpse(irl_join)
+
+# then add the "Social" table -----------------------------------------------------------
+irl_join <- left_join(x = irl_join, 
+                      y = get_social(legislature = "irl"), 
+                      by = "wikidataid")
+glimpse(irl_join)
+
+# get "Core" table for Scottish Liberal Democrats
+sco_subset <- semi_join(x = get_core(legislature = "sco"),
+                        y = filter(get_political(legislature = "sco"), 
+                                   party == "Scottish Liberal Democrats"),
+                        by = "pageid")
+glimpse(sco_subset)
+
+# combine "Core" and "Political" tables for German Bundestag CDU/CSU and AfD members ----
+deu_subset <- inner_join(x = get_core(legislature = "deu"),
+                         y = filter(get_political(legislature = "deu"), 
+                                    party %in% c("CDU", "CSU", "AfD")),
+                         by = "pageid")
+glimpse(deu_subset)
+
+# combine "Core" and "Political" tables for female legislators from the 37th Canadian 
+# House of Commons ----------------------------------------------------------------------
+can_subset <- inner_join(x = filter(get_core(legislature = "can"), sex == "female"), 
+                         y = filter(get_political(legislature = "can"), session == 37), 
+                         by = "pageid")
+glimpse(can_subset)
+
+# combine "Core", "Traffic", and "Social" tables for UK House Commons members with 
+# Twitter handles -----------------------------------------------------------------------
+uk_subset <- left_join(x = inner_join(x = get_core(legislature = "gbr"),
+                                      y = filter(get_social(legislature = "gbr"), !is.na(twitter)),
+                                      by = "wikidataid"),
+                       y = get_traffic(legislature = "gbr"),
+                       by = "pageid")
+glimpse(uk_subset)
+```
+
+Of course, you can also use the pipe operator `%>%` from the 'magrittr' package to improve code readability and reach your goal in less steps.
+
+```{r eval = LOCAL}
+library(magrittr)
+
+# combine "Core", "IDs", and "Portraits" tables for the Austrian Nationalrat ------------
+aut_join <- get_core(legislature = "aut") %>%
+  left_join(get_ids(legislature = "aut"),
+            by = "wikidataid") %>%
+  left_join(get_portrait(legislature = "aut"),
+            by = "pageid")
+glimpse(aut_join)
+
+# get "Core" table for high-profile politicians (top 1% of Wikipedia page views) of 
+# French Assemblée ----------------------------------------------------------------------
+fra_subset <- get_traffic(legislature = "fra") %>%
+  group_by(pageid) %>%
+  summarise(total_traffic = sum(traffic)) %>%
+  filter(total_traffic >= quantile(total_traffic, probs = 0.99)) %>%
+  semi_join(x = get_core(legislature = "fra"),
+            y = .,
+            by = "pageid")
+glimpse(fra_subset)
+```
+
+## Integrating with other sources
+The CLD is integrated with several other data projects. You can call `?get_ids()` to get an overview of all projects the CLD is integrated with and how respective IDs are named. Here are two examples that show how to use the IDs to join the CLD with other projects. The first example integrates the "Core" table for the Spanish Congreso with a small one-month-extract of the ParlSpeech V2 data (Rauh and Schwalbach 2020). The second example integrates the "Core" and "Political" tables for the Irish Dail with a small one-month-extract of the Database of Parliamentary Speeches in Ireland (Herzog and Mikhaylov 2017).
+
+```{r eval = LOCAL}
+library(stringr)
+
+# import ParlSpeech example and rename ID to match CLD ----------------------------------
+parlspeech_example <- readRDS("parlspeech_example") %>%
+  rename(parlspeech = speaker)
+
+# remove whitespace from start and end of the ID in ParlSpeech --------------------------
+parlspeech_example$parlspeech <- str_trim(parlspeech_example$parlspeech)
+
+# integrate CLD with ParlSpeech example -------------------------------------------------
+esp_speeches <- get_core(legislature = "esp") %>%
+  left_join(get_ids(legislature = "esp"),
+            by = "wikidataid") %>%
+  filter(!is.na(parlspeech)) %>%
+  inner_join(parlspeech_example,
+             by = "parlspeech")
+
+# import Database of Parliamentary Speeches in Ireland example and rename ID ------------
+dpsi_example <- readRDS("dpsi_example") %>%
+  rename(dpsi = memberID)
+
+# integrate CLD with ParlSpeech example -------------------------------------------------
+irl_speeches <- get_core(legislature = "irl") %>%
+  inner_join(filter(get_political(legislature = "irl"), session == 28),
+            by = "pageid") %>%
+  left_join(get_ids(legislature = "irl"),
+            by = "wikidataid") %>%
+  inner_join(dpsi_example,
+             by = "dpsi")
+```
+
+## Map over legislatures
+So far we have accessed the CLD legislature by legislature. It is also possible to retrieve data for multiple legislatures at once with the help of the `cld_content()` function. This function returns the three-letter country codes for all legislatures available in the CLD as well as the available legislative sessions. This helps to conveniently map over legislatures. In the first example below we `purrr::map()` over the names of all legislatures to get a list of "Core" tables. In the second example, we do the same and additionally join with the respective "Political" tables cut to the last three legislative sessions. To achieve this, we call `cld_content()` within `purrr::map()` one more time, passing the name of the respective legislature to get all available sessions, of which we then select the last three sessions to filter the "Political" tables accordingly before joining with the "Core" table. You can always pass a vector of three-letter country codes to the "legislature" argument of `cld_content()` beforehand or otherwise subset the list returned by the function to select a specific subset of legislatures.
+
+```{r eval = LOCAL}
+library(purrr)
+
+# get "Core" table for all legislatures -------------------------------------------------
+all_core <- cld_content() %>%
+  names() %>%
+  map(get_core)
+glimpse(all_core)
+
+# get "Core" and "Political" tables for last three sessions of all legislatures ----------
+recent_sessions <- cld_content() %>%
+  names() %>%
+  map(~ {
+    get_core(legislature = .x) %>%
+      inner_join(filter(get_political(legislature = .x),
+                        session %in% tail(cld_content(.x)[[1]], 3)),
+                 by = "pageid")
+  })
+glimpse(recent_sessions)
+```
+
+## Other Formats
+You do not have to be an R user to work with the CLD. If you are more familiar in conducting analyses with other software, such as Excel, SAS, STATA, or SPSS, you can use **legislatoR** to get the data you require as illustrated above and then export it into the desired format as shown below.
+
+```{r eval = FALSE}
+library(haven)
+
+# save data as .csv for use with Excel --------------------------------------------------
+write.csv(fra_subset, "fra_subset.csv")
+
+# save data as .sas for use with SAS ----------------------------------------------------
+write_sas(sco_subset, "sco_subset.sas")
+
+# save data as .dta for use with STATA --------------------------------------------------
+write_dta(irl_join, "irl_join.dta")
+
+# save data as .sav for use with SPSS ---------------------------------------------------
+write_sav(esp_speeches, "esp_speeches.sav")
+```
