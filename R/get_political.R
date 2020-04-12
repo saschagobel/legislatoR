@@ -42,7 +42,7 @@
 #' }
 #' @source
 #' Wikipedia, \url{https://wikipedia.org/} \cr
-#' Czech Republic Parliamentary Members Archive \url{http://public.psp.cz/sqw/fsnem.sqw?zvo=1}
+#' Czech Republic Parliamentary Members Archive \url{http://public.psp.cz/sqw/fsnem.sqw?zvo=1} \cr
 #' Spain Parliamentary Members Archive \url{http://www.congreso.es/portal/page/portal/Congreso/Congreso/Diputados}
 #' @export
 #' @importFrom curl nslookup

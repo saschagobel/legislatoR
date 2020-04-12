@@ -33,7 +33,7 @@
 #'                                        by = "pageid")$birth
 #' }
 #' @source
-#' Wikimedia API, \url{https://wikimedia.org/api/rest_v1/}
+#' Wikimedia API, \url{https://wikimedia.org/api/rest_v1/} \cr
 #' \url{http://petermeissner.de:8880/}
 #' @export
 #' @importFrom curl nslookup

@@ -46,7 +46,7 @@
 #' Wikipedia API, \url{https://wikipedia.org/w/api.php} \cr
 #' Wikidata API, \url{https://www.wikidata.org/} \cr
 #' Wikimedia Commons, \url{https://commons.wikimedia.org/} \cr
-#' Face++ Cognitive Services API, \url{https://www.faceplusplus.com/}
+#' Face++ Cognitive Services API, \url{https://www.faceplusplus.com/} \cr
 #' Germany Bundestag Open Data, \url{https://www.bundestag.de/service/opendata}
 #' @export
 #' @importFrom curl nslookup
