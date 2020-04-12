@@ -56,18 +56,21 @@ wikiIDs <- function(url, corp = NULL) {
   }
   url <- debugEnc(string = url)
   title <- str_extract(url, "(?<=/)[[:upper:]].+")
-  langcode <- str_extract(url[1], "(?<=//)[[:alpha:]]{2}")
+  langcode <- str_extract(url, "(?<=//)[[:alpha:]]{2}") #  str_extract(url[1], "(?<=//)[[:alpha:]]{2}")
   ids <- data.table(pageid = rep(as.integer(NA), length(title)),
                     wikidataid = rep(as.character(NA), length(title)))
   k <- 1
   cat("|")
-   cat(k) # for debug purposes
+   #cat(k) # for debug purposes
   for (i in 1:length(url)) {
+    if (is.na(url[i])) {
+      next
+    }
     # for (i in 201:300) {
     id <- NULL
     while (is.null(id)) {
       try(
-        id <- as.character(RETRY("POST", str_c("https://", langcode,".wikipedia.org/w/api.php"),
+        id <- as.character(RETRY("POST", str_c("https://", langcode[i],".wikipedia.org/w/api.php"), # langcode
                                  query = list(action  = "query",
                                               titles = title[i],
                                               format = "json",
@@ -88,6 +91,31 @@ wikiIDs <- function(url, corp = NULL) {
     cat(".")
   }
   return(ids)
+}
+
+#### RETRIEVAL OF POLITICIANS' WIKIPEDIA URLS ===========================================
+wikiURLS <- function(ids, langcode) { # wikidataid
+  cat("|")
+  urls <- rep(NA, length(ids))
+  for (i in 1:length(ids)) {
+    cat(".")
+    if (is.na(ids[i])) {
+      next
+    }
+    url <- as.character(RETRY("POST", "https://www.wikidata.org/w/api.php",
+                              query = list(action  = "wbgetentities",
+                              format = "json",
+                              props = "sitelinks/urls",
+                              ids = ids[i],
+                              sitefilter = langcode),
+                              times = 1000))
+    Sys.sleep(1)
+    check <- fromJSON(url)$entities[[1]]$sitelinks
+    if (length(check) > 0) {
+      urls[i] <- fromJSON(url)$entities[[1]]$sitelinks[[1]][[4]]
+    }
+  }
+  return(urls)
 }
 
 
@@ -206,7 +234,7 @@ wikiData <- function (item, entity = NULL, property, date = FALSE, location = FA
         subtract(1)
       property_ids_unique <- sort(c(unique(unlist(property_ids)), rep(names(idscount), idscount)))
     } else {
-      property_ids_unique <- unique(unlist(property_ids))
+      property_ids_unique <- na.omit(unique(unlist(property_ids))) # remove na.omit
     }
     property_entities_unique <- get_item(id = property_ids_unique)
     property_values_unique <- lapply(property_entities_unique, `$.data.frame`, "labels") %>%
@@ -329,7 +357,7 @@ wikiData <- function (item, entity = NULL, property, date = FALSE, location = FA
 
 
 #### RETRIEVAL OF WIKIPEDIA REVISION HISTORIES ==========================================
-wikiHist <- function(pageid, project) {
+wikiHist <- function(pageid, project, uniqueid = NULL) {
   nms <- c("revid", "parentid", "user", "userid", "userhidden", "anon",
            "timestamp", "size", "minor", "comment", "commenthidden", "tags")
   cat("|")
@@ -384,6 +412,9 @@ wikiHist <- function(pageid, project) {
     cat(".")
   }
   revisions_full <- revisions_full %>% mutate(pageid = pageid)
+  if (!is.null(uniqueid)) {
+    revisions_full <- revisions_full %>% mutate(pageid_unique = uniqueid)
+  }
   return(revisions_full)
 }
 
@@ -428,15 +459,73 @@ wikiTraffic <- function(data, project) {
   return(traffic)
 }
 
+wikiTrafficNew <- function(data, project, uniqueid = NULL) {
+  title <- data$title
+  if (is.null(uniqueid)) {
+    pageid <- data$pageid
+  } else {
+    pageid_unique <- data$pageid_unique
+  }
+  traffic <- NULL
+  for (i in 1:length(title)) {
+    cat(".")
+    while(is.null(traffic)) {
+      traffic <- try(wp_trend(page = title[i],
+                              lang = project[i],
+                              from = "2007-12-01",
+                              to = Sys.Date()) %>%
+                       dplyr::select(date, views) %>%
+                       filter(views > 0) %>%
+                       mutate(date = lubridate::as_date(date)),
+                     silent = TRUE
+      )
+      if (class(traffic) == "try-error") {
+        traffic <- try(wp_trend(page = title[i],
+                                lang = project[i],
+                                from = "2016-01-01",
+                                to = Sys.Date()) %>%
+                         dplyr::select(date, views) %>%
+                         filter(views > 0) %>%
+                         mutate(date = lubridate::as_date(date)),
+                       silent = TRUE
+        )
+        if (class(traffic) == "try-error") {
+          next
+        }
+      }
+    }
+    if (is.null(uniqueid)) {
+      traffic$pageid <- pageid[i]
+      traffic <- traffic %>%
+        dplyr::select(pageid, date, traffic = views)
+    } else {
+      traffic$pageid_unique <- pageid_unique[i]
+      traffic <- traffic %>%
+        dplyr::select(pageid = pageid_unique, date, traffic = views)
+    }
+    traffic <- suppressMessages(padr::pad(traffic, interval = "day"))
+    traffic[,1:2] <- zoo::na.locf(traffic[,1:2])
+    traffic[is.na(traffic[3]), 3] <- 0
+    if (i == 1) {
+      traffic_list <- list(traffic)
+    } else {
+      traffic_list <- c(traffic_list, list(traffic))
+    }
+    traffic <- NULL
+  }
+  traffic <- bind_rows(traffic_list)
+  return(traffic)
+}
+
 
 #### RETRIEVAL OF WIKIPEDIA IMAGE URLS ==================================================
-imageUrl <- function(pageid, project) {
+imageUrl <- function(pageid, project, uniqueid = NULL) {
   image <- NULL
   urls <- rep(NA, times = length(pageid))
   for (i in 1:length(urls)) {
     while(is.null(image)) {
       try(
-        image <- as.character(httr::RETRY("POST", str_c("https://", project,".org/w/api.php"),
+        image <- as.character(httr::RETRY("POST", str_c("https://", project,".org/w/api.php"), # project[i]
                                           query = list(action  = "query",
                                                        pageids = pageid[i],
                                                        prop = "pageimages",
@@ -461,19 +550,19 @@ imageUrl <- function(pageid, project) {
     image <- NULL
     cat(".")
   }
-  urls <- na.omit(data.table(pageid = pageid, image_url = urls))
+  urls <- na.omit(data.table(pageid = pageid, image_url = urls)) # pageid = uniqueid
   return(urls)
 }
 
 
 #### RETRIEVAL OF UNDIRECTED WIKIPEDIA PAGE TITLES ======================================
-undirectedTitle <- function(pageid, project) {
+undirectedTitle <- function(pageid, project, uniqueid = NULL) {
   revision <- NULL
   urls <- rep(NA, times = length(pageid))
   for (i in 1:length(urls)) {
     while(is.null(revision)) {
       try(
-        revision <- as.character(httr::RETRY("POST", str_c("https://", project,".org/w/api.php"),
+        revision <- as.character(httr::RETRY("POST", str_c("https://", project,".org/w/api.php"), # project[i] - adjust if error
                                              query = list(action  = "query",
                                                           pageids = pageid[i],
                                                           prop = "info",
@@ -489,7 +578,11 @@ undirectedTitle <- function(pageid, project) {
     cat(".")
   }
   urls <- debugEnc(urls)
-  urls <- data.table(title = urls, pageid = pageid)
+  if (is.null(uniqueid)) {
+    urls <- data.table(title = urls, pageid = pageid)
+  } else {
+    urls <- data.table(title = urls, pageid = pageid, pageid_unique = uniqueid)
+  }
   return(urls)
 }
 
@@ -596,7 +689,8 @@ collectorCanada <- function(source) {
                    c("1993-10-25", "1997-06-01"), c("1997-06-02", "2000-11-26"),
                    c("2000-11-27", "2004-06-27"), c("2004-06-28", "2006-01-22"),
                    c("2006-01-23", "2008-10-13"), c("2008-10-14", "2011-05-01"),
-                   c("2011-05-02", "2015-10-18"), c("2015-10-19", "2018-12-31"))
+                   c("2011-05-02", "2015-10-18"), c("2015-10-19", "2019-10-20"),
+                   c("2019-10-21", "2023-10-16"))
   condition1 <- "contains(@title, 'Bloc')"
   condition2 <- "contains(., 'members') or contains(., 'membership') or contains(., 'Membership') or contains(., 'Standings')"
   condition3 <- "contains(@title, 'Lieutenant') or contains(@title, 'Minister') or 
@@ -640,7 +734,7 @@ collectorCanada <- function(source) {
                        condition5, ")]"), times = 3),
              rep(str_c("//h3[not(", condition2, ")]", "/span/ancestor::h3/following-sibling::table[1]/tbody/tr/
                        td[3]/ancestor::tr/td[2]//a[1][not(", condition3, " or ", condition7, " or ",
-                       condition5, ")]"), times = 6))
+                       condition5, ")]"), times = 7))
   query_party <- c(rep("//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/
                        td[last()]", times = 30),
                    rep(str_c("//h3[not(", condition2, ")]", "/span/ancestor::h3/following-sibling::table[1]/tbody/tr/
@@ -654,7 +748,7 @@ collectorCanada <- function(source) {
                    "//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/
                    td[last()]",
                    rep(str_c("//h3[not(", condition2, ")]", "/span/ancestor::h3/following-sibling::table[1]/tbody/tr/
-                             td[3]/ancestor::tr/td[3]"), times = 6)
+                             td[3]/ancestor::tr/td[3]"), times = 7)
                    )
   regex_term <- "[[:digit:]]+"
   query_constituency <- c(rep("//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[1]/a", times = 2),
@@ -666,7 +760,7 @@ collectorCanada <- function(source) {
                           str_c("//h3[not(", condition2, ")]/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[last()]/a"),
                           rep("//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[2]/a", times = 2),
                           "//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[3]/ancestor::tr/td[1]/a",
-                          rep(str_c("//h3[not(", condition2, ")]/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[last()]/a"), times = 6))
+                          rep(str_c("//h3[not(", condition2, ")]/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[last()]/a"), times = 7))
   query_multiplier <- c(rep("//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[1]/a/parent::td", times = 2),
                         "//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[1]",
                         rep("//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[1]/a/parent::td", times = 24),
@@ -677,24 +771,24 @@ collectorCanada <- function(source) {
                         rep("//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[2]/a/parent::td", times = 2),
                         "//h3/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[3]/ancestor::tr/td[1]/a/parent::td",
                         rep(str_c("//h3[not(", condition2, ")]/span/ancestor::h3/following-sibling::table[1]/tbody/tr/td[4]/ancestor::tr/td[last()]/a/parent::td"),
-                            times = 6))
+                            times = 7))
   replace_idx <- c(list(56), rep(list(0), times = 10), list(54), rep(list(0), times = 18), list(71), list(280), list(0), 
                    list(c(12, 37, 57, 62, 71, 76, 87, 91, 94, 99, 100, 107, 247)), list(c(113, 153, 204, 240)), list(0),
                    list(c(1:6,7,8:12,14,15:26,28:51,52,55,60:62,64,65,66,68,78,82,83,87,90,91, 93, 97, 98, 100, 104,124,
                           142,161,169,173,224,228,262,264,269,275,278,285:287,290,291,293:296,298)),
                    list(c(14, 56, 67, 149, 155, 159, 290)), list(c(10, 89, 97, 107, 124,134, 137, 158, 198, 301, 305)), 
                    list(c(2, 51, 189, 238)), list(c(11,15,42,89,110,153,172,177,194,197,219,238,244,260,271,272,283,284,290)), 
-                   list(c(13,37,121,170,202,238,250,253,271,289,291,295,302,306,316,328,337,7, 8, 27, 33,102,175,198,210,
-                          310,322,127)))
+                   list(c(6,7,8,13,27,33,51,71,102,114,121,127,170,174,175,198,202,210,233,250,253,271,283,289,291,302,
+                          306,310,311,316,322,328,337)), list(0))
   replacement <- c(list(1), rep(list(0), times = 10), list(1), rep(list(0), times = 18), list(1), list(1), list(0),
                    list(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)), list(c(1, 1, 1, 1)), list(0),
                    list(c(rep(1,6),2,rep(1,5),1,rep(1,12),rep(1,24),1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,2,
                           1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1)),
                    list(c(1,1,1,1,1,1,1)), list(c(1,1,1,1,1,1,1,1,1,1,1)), list(c(1,1,1,1)), 
-                   list(c(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)), list(1))
+                   list(c(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)), list(1), list(0))
   query_constituency2 <- c(rep("//h3[not(contains(., 'members') or contains(., 'membership') or contains(., 'Membership') or contains(., 'Standings'))]/span[@id]", times = 9),
                            rep("//h3[not(contains(., 'members') or contains(., 'membership') or contains(., 'Membership') or contains(., 'Standings'))]/span[@id]/a/ancestor::span", times = 18),
-                           rep("//h3[not(contains(., 'members') or contains(., 'membership') or contains(., 'Membership') or contains(., 'Standings'))]/span[@id]", times = 15))
+                           rep("//h3[not(contains(., 'members') or contains(., 'membership') or contains(., 'Membership') or contains(., 'Standings'))]/span[@id]", times = 16))
   query_multiplier2_1 <- unlist(lapply(str_split(query, "/tbody"), `[`, 1))
   query_multiplier2_2 <- unlist(lapply(str_split(query, "table\\[1\\]"), `[`, 2)) %>%
     str_replace("^", "\\.")
@@ -742,7 +836,7 @@ collectorCanada <- function(source) {
                     list(c(92,56,291,93)),
                     list(c(88,155,89,156,81,98,205,213,310,94,238,95,82,99,111,138,128,239,311,214,206)),
                     list(c(44,101,267,244,102,45,268,245,78,206,69,243,52,2,207,79,70)),
-                    list(c(0)),list(c(0))) 
+                    list(c(0)),list(c(0)), list(c(0))) 
   replacement2 <- c(list(0),list(0),list(c(0,0)),list(c(1036,552,1292)),
                     list(c(1707, 524, 428, 310, 1168, 538, 73, 863, 1500, 492, 537, 406, 56)),
                     list(c(1472, 162, 1472, 1472, 1167, 1167, 304, 1167, 1167, 1167, 1167, 197, 
@@ -795,7 +889,7 @@ collectorCanada <- function(source) {
                     list(c(171,376,499,401)),
                     list(c(217,240,685,685,370,394,525,535,550,552,585,391,391,391,732,805,921,209,209,209,209)),
                     list(c(181,198,219,337,591,591,591,591,563,688,688,738,741,761,152,152,152)),
-                    list(c(0)), list(c(0)))
+                    list(c(0)), list(c(0)), list(c(0)))
   regex_service1 <- c(rep("(from|acclaimed in|re-elected).+?[[:digit:]]{4}?", times = 4),
                       rep("(from|acclaimed in|re-elected|by-election|declared).+?[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}?", times = 7),
                       rep(c("(from|acclaimed in|re-elected|by-election|declared).+?[[:digit:]]{4}?",
@@ -807,6 +901,40 @@ collectorCanada <- function(source) {
                       rep("(to |died|until|overturned|defeated in|ended term|resigned|appointed|unseated|voided|expelled).+?[[:digit:]]{4}?", times = 23),
                       rep(".+", times =13),
                       rep("(to |died|until|overturned|defeated in|ended term|resigned).+?[[:digit:]]{4}?", times = 2))
+  append_names <- c(rep(list(0), 41), 
+                    list(c("Bob Benzen", "Stephanie Kusie", "Glen Motz", "Dane Lloyd",
+                           "Churence Rogers", "Michael Barrett", "Mary Ng", "Mona Fortier",
+                           "Jean Yip", "Emmanuella Lambropoulos", "Rosemarie Falk")))
+  append_urls <- c(rep(list(0), 41),
+                   list(c("https://en.wikipedia.org/wiki/Bob_Benzen",
+                          "https://en.wikipedia.org/wiki/Stephanie_Kusie",
+                          "https://en.wikipedia.org/wiki/Glen_Motz",
+                          "https://en.wikipedia.org/wiki/Dane_Lloyd",
+                          "https://en.wikipedia.org/wiki/Churence_Rogers",
+                          "https://en.wikipedia.org/wiki/Michael_Barrett_(Canadian_politician)",
+                          "https://en.wikipedia.org/wiki/Mary_Ng",
+                          "https://en.wikipedia.org/wiki/Mona_Fortier",
+                          "https://en.wikipedia.org/wiki/Jean_Yip",
+                          "https://en.wikipedia.org/wiki/Emmanuella_Lambropoulos",
+                          "https://en.wikipedia.org/wiki/Rosemarie_Falk")))
+  append_parties <- c(rep(list(0), 41), 
+                      list(c("Conservative", "Conservative", "Conservative", "Conservative", 
+                             "Liberal", "conservative", "Liberal",
+                             "Liberal", "Liberal", "Liberal", "Conservative")))
+  append_constituencies <- c(rep(list(0), 41), 
+                             list(c("Calgary Heritage", "Calgary Midnapore", "Medicine Hat—Cardston—Warner", "Sturgeon River—Parkland",
+                                    "Bonavista—Burin—Trinity", "Leeds—Grenville—Thousand Islands and Rideau Lakes",
+                                    "Markham—Thornhill", "Ottawa—Vanier", "Scarborough—Agincourt", "Saint-Laurent",
+                                    "Battlefords—Lloydminster")))
+  append_constituencies2 <- c(rep(list(0), 41), 
+                             list(c("Alberta", "Alberta","Alberta", "Alberta", "Newfoundland and Labrador",
+                                    "Ontario", "Ontario", "Ontario", "Ontario", "Quebec", "Saskatchewan")))
+  append_services <- c(rep(list(0), 41), 
+                       list(c(930,930,1091,727,678,321,920,920,678,930,678)))
+  append_session_start <- c(rep(list(0), 41), 
+                            list(rep("2015-10-19", times = 11)))
+  append_session_end <- c(rep(list(0), 41), 
+                          list(rep("2019-10-20", times = 11)))
   urls <- rep(list(NA), times = length(source))
   htmls <- rep(list(NA), times = length(source))
   names <- rep(list(NA), times = length(source))
@@ -851,7 +979,7 @@ collectorCanada <- function(source) {
       str_replace_all("\n", "") %>%
       str_extract(regex_service1[i]) %>%
       str_replace_all("from |acclaimed in |re-elected in |by-election |,|of |declared elected |after ", "")
-    if (i %in% c(1,2,3,20,41,42)) {
+    if (i %in% c(1,2,3,20,41,42,43)) {
       beginnings[[i]] <- beginnings[[i]] %>%
         str_replace("^(?=[[:digit:]]{4})", "January 2, ") %>% 
         str_replace("(?<=[[:alpha:]])((,)? )(?=[[:digit:]]{4})", " 2, ") %>%
@@ -880,7 +1008,7 @@ collectorCanada <- function(source) {
       str_replace_all("to |,|died |until |overturned in |defeated in |by-election |ended term |resigned |
                       unseated |Quebec legislative council |appointment |election voided |appointed |New Brunswick's |
                       Lieutenant-Governor |Manitoba |voided |expelled |by petition |Secretary of State |unseated |House of Commons Clerk on ", "")
-    if (i %in% c(1,2,3,20,41,42)) {
+    if (i %in% c(1,2,3,20,41,42,43)) {
       endings[[i]] <- endings[[i]] %>%
         str_replace("^(?=[[:digit:]]{4})", "January 1, ") %>%
         str_replace("(?<=[[:alpha:]])((,)? )(?=[[:digit:]]{4})", " 1, ") %>%
@@ -904,6 +1032,16 @@ collectorCanada <- function(source) {
       round()
     session_start[[i]] <- duration[[i]][1]
     session_end[[i]] <- duration[[i]][2]
+    if (i %in% c(42)) {
+      urls[[i]] <- append(urls[[i]], append_urls[[i]])
+      names[[i]] <- append(names[[i]], append_names[[i]])
+      parties[[i]] <- append(parties[[i]], append_parties[[i]])
+      constituencies[[i]] <- append(constituencies[[i]], append_constituencies[[i]])
+      constituencies2[[i]] <- append(constituencies2[[i]], append_constituencies2[[i]])
+      services[[i]] <- append(services[[i]], append_services[[i]])
+   #   session_start[[i]] <- append(session_start[[i]], append_session_start[[i]])
+  #    session_end[[i]] <- append(session_end[[i]], append_session_end[[i]])
+    }
   }
   urls <- lapply(urls, data.table) %>%
     lapply(rename, url = V1)
@@ -926,8 +1064,8 @@ collectorCanada <- function(source) {
                  session_end, SIMPLIFY = FALSE)
   urls <-  as.numeric(as.roman(str_extract(source, regex_term))) %>%
     mapply(function(urls, x) mutate(urls, term = x), urls, ., SIMPLIFY=FALSE) %>%
-    mapply(function(., x) mutate(., country = x), ., rep("CAN", times = 42), SIMPLIFY=FALSE)
-  }
+    mapply(function(., x) mutate(., country = x), ., rep("CAN", times = 43), SIMPLIFY=FALSE)
+}
 
 
 #### AUSTRIA WIKIPEDIA INFORMATION EXTRACTION ===========================================
@@ -947,20 +1085,21 @@ collectorAustria <- function(source) {
                    c("1994-11-07", "1996-01-14"), c("1996-01-15", "1999-10-29"),
                    c("1999-10-29", "2002-12-19"), c("2002-12-20", "2006-10-29"),
                    c("2006-10-30", "2008-10-27"), c("2008-10-28", "2013-10-28"),
-                   c("2013-10-29", "2017-10-15"), c("2017-10-16", "2022-11-06"))
+                   c("2013-10-29", "2017-10-15"), c("2017-10-16", "2019-09-29"),
+                   c("2019-09-30", "2024-10-01"))
   # assign session specific XPath query for URLs of legislators 
-  query <- rep("//table/tbody/tr/td[1]/a", times = 26)
+  query <- rep("//table/tbody/tr/td[1]/a", times = 27)
   # assign session specific XPath query for party affiliation of legislators
   query_party <- c(rep("//table/tbody/tr/td[4]", times = 24),
-                   rep("//table/tbody/tr/td[6]", times = 2))
+                   rep("//table/tbody/tr/td[6]", times = 3)) ##########
   # assign session specific XPath query for constituency of legislators
   query_constituency <- c(rep(NA, times = 22),
                           rep("//table/tbody/tr/td[5]", times = 2),
-                          rep("//table/tbody/tr/td[7]", times = 2))
+                          rep("//table/tbody/tr/td[7]", times = 3))
   # assign session specific XPath query for constituency of legislators
   query_service <- c(rep("//table/tbody/tr/td[5]", times = 22),
                      rep("//table/tbody/tr/td[6]", times = 2),
-                     rep("//table/tbody/tr/td[8]", times = 2)) 
+                     rep("//table/tbody/tr/td[8]", times = 3)) 
   # assign empty lists to store session speficic htmls
   htmls <- rep(list(NA), times = length(source))
   # assign empty lists to store session speficic legislator URLs
@@ -983,10 +1122,10 @@ collectorAustria <- function(source) {
   session_end <- rep(list(NA), times = length(source))
   # assign session specific manual replacement index for services
   replace_idx <- c(rep(list(0), times = 21), list(c(c(65))),
-                   rep(list(0), times = 4))
+                   rep(list(0), times = 5))
   # assign session specific manual replacement for services
   replacement <- c(rep(list(0), times = 21), list(c(c(429))),
-                   rep(list(0), times = 4))
+                   rep(list(0), times = 5))
   # loop through all html files
   for (i in 1:length(htmls)) {
     # read html file
@@ -1059,7 +1198,7 @@ collectorAustria <- function(source) {
                  services, session_start, session_end, SIMPLIFY = FALSE)
   urls <-  as.numeric(as.roman(str_extract(source, "[[:digit:]]+"))) %>%
     mapply(function(urls, x) mutate(urls, term = x), urls, ., SIMPLIFY=FALSE) %>%
-    mapply(function(., x) mutate(., country = x), ., rep("AUT", times = 26), SIMPLIFY=FALSE)
+    mapply(function(., x) mutate(., country = x), ., rep("AUT", times = 27), SIMPLIFY=FALSE)
 }
 
 
@@ -1245,7 +1384,8 @@ collectorIreland <- function(source) {
                    c("1987-02-17", "1989-06-15"), c("1989-06-15", "1992-11-25"),
                    c("1992-11-25", "1997-06-06"), c("1997-06-06", "2002-05-17"),
                    c("2002-05-17", "2007-05-24"), c("2007-05-24", "2011-02-25"),
-                   c("2011-02-25", "2016-02-26"), c("2016-02-26", "2021-04-12"))
+                   c("2011-02-25", "2016-02-26"), c("2016-02-26", "2020-02-08"),
+                   c("2020-02-08", "2025-02-20"))
   query <- c("//h2/span[contains(text(), 'Members by constituency')]/ancestor::h2/
              following-sibling::table[1]/tbody/tr/td[2]/a",
              "//h2/span[contains(text(), 'Members by constituency')]/ancestor::h2/
@@ -1257,7 +1397,11 @@ collectorIreland <- function(source) {
              rep("//h2/span[contains(text(), 'TDs by party')]/ancestor::h2/
                  following-sibling::table[1]/tbody/tr/td[not(@rowspan) and position() <
                  last()]/a[not(contains(@title, 'Unemployed Action'))]",
-                 times = 4))
+                 times = 4),
+             rep("//h2/span[contains(text(), 'List of TDs')]/ancestor::h2/
+                 following-sibling::table[1]/tbody/tr/td[not(@rowspan) and position() <
+                 last()]/a[not(contains(@title, 'Unemployed Action'))]",
+                 times = 1))
   query_party <- c(rep("//h2/span[contains(text(), 'Members by constituency')]/
                        ancestor::h2/following-sibling::table[1]/tbody/tr/
                        td[last()]/a", times = 2),
@@ -1266,7 +1410,10 @@ collectorIreland <- function(source) {
                        td[last()]/a", times = 26),
                    rep("//h2/span[contains(text(), 'TDs by party')]/
                        ancestor::h2/following-sibling::table[1]/tbody/tr/
-                       td[contains(text(), ')')]/a", times = 4)
+                       td[contains(text(), ')')]/a", times = 4),
+                   rep("//h2/span[contains(text(), 'List of TDs')]/
+                       ancestor::h2/following-sibling::table[1]/tbody/tr/
+                       td[contains(text(), ')')]/a", times = 1)
                    )
   query_constituency <- c(rep("//h2/span[contains(text(), 'Members by constituency')]/
                               ancestor::h2/following-sibling::table[1]/tbody/tr/td/
@@ -1276,7 +1423,10 @@ collectorIreland <- function(source) {
                               a[contains(@title, 'constituency')]", times = 26),
                           rep("//h2/span[contains(text(), 'TDs by party')]/
                               ancestor::h2/following-sibling::table[1]/tbody/tr/td/
-                              a[contains(@title, 'constituency')]", times = 4))
+                              a[contains(@title, 'constituency')]", times = 4),
+                          rep("//h2/span[contains(text(), 'List of TDs')]/
+                              ancestor::h2/following-sibling::table[1]/tbody/tr/td/
+                              a[contains(@title, 'constituency')]", times = 1))
   query_multiplier <- c(rep("//h2/span[contains(text(), 'Members by constituency')]/
                             ancestor::h2/following-sibling::table[1]/tbody/tr/td/
                             a[contains(@title, 'constituency')]/parent::td", times = 2),
@@ -1285,11 +1435,17 @@ collectorIreland <- function(source) {
                             a[contains(@title, 'constituency')]/parent::td", times = 26),
                         rep("//h2/span[contains(text(), 'TDs by party')]/
                             ancestor::h2/following-sibling::table[1]/tbody/tr/td/
-                            a[contains(@title, 'constituency')]/parent::td", times = 4))
+                            a[contains(@title, 'constituency')]/parent::td", times = 4),
+                        rep("//h2/span[contains(text(), 'List of TDs')]/
+                            ancestor::h2/following-sibling::table[1]/tbody/tr/td/
+                            a[contains(@title, 'constituency')]/parent::td", times = 1))
   query_multiplier2 <- c(rep(NA, times = 28),
                          rep("//h2/span[contains(text(), 'TDs by party')]/
                              ancestor::h2/following-sibling::table[1]/tbody/tr/
-                             td[contains(text(), ')')]", times = 4))
+                             td[contains(text(), ')')]", times = 4),
+                         rep("//h2/span[contains(text(), 'List of TDs')]/
+                             ancestor::h2/following-sibling::table[1]/tbody/tr/
+                             td[contains(text(), ')')]", times = 1))
   replace_idx <- c(list(c(25,29,92)), list(c(0)), list(c(0)), 
                    list(c(59,129,57,42,102,24,113,17,39,3,8,50,53,61,86,91,115,132,43,97)),
                    list(c(62,48)), list(c(1,53,49,89,108,42,83)), list(0),
@@ -1300,7 +1456,7 @@ collectorIreland <- function(source) {
                    list(c(69,90,104,34,46,23)), list(c(119,25,78,80,114,36,70)), list(c(16,25,32)),
                    list(0),list(c(79,89)),list(c(38,42,109)),list(0),list(0), list(c(68,131,21,28,162,35,82)),
                    list(c(114,45,28,69,149,147)),list(c(50,84)),list(c(14,162,34,25,49,7)),
-                   list(c(122,49,50,153,38,41,76)),list(0))
+                   list(c(122,49,50,153,38,41,76)),list(c(158, 132, 22, 69, 133, 37)), list(c(0)))
   replacement <- c(list(c(681,601,82)), list(c(0)), list(c(0)), 
                    list(c(61,68,198,205,275,449,449,450,451,562,562,562,562,562,562,562,562,562,906,906)),
                    list(c(76,76)), list(c(49,201,546,631,1002,1181,1383)),list(0),
@@ -1311,7 +1467,7 @@ collectorIreland <- function(source) {
                    list(c(259,300,300,532,532,410)), list(c(272,613,734,734,987,1198,1198)),
                    list(c(874,874,1239)),list(0), list(c(96,152)),list(c(170,364,568)),list(0),list(0),
                    list(c(561,561,715,715,946,1224,1224)), list(c(113,136,281,626,1019,1202)),list(c(898,898)),
-                   list(c(412,589,746,991,1034,1258)),list(c(105,665,1124,1186,1186,1343,1784)),list(0))
+                   list(c(412,589,746,991,1034,1258)),list(c(105,665,1124,1186,1186,1343,1784)),list(c(13,1221,1221,1221,1221,1376)),list(0))
   # assign session specific manual addition
   append_urls <- c(list(0), list(0), list(0), 
                    list(c("https://en.wikipedia.org/wiki/Hugh_Kennedy",
@@ -1446,7 +1602,11 @@ collectorIreland <- function(source) {
                           "https://en.wikipedia.org/wiki/Gabrielle_McFadden",
                           "https://en.wikipedia.org/wiki/Paul_Murphy_(Irish_politician)",
                           "https://en.wikipedia.org/wiki/Michael_Fitzmaurice_(politician)",
-                          "https://en.wikipedia.org/wiki/Bobby_Aylward")))
+                          "https://en.wikipedia.org/wiki/Bobby_Aylward")),
+                   list(c("https://en.wikipedia.org/wiki/Mark_Ward_(politician)",
+                          "https://en.wikipedia.org/wiki/P%C3%A1draig_O%27Sullivan",
+                          "https://en.wikipedia.org/wiki/Malcolm_Byrne",
+                          "https://en.wikipedia.org/wiki/Joe_O%27Brien_(politician)")))
   # assign session specific manual addition for names
   append_names <- c(list(0), list(0), list(0), 
                     list(c("Hugh Kennedy", "Patrick McGilligan",
@@ -1484,7 +1644,8 @@ collectorIreland <- function(source) {
                            "Brian Lenihan Jnr")), list(c("Jan O'Sullivan","Seán Ryan","Simon Coveney","Mary Upton",
                                                          "Séamus Healy","Tom Hayes")),list(c("Shane McEntee","Catherine Murphy")), list(c("George Lee",
                                                                                                                                           "Maureen O'Sullivan","Pearse Doherty")), list(c("Patrick Nulty","Helen McEntee","Ruth Coppinger",
-                                                                                                                                                                                          "Gabrielle McFadden","Paul Murphy","Michael Fitzmaurice","Bobby Aylward")))
+                                                                                                                                                                                          "Gabrielle McFadden","Paul Murphy","Michael Fitzmaurice","Bobby Aylward")),
+                    list(c("Mark Ward", "Pádraig O'Sullivan", "Malcolm Byrne", "Joe O'Brien")))
   # assign session specific manual addition for parties
   append_parties <- c(list(0), list(0), list(0), 
                       list(c(rep("Cumann na nGaedheal", times = 6), 
@@ -1515,7 +1676,8 @@ collectorIreland <- function(source) {
                       list(c("Labour Party","Labour Party","Fine Gael","Labour Party","Independent","Fine Gael")),
                       list(c("Fine Gael","Independent")),list(c("Fine Gael","Independent","Sinn Féin")),
                       list(c("Labour Party","Fine Gael","Socialist Party","Fine Gael","Anti-Austerity Alliance",
-                             "Independent","Fianna Fáil")))
+                             "Independent","Fianna Fáil")),
+                      list(c("Sinn Féin", "Fianna Fáil", "Fianna Fáil", "Green Party")))
   # assign session specific manual addition for constituencies
   append_constituencies <- c(list(0), list(0), list(0), 
                              list(c("Dublin South", "National University of Ireland", "Dublin South",
@@ -1552,7 +1714,8 @@ collectorIreland <- function(source) {
                                                                                                                                          "Dublin South-Central","Tipperary South","Tipperary South")),list(c("Meath",
                                                                                                                                                                                                              "Kildare North")),list(c("Dublin South","Dublin Central","Donegal South-West")),
                              list(c("Dublin West","Meath East","Dublin West","Longford–Westmeath","Dublin South-West",
-                                    "Roscommon–South Leitrim","Carlow–Kilkenny")))
+                                    "Roscommon–South Leitrim","Carlow–Kilkenny")),
+                             list(c("Dublin Mid-West", "Cork North-Central", "Wexford", "Dublin Fingal")))
   # assign session specific manual addition for services
   append_services <- c(list(0), list(0), list(0), 
                        list(c(388,1313,1183,1176,1106,932,932,932,931,930,819,819,819,819,819,819,
@@ -1568,7 +1731,8 @@ collectorIreland <- function(source) {
                        list(c(182,126)), list(c(1375,1181,977)),list(0),list(0),
                        list(c(1092,1092,938,938,707,429,429)),list(c(1527,1527,1301,932,
                                                                      693,319)), list(c(803,803)),list(c(247,628,90)),list(c(875,1065,643,643,
-                                                                                                                            502,502,278)))
+                                                                                                                            502,502,278)),
+                       list(c(70,70,70,70)))
   # assign session specific manual addition for session_star
   append_session_start <- c(list(0), list(0), list(0), 
                             list(rep("1923-08-27", times = 21)),
@@ -1585,7 +1749,8 @@ collectorIreland <- function(source) {
                             list(c("1982-02-18","1982-02-18")),list(rep("1982-11-24", times = 3)),
                             list(0),list(0),list(rep("1992-11-25",times =7)),
                             list(rep("1997-06-06",times = 6)),list(c("2002-05-17","2002-05-17")),
-                            list(rep("2007-05-24",times = 3)),list(rep("2011-02-25",times = 7)))
+                            list(rep("2007-05-24",times = 3)),list(rep("2011-02-25",times = 7)),
+                            list(rep("2016-02-26",times = 4)))
   # assign session specific manual addition for session_end
   append_session_end <- c(list(0), list(0), list(0), 
                           list(rep("1927-06-09", times = 21)),
@@ -1602,7 +1767,8 @@ collectorIreland <- function(source) {
                           list(c("1982-11-24","1982-11-24")),list(rep("1987-02-17", times = 3)),
                           list(0),list(0),list(rep("1997-06-06",times = 7)),
                           list(rep("2002-05-17",times = 6)),list(c("2007-05-24","2007-05-24")),
-                          list(rep("2011-02-25",times = 3)),list(rep("2016-02-26",times = 7)))
+                          list(rep("2011-02-25",times = 3)),list(rep("2016-02-26",times = 7)),
+                          list(rep("2020-02-08",times = 4)))
   # assign empty lists to store session speficic htmls
   htmls <- rep(list(NA), times = length(source))
   # assign empty lists to store session speficic legislator URLs
@@ -1657,7 +1823,7 @@ collectorIreland <- function(source) {
     services[[i]] <- round(rep(difftime(time1 = session_end[[i]][1], time2 = session_start[[i]][1], units = "days"),
                                length(urls[[i]])))
     services[[i]] <- replace(services[[i]], replace_idx[[i]], replacement[[i]])
-    if (i %in% c(4:6,8,10,12:21,23:24,27:31)) {
+    if (i %in% c(4:6,8,10,12:21,23:24,27:32)) {
       urls[[i]] <- append(urls[[i]], append_urls[[i]])
       names[[i]] <- append(names[[i]], append_names[[i]])
       parties[[i]] <- append(parties[[i]], append_parties[[i]])
@@ -1685,7 +1851,7 @@ collectorIreland <- function(source) {
                  services, session_start,session_end, SIMPLIFY = FALSE)
   urls <-  as.numeric(as.roman(str_extract(source, "[[:digit:]]+"))) %>%
     mapply(function(urls, x) mutate(urls, term = x), urls, ., SIMPLIFY=FALSE) %>%
-    mapply(function(., x) mutate(., country = x), ., rep("IRL", times = 32), SIMPLIFY=FALSE)
+    mapply(function(., x) mutate(., country = x), ., rep("IRL", times = 33), SIMPLIFY=FALSE)
 }
 
 
@@ -2294,8 +2460,8 @@ collectorUk <- function(source) {
                    c("1987-06-11","1992-04-09"), c("1992-04-09","1997-05-01"),
                    c("1997-05-01","2001-06-07"), c("2001-06-07","2005-05-05"),
                    c("2005-05-05","2010-05-06"), c("2010-05-06","2015-05-07"),
-                   c("2015-05-07","2017-06-08"), c("2017-06-08","2022-05-07"))
-  # CONTINUE WITH 25 - here i = 19
+                   c("2015-05-07","2017-06-08"), c("2017-06-08","2019-12-12"),
+                   c("2019-12-12","2024-05-02"))
   query <- c("", "", "", "", "", "", "", "", "", "",
              "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[7]/b/span/a[1]|
              //h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[7]/b/a[1]",
@@ -2401,7 +2567,8 @@ collectorUk <- function(source) {
              "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[2]/a[1]",
              "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/a[1]",
              "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/span//a[1]",
-             "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[6]/span//a[1]")
+             "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[3]/b/a[1]",
+             "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[3]/b/a[1]")
   query_party <- c("", "", "", "", "", "", "", "", "", "",
                    "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[8]/a[1]",
                    "//table[@class = 'wikitable']/tbody/tr/td[3]|
@@ -2504,7 +2671,8 @@ collectorUk <- function(source) {
                    "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[3]",
                    "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/a[2]",
                    "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/a[1]",
-                   "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[6]/a[1]")
+                   "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[2]/a[1]",
+                   "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[5]/a[1]")
   query_constituency <- c("", "", "", "", "", "", "", "", "", "",
                           "//h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[1]/b/a[1]|
                           //h2/span[contains(text(), 'MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[1]/b/span/a[1]",
@@ -2547,7 +2715,8 @@ collectorUk <- function(source) {
                           "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[2]/tbody/tr/td[1]/a[1]",
                           "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[1]/a[1]",
                           "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[1]/a[1]",
-                          "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/td[1]/a[1]")
+                          "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/th[1]/a[1]",
+                          "//h2/span[contains(text(), 'List of MPs')]/ancestor::h2/following-sibling::table[1]/tbody/tr/th[1]/a[1]")
   query_multiplier <- c("", "", "", "", "", "", "", "", "", "",
                         "",
                         "//table[@class = 'wikitable']/tbody/tr/td[3]/ancestor::tr/td[1]", 
@@ -2754,7 +2923,7 @@ collectorUk <- function(source) {
                    list(c(238,422,242,236,257,275,152,490,184,94,61,180,340,126)),
                    list(c(284,385,646,520,366,204,158,368,477,114,150,354,77,226,298,38,327,23,435)),
                    list(c(436,495,433,576,30,631,468,503,149,549)),
-                   list(c(331,619)))
+                   list(c(619,331,392,447,79)), list(c(0)))
   # assign session specific manual replacement for services
   replacement <- c(rep(list(c(0)),31),list(c(1617,1477,1350,1344,1330,1323,1239,1227,1190,1183,1029,993,980,974,973,958,937,882,875,
                                              874,812,798,671,586,518,518,510,509,503,502,420,385,383,382,336,334,256,232,231,
@@ -2790,7 +2959,7 @@ collectorUk <- function(source) {
                    list(c(1652,1540,1281,1176,1162,1148,1113,805,805,420,420,280,147,70)),
                    list(c(1617,1491,1379,1092,1036,1029,938,938,938,924,924,924,693,588,420,399,364,301,252)),
                    list(c(167,273,321,368,406,494,537,547,627,627)),
-                   list(c(371,329)))
+                   list(c(329,372,665,728,784)), list(c(0)))
   replace_idx2 <- c(rep(list(c(0)), 20), list(c(75)), list(c(0)), list(c(0)), list(c(246)),
                     list(c(83,105)), list(c(0)), list(c(0)), list(c(35)), list(c(0)), list(c(6)), list(c(54)))
   replacement2 <- c(rep(list(c(0)), 20), list(c("18 November 1902")), list(c(0)), list(c(0)), list(c("11 February 1911")),
@@ -2833,7 +3002,7 @@ collectorUk <- function(source) {
   col_by_table_3 <- c(rep(2, 10), rep(1, 10))
   col_by_table_4 <- c(rep(1, 10), rep(2, 10))
   for (i in 1:length(htmls)) {
-    if (i %in% c(11:51)) {
+    if (i %in% c(11:52)) {
       # read html file
       htmls[[i]] <-  read_html(source[i], encoding = "UTF-8")
       # locate legislator biography URLs in html via XPath query, extract and complete URL
@@ -2957,10 +3126,13 @@ collectorUk <- function(source) {
     if (i %in% c(42:48)) {#48-
       by_elections <- read_html("./data/htmls/uk_by_elections/by_elections4.html")
     }
-    if (i %in% c(49:51)) {#48-
+    if (i %in% c(49:50)) {#48-
       by_elections <- read_html("./data/htmls/uk_by_elections/by_elections5.html")
     }
-    if (i %in% c(21:51)) {
+    if (i %in% c(51)) {#48-
+      by_elections <- read_html("./data/htmls/uk_by_elections/by_elections15.html")
+    }
+    if (i %in% c(21:52)) {
       be_urls <- html_nodes(x = by_elections, xpath = query_be[i]) %>%
         html_attr("href") %>%
         str_c("https://", "en",".wikipedia.org", .)
@@ -3025,11 +3197,13 @@ collectorUk <- function(source) {
         dmy() %>%
         difftime(time1 = duration[[i]][2], time2 = .)
     }
-    urls[[i]] <- c(urls[[i]], be_urls)
-    names[[i]] <- c(names[[i]], be_names)
-    parties[[i]] <- c(parties[[i]], be_parties)
-    constituencies[[i]] <- c(constituencies[[i]], be_constituencies)
-    services[[i]] <- c(services[[i]], be_services)
+    if (!(i %in% 52)) {
+      urls[[i]] <- c(urls[[i]], be_urls)
+      names[[i]] <- c(names[[i]], be_names)
+      parties[[i]] <- c(parties[[i]], be_parties)
+      constituencies[[i]] <- c(constituencies[[i]], be_constituencies)
+      services[[i]] <- c(services[[i]], be_services)
+    }
   }
   urls <- lapply(urls, data.table) %>%
     lapply(rename, url = V1)
@@ -3048,7 +3222,94 @@ collectorUk <- function(source) {
   urls <- mapply(cbind, urls, names, parties, constituencies, 
                  services, session_start, 
                  session_end, SIMPLIFY = FALSE)
-  urls <-  c(1:11,16,17,20:57) %>%
+  urls <-  c(1:11,16,17,20:58) %>%
     mapply(function(urls, x) mutate(urls, term = x), urls, ., SIMPLIFY=FALSE) %>%
-    mapply(function(., x) mutate(., country = x), ., rep("GBR", times = 51), SIMPLIFY=FALSE)
+    mapply(function(., x) mutate(., country = x), ., rep("GBR", times = 52), SIMPLIFY=FALSE)
+}
+
+
+#### SPAIN WIKIPEDIA INFORMATION EXTRACTION =============================================
+collectorSpain <- function(source) {
+  source <- mixedsort(list.files(source, full.names = TRUE), decreasing = TRUE)
+  for (i in 1:length(source)) {
+    subsource <- mixedsort(list.files(source[i], full.names = TRUE), decreasing = FALSE)
+    cat("|")
+    for (j in 1:length(subsource)) {
+      urls <- read_html(subsource[j]) %>%
+        html_nodes(xpath = "//div[@class = 'mw-category']//ul/li/a") %>%
+        html_attr("href")
+      names <- read_html(subsource[j]) %>%
+        html_nodes(xpath = "//div[@class = 'mw-category']//ul/li/a") %>%
+        html_text()
+      if (j == 1) {
+        urls_all <- urls
+        names_all <- names
+      } else {
+        urls_all <- c(urls_all, urls)
+        names_all <- c(names_all, names)
+      }
+      cat(".")
+    }
+    if (i %in% c(2:5)) {
+      urls_all <- urls_all[-1]
+      names_all <- names_all[-1]
+    }
+    if (i == 1) {
+      output <- list(data.frame(name = names_all, url = urls_all,
+                                stringsAsFactors = FALSE))
+    } else {
+      output <- c(output,
+                  list(data.frame(name = names_all, url = urls_all,
+                                  stringsAsFactors = FALSE)))
+    }
+  }
+  return(output)
+}
+
+#### SPAIN OFFICIAL INFORMATION EXTRACTION ==============================================
+collectorSpainOfficial <- function(source) {
+  source <- mixedsort(list.files(source, full.names = TRUE), decreasing = TRUE)
+  for (i in 1:length(source)) {
+    subsource <- mixedsort(list.files(source[i], full.names = TRUE), decreasing = TRUE)
+    hull <- data.frame(name = rep(NA, length(subsource)), 
+                       party = rep(NA, length(subsource)),
+                       group = rep(NA, length(subsource)),
+                       constituency = rep(NA, length(subsource)),
+                       start_time = rep(NA, length(subsource)),
+                       end_time = rep(NA, length(subsource)),
+                       portrait = rep(NA, length(subsource))) 
+    cat("|")
+    for (j in 1:length(subsource)) {
+      parsed <- read_html(subsource[j])
+      hull$name[j] <- html_node(parsed, xpath = "//div[@class = 'nombre_dip']") %>%
+        html_text()
+      hull$party[j] <- html_node(parsed, xpath = "//p[@class = 'nombre_grupo']") %>%
+        html_text()
+      hull$group[j] <- html_node(parsed, xpath = "//div[@class = 'dip_rojo']/a") %>%
+        html_text()
+      hull$constituency[j] <- html_node(parsed, xpath = "//div[@class = 'dip_rojo'][1]") %>%
+        html_text() %>%
+        str_replace_all("\\\r|\\\n|\\.", "") %>%
+        str_squish()
+      if (i %in% c(1,2)) {
+        hull$start_time[j] <-  html_node(parsed, xpath = "//div[@class = 'texto_dip'][2]/ul/li//div[contains(text(), 'Condici')]") %>%
+          html_text()
+      } else {
+        hull$start_time[j] <-  html_node(parsed, xpath = "//div[@class = 'texto_dip'][2]/ul/li//div[contains(text(), 'Fecha')]") %>%
+          html_text()
+      }
+      hull$end_time[j] <- html_node(parsed, xpath = "//div[@class = 'texto_dip'][2]/ul/li//div[contains(text(), 'Caus')]") %>%
+        html_text()
+      hull$portrait[j] <- html_node(parsed, xpath = "//img[@name = 'foto']") %>%
+        html_attr(name = "src") %>%
+        str_c("http://www.congreso.es", .)
+      cat(".")
+    }
+    if (i == 1) {
+      output <- list(hull) 
+    } else {
+      output <- c(output, list(hull))
+    }
+  }
+  return(output)
 }

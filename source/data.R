@@ -2,7 +2,7 @@
 # legislatoR
 # Sascha Göbel and Simon Munzert
 # Script: data
-# December 2017
+# August 2019
 # ---------------------------------------------------------------------------------------
 
 
@@ -363,51 +363,87 @@ saveRDS(usas_title, "./data/usas_title")
 # retrieve wikipedia user traffic -------------------------------------------------------
 
 # austrian nationalrat
-austria_traffic <- wikiTraffic(data = austria_title, project = "de.wikipedia")
+austria_title <- readRDS("./data/austria_title")
+#austria_title$title[austria_title$pageid == "560107"] <- "Lujo_Tončić-Sorinj"
+#austria_title$title[austria_title$pageid == "621824"] <- "Theodor_Piffl-Perčević"
+austria_traffic <- wikiTrafficNew(data = austria_title,
+                                  project = rep("de", dim(austria_title)[1]))
+#austria_traffic <- wikiTraffic(data = austria_title, project = "de.wikipedia")
 saveRDS(austria_traffic, "./data/austria_traffic")
 
 # canadian house of commons
-canada_traffic <- wikiTraffic(data = canada_title, project = "en.wikipedia")
+canada_title <- readRDS("./data/canada_title")
+canada_traffic <- wikiTrafficNew(data = canada_title,
+                       project = rep("en", dim(canada_title)[1]))
+#canada_traffic <- wikiTraffic(data = canada_title, project = "en.wikipedia")
 saveRDS(canada_traffic, "./data/canada_traffic")
+rm(canada_traffic)
 
 # czech poslanecka snemovna
-czech_traffic <- wikiTraffic(data = czech_title, project = "cs.wikipedia")
+czech_title <- readRDS("./data/czech_title")
+czech_traffic <- wikiTrafficNew(data = czech_title,
+                                 project = rep("cs", dim(czech_title)[1]))
+#czech_traffic <- wikiTraffic(data = czech_title, project = "cs.wikipedia")
 saveRDS(czech_traffic, "./data/czech_traffic")
+rm(czech_traffic)
 
 # french assemble
 france_title <- readRDS("./data/france_title")
-france_traffic <- wikiTraffic(data = france_title, project = "fr.wikipedia")
+france_traffic <- wikiTrafficNew(data = france_title,
+                                 project = rep("fr", dim(france_title)[1]))
+#france_traffic <- wikiTraffic(data = france_title, project = "fr.wikipedia")
 saveRDS(france_traffic, "./data/france_traffic")
+rm(france_traffic)
 
 # german bundestag
 germany_title <- readRDS("./data/germany_title")
-germany_traffic <- wikiTraffic(data = germany_title, project = "de.wikipedia")
+germany_traffic <- wikiTrafficNew(data = germany_title,
+                                  project = rep("de", dim(germany_title)[1]))
+#germany_traffic <- wikiTraffic(data = germany_title, project = "de.wikipedia")
 saveRDS(germany_traffic, "./data/germany_traffic")
+rm(germany_traffic)
 
 # irish dail
 ireland_title <- readRDS("./data/ireland_title")
-ireland_traffic <- wikiTraffic(data = ireland_title, project = "en.wikipedia")
+ireland_traffic <- wikiTrafficNew(data = ireland_title,
+                                  project = rep("en", dim(ireland_title)[1]))
+#ireland_traffic <- wikiTraffic(data = ireland_title, project = "en.wikipedia")
 saveRDS(ireland_traffic, "./data/ireland_traffic")
+rm(ireland_traffic)
 
 # scottish parliament
 scotland_title <- readRDS("./data/scotland_title")
-scotland_traffic <- wikiTraffic(data = scotland_title, project = "en.wikipedia")
+scotland_traffic <- wikiTrafficNew(data = scotland_title,
+                                   project = rep("en", dim(scotland_title)[1]))
+#scotland_traffic <- wikiTraffic(data = scotland_title, project = "en.wikipedia")
 saveRDS(scotland_traffic, "./data/scotland_traffic")
+rm(scotland_traffic)
 
 # uk parliament
 uk_title <- readRDS("./data/uk_title")
-uk_traffic <- wikiTraffic(data = uk_title, project = "en.wikipedia")
+uk_traffic <- wikiTrafficNew(data = uk_title_orig,
+                             project = rep("en", dim(uk_title_orig)[1]))
+#uk_traffic <- wikiTraffic(data = uk_title, project = "en.wikipedia")
 saveRDS(uk_traffic, "./data/uk_traffic")
+rm(uk_traffic)
 
 # united states house
 usah_title <- readRDS("./data/usah_title")
-usah_traffic <- wikiTraffic(data = usah_title, project = "en.wikipedia")
+usah_title[6302,]$title <- "Jonah_K%C5%ABhi%C5%8D_Kalaniana%CA%BBole" 
+usah_traffic <- wikiTrafficNew(data = usah_title,
+                             project = rep("en", dim(usah_title)[1]))
+#usah_traffic <- wikiTraffic(data = usah_title, project = "en.wikipedia")
 saveRDS(usah_traffic, "./data/usah_traffic")
+rm(usah_traffic)
 
 # united states senate
 usas_title <- readRDS("./data/usas_title")
-usas_traffic <- wikiTraffic(data = usas_title, project = "en.wikipedia")
+usas_traffic <- wikiTrafficNew(data = usas_title,
+                               project = rep("en", dim(usas_title)[1]))
+#usas_traffic <- wikiTraffic(data = usas_title, project = "en.wikipedia")
 saveRDS(usas_traffic, "./data/usas_traffic")
+rm(usas_traffic)
+
 
 # retrieve Wikidata entities ------------------------------------------------------------
 
@@ -459,7 +495,7 @@ austria_sex <- wikiData(item = unique(austria$wikidataid), entity = austria_enti
 austria_sex$sex <- ifelse(austria_sex$male == TRUE, "male",
                           ifelse(austria_sex$female == TRUE, "female", NA))
 austria_sex <- austria_sex[,-c(2,3)]
-austria_sex$sex <- factor(austria_sex$sex)
+#austria_sex$sex <- factor(austria_sex$sex)
 saveRDS(austria_sex, "./data/austria_sex")
 
 # canadian house of commons
@@ -468,7 +504,7 @@ canada_sex <- wikiData(item = unique(canada$wikidataid), entity = canada_entitie
 canada_sex$sex <- ifelse(canada_sex$male == TRUE, "male",
                           ifelse(canada_sex$female == TRUE, "female", NA))
 canada_sex <- canada_sex[,-c(2,3)]
-canada_sex$sex <- factor(canada_sex$sex)
+#canada_sex$sex <- factor(canada_sex$sex)
 saveRDS(canada_sex, "./data/canada_sex")
 
 # czech poslanecka snemovna
@@ -504,7 +540,7 @@ ireland_sex <- wikiData(item = unique(ireland$wikidataid), entity = ireland_enti
 ireland_sex$sex <- ifelse(ireland_sex$male == TRUE, "male",
                           ifelse(ireland_sex$female == TRUE, "female", NA))
 ireland_sex <- ireland_sex[,-c(2,3)]
-ireland_sex$sex <- factor(ireland_sex$sex)
+#ireland_sex$sex <- factor(ireland_sex$sex)
 saveRDS(ireland_sex, "./data/ireland_sex")
 
 # scottish parliament
@@ -522,7 +558,7 @@ uk_sex <- wikiData(item = unique(uk$wikidataid), entity = uk_entities,
 uk_sex$sex <- ifelse(uk_sex$male == TRUE, "male",
                           ifelse(uk_sex$female == TRUE, "female", NA))
 uk_sex <- uk_sex[,-c(2,3)]
-uk_sex$sex <- factor(uk_sex$sex)
+#uk_sex$sex <- factor(uk_sex$sex)
 saveRDS(uk_sex, "./data/uk_sex")
 
 # united states house
@@ -598,8 +634,8 @@ canada_religion$religion <- replace(NA, rowSums(canada_religion[,c(6,7,18,20)]) 
           "judaism")
 canada_religion <- canada_religion[,c(1, 26)] %>%
   filter(!is.na(religion))
-canada_religion$religion <- factor(canada_religion$religion)
-saveRDS(canada_religion, "./data/canada_religion")
+#canada_religion$religion <- factor(canada_religion$religion)
+saveRDS(canada_religion, "./data/canada_religion_temp")
 
 # czech poslanecka snemovna
 czech_religion <- wikiData(item = unique(czech$wikidataid), 
@@ -681,8 +717,8 @@ ireland_religion$religion <- replace(NA, rowSums(ireland_religion[,c(3, 8)]) >= 
   replace(., rowSums(ireland_religion[,c(7)]) >= 1,
           "anglicanism")
 ireland_religion <- ireland_religion[,c(1, 9)]
-ireland_religion$religion <- factor(ireland_religion$religion)
-saveRDS(ireland_religion, "./data/ireland_religion")
+#ireland_religion$religion <- factor(ireland_religion$religion)
+saveRDS(ireland_religion, "./data/ireland_religion_temp")
 
 # scottish parliament
 scotland_religion <- wikiData(item = unique(scotland$wikidataid), 
@@ -729,8 +765,8 @@ replace(., rowSums(uk_religion[,c(18)]) >= 1,
   replace(., rowSums(uk_religion[,c(22)]) >= 1,
           "protestantism methodist")
 uk_religion <- uk_religion[,c(1, 25)]
-uk_religion$religion <- factor(uk_religion$religion)
-saveRDS(uk_religion, "./data/uk_religion")
+#uk_religion$religion <- factor(uk_religion$religion)
+saveRDS(uk_religion, "./data/uk_religion_temp")
 
 # united states house
 usah_religion <- wikiData(item = unique(usah$wikidataid), entity = usah_entities,
@@ -1234,7 +1270,7 @@ canada_website <- wikiData(item = unique(canada$wikidataid),
 canada_social <- full_join(canada_twitter, canada_facebook, by = "wikidataid") %>%
   full_join(., canada_youtube, by = "wikidataid") %>%
   full_join(., canada_instagram, by = "wikidataid") %>%
-  full_join(., canada_website, by = "wikidataid") %>%
+  full_join(., canada_website, by = "wikidataid")
   full_join(., canada_googlep, by = "wikidataid")
 names(canada_social) <- c("wikidataid", "twitter", "facebook", "youtube", "instagram",
                            "website", "googlep")
@@ -1491,8 +1527,8 @@ saveRDS(usas_social, "./data/usas_social")
 # retrieve and format facial data -------------------------------------------------------
 
 # specify face++ api authentification
-auth <- authFacepp(api_key = "cdg976ZVSpX0soMLSGXzB8m1-T5CP-yB",
-                   api_secret = "13qnSJ1w3xoOlqiLuzt3hw9Lwr3YOPVI")
+auth <- authFacepp(api_key = "",
+                   api_secret = "")
 
 # austrian nationalrat
 austria_images <- imageUrl(pageid = unique(austria$pageid), project = "de.wikipedia")

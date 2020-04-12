@@ -201,7 +201,6 @@ ireland_core$religion <- as.character(ireland_core$religion)
 rm(ireland, ireland_title, ireland_faces, ireland_sex, ireland_religion, ireland_birth,
    ireland_death, ireland_birthplace, ireland_deathplace)
 
-
 # scottish parliament
 scotland <- readRDS("./data/scotland")
 scotland_title <- readRDS("./data/scotland_title")
@@ -356,7 +355,7 @@ austria_political$constituency_id <- str_replace_all(austria_political$constitue
 austria_political$constituency_id <- ifelse(austria_political$constituency_id == "Bundeswahlvorschlag", "BWV",
                                             ifelse(austria_political$constituency_id == "", NA, austria_political$constituency_id))
 austria_political$constituency <- str_replace_all(austria_political$constituency, 
-                ",( )?Bundeswahlvorschlag|Bundeswahlvorschlag,|[[:digit:]][A-Z]{1}|[[:digit:]]{1}| \u2013 | \u2014 | - ", "")
+                ",( )?Bundeswahlvorschlag|Bundeswahlvorschlag,|[[:digit:]][A-Z]{1}|[[:digit:]]{1}| \u2013 | \u2014 | - | \\(bis.+|\\[|\\]", "")
 austria_political <- select(austria_political, pageid, session, party, constituency,
                             constituency_id, session_start, session_end, service)
 austria_political$session <- as.integer(austria_political$session)
@@ -368,7 +367,7 @@ austria_political$service <- as.integer(austria_political$service)
 canada_political$party <- str_replace_all(canada_political$party, "^.+then |1|†+|Both |\\*.+|\\*", "")
 canada_political$party <- ifelse(canada_political$party == "Liberal"|canada_political$party == "Liberal Reformer"|
        canada_political$party =="Liberal Party"|canada_political$party == "Liberalo", "Liberal Party of Canada",
- ifelse(canada_political$party == "Conservative", "Conservative Party of Canada",
+ ifelse(canada_political$party == "Conservative" | canada_political$party == "conservative", "Conservative Party of Canada",
  ifelse(canada_political$party == "Independent Liberal"|canada_political$party == "Independent Conservative"|
         canada_political$party == "Independent Labour"|canada_political$party == "Independent Progressive"|
         canada_political$party == "Independent C.C.F."|canada_political$party == "Independent Progressive Conservative"|
@@ -976,61 +975,63 @@ usas_political <- select(usas_political, -c(wikidataid))
 
 # austrian nationalrat
 austria_traffic <- readRDS("./data/austria_traffic")
-austria_traffic <- austria_traffic[,-2]
+#austria_traffic <- austria_traffic[,-2]
 austria_traffic$date <- austria_traffic$date %>% as.POSIXct(tz = "UTC")
 austria_traffic$pageid <- as.integer(austria_traffic$pageid)
 
 # canadian house of commons
 canada_traffic <- readRDS("./data/canada_traffic")
-canada_traffic <- canada_traffic[,-2]
+#canada_traffic <- canada_traffic[,-2]
 canada_traffic$date <- canada_traffic$date %>% as.POSIXct(tz = "UTC")
 canada_traffic$pageid <- as.integer(canada_traffic$pageid)
 
 # czech poslanecka snemovna
 czech_traffic <- readRDS("./data/czech_traffic")
-czech_traffic <- czech_traffic[,-2]
+#czech_traffic <- czech_traffic[,-2]
 czech_traffic$date <- czech_traffic$date %>% as.POSIXct(tz = "UTC")
 czech_traffic$pageid <- as.integer(czech_traffic$pageid)
 
 # french assemble
 france_traffic <- readRDS("./data/france_traffic")
-france_traffic <- france_traffic[,-2]
+#france_traffic <- france_traffic[,-2]
 france_traffic$date <- france_traffic$date %>% as.POSIXct(tz = "UTC")
 france_traffic$pageid <- as.integer(france_traffic$pageid)
 
 # german bundestag
 germany_traffic <- readRDS("./data/germany_traffic")
-germany_traffic <- germany_traffic[,-2]
+#germany_traffic <- germany_traffic[,-2]
 germany_traffic$date <- germany_traffic$date %>% as.POSIXct(tz = "UTC")
 germany_traffic$pageid <- as.integer(germany_traffic$pageid)
 
 # irish dail
 ireland_traffic <- readRDS("./data/ireland_traffic")
-ireland_traffic <- ireland_traffic[,-2]
+#ireland_traffic <- ireland_traffic[,-2]
 ireland_traffic$date <- ireland_traffic$date %>% as.POSIXct(tz = "UTC")
 ireland_traffic$pageid <- as.integer(ireland_traffic$pageid)
 
 # scottish parliament
 scotland_traffic <- readRDS("./data/scotland_traffic")
-scotland_traffic <- scotland_traffic[,-2]
+#scotland_traffic <- scotland_traffic[,-2]
 scotland_traffic$date <- scotland_traffic$date %>% as.POSIXct(tz = "UTC")
 scotland_traffic$pageid <- as.integer(scotland_traffic$pageid)
 
 # united kingdom parliament
 uk_traffic <- readRDS("./data/uk_traffic")
-uk_traffic <- uk_traffic[,-2]
+#uk_traffic <- uk_traffic[,-2]
 uk_traffic$date <- uk_traffic$date %>% as.POSIXct(tz = "UTC")
 uk_traffic$pageid <- as.integer(uk_traffic$pageid)
 
 # united states house
 usah_traffic <- readRDS("./data/usah_traffic")
-usah_traffic <- usah_traffic[,-2]
+#usah_traffic <- usah_traffic[,-2]
 usah_traffic$date <- usah_traffic$date %>% as.POSIXct(tz = "UTC")
+# restrict to data after mid 2009 to match individual file storage restrictions
+usah_traffic <- filter(usah_traffic, date >= ymd("2009-07-01"))
 usah_traffic$pageid <- as.integer(usah_traffic$pageid)
 
 # united states senate
 usas_traffic <- readRDS("./data/usas_traffic")
-usas_traffic <- usas_traffic[,-2]
+#usas_traffic <- usas_traffic[,-2]
 usas_traffic$date <- usas_traffic$date %>% as.POSIXct(tz = "UTC")
 usas_traffic$pageid <- as.integer(usas_traffic$pageid)
 
@@ -1155,30 +1156,30 @@ austria_social <- readRDS("./data/austria_social")
 austria_positions <- readRDS("./data/austria_positions")
 austria_occupation <- readRDS("./data/austria_occupation")
 austria_id <- readRDS("./data/austria_id")
-saveRDS(austria_core, "./package/legislatoR-data/data/aut_core")
-saveRDS(austria_political, "./package/legislatoR-data/data/aut_political")
-saveRDS(austria_history, "./package/legislatoR-data/data/aut_history")
-saveRDS(austria_traffic, "./package/legislatoR-data/data/aut_traffic")
-saveRDS(austria_social, "./package/legislatoR-data/data/aut_social")
-saveRDS(austria_faces, "./package/legislatoR-data/data/aut_portrait")
-saveRDS(austria_positions, "./package/legislatoR-data/data/aut_office")
-saveRDS(austria_occupation, "./package/legislatoR-data/data/aut_profession")
-saveRDS(austria_id, "./package/legislatoR-data/data/aut_ids")
+saveRDS(austria_core, "./package/legislatoR-data-v1.0.0/aut_core")
+saveRDS(austria_political, "./package/legislatoR-data-v1.0.0/aut_political")
+saveRDS(austria_history, "./package/legislatoR-data-v1.0.0/aut_history")
+saveRDS(austria_traffic, "./package/legislatoR-data-v1.0.0/aut_traffic")
+saveRDS(austria_social, "./package/legislatoR-data-v1.0.0/aut_social")
+saveRDS(austria_faces, "./package/legislatoR-data-v1.0.0/aut_portrait")
+saveRDS(austria_positions, "./package/legislatoR-data-v1.0.0/aut_office")
+saveRDS(austria_occupation, "./package/legislatoR-data-v1.0.0/aut_profession")
+saveRDS(austria_id, "./package/legislatoR-data-v1.0.0/aut_ids")
 
 # canadian house of commons
 canada_social <- readRDS("./data/canada_social")
 canada_positions <- readRDS("./data/canada_positions")
 canada_occupation <- readRDS("./data/canada_occupation")
 canada_id <- readRDS("./data/canada_id")
-saveRDS(canada_core, "./package/legislatoR-data/data/can_core")
-saveRDS(canada_political, "./package/legislatoR-data/data/can_political")
-saveRDS(canada_history, "./package/legislatoR-data/data/can_history")
-saveRDS(canada_traffic, "./package/legislatoR-data/data/can_traffic")
-saveRDS(canada_social, "./package/legislatoR-data/data/can_social")
-saveRDS(canada_faces, "./package/legislatoR-data/data/can_portrait")
-saveRDS(canada_positions, "./package/legislatoR-data/data/can_office")
-saveRDS(canada_occupation, "./package/legislatoR-data/data/can_profession")
-saveRDS(canada_id, "./package/legislatoR-data/data/can_ids")
+saveRDS(canada_core, "./package/legislatoR-data-v1.0.0/can_core")
+saveRDS(canada_political, "./package/legislatoR-data-v1.0.0/can_political")
+saveRDS(canada_history, "./package/legislatoR-data-v1.0.0/can_history")
+saveRDS(canada_traffic, "./package/legislatoR-data-v1.0.0/can_traffic")
+saveRDS(canada_social, "./package/legislatoR-data-v1.0.0/can_social")
+saveRDS(canada_faces, "./package/legislatoR-data-v1.0.0/can_portrait")
+saveRDS(canada_positions, "./package/legislatoR-data-v1.0.0/can_office")
+saveRDS(canada_occupation, "./package/legislatoR-data-v1.0.0/can_profession")
+saveRDS(canada_id, "./package/legislatoR-data-v1.0.0/can_ids")
 
 # czech poslanecka snemovna
 czech_social <- readRDS("./data/czech_social")
@@ -1188,7 +1189,7 @@ czech_id <- readRDS("./data/czech_id")
 saveRDS(czech_core, "./package/legislatoR-data/data/cze_core")
 saveRDS(czech_political, "./package/legislatoR-data/data/cze_political")
 saveRDS(czech_history, "./package/legislatoR-data/data/cze_history")
-saveRDS(czech_traffic, "./package/legislatoR-data/data/cze_traffic")
+saveRDS(czech_traffic, "./package/legislatoR-data-v1.0.0/cze_traffic")
 saveRDS(czech_social, "./package/legislatoR-data/data/cze_social")
 saveRDS(czech_faces, "./package/legislatoR-data/data/cze_portrait")
 saveRDS(czech_positions, "./package/legislatoR-data/data/cze_office")
@@ -1203,7 +1204,7 @@ france_id <- readRDS("./data/france_id")
 saveRDS(france_core, "./package/legislatoR-data/data/fra_core")
 saveRDS(france_political, "./package/legislatoR-data/data/fra_political")
 saveRDS(france_history, "./package/legislatoR-data/data/fra_history")
-saveRDS(france_traffic, "./package/legislatoR-data/data/fra_traffic")
+saveRDS(france_traffic, "./package/legislatoR-data-v1.0.0/fra_traffic")
 saveRDS(france_social, "./package/legislatoR-data/data/fra_social")
 saveRDS(france_faces, "./package/legislatoR-data/data/fra_portrait")
 saveRDS(france_positions, "./package/legislatoR-data/data/fra_office")
@@ -1218,7 +1219,7 @@ germany_id <- readRDS("./data/germany_id")
 saveRDS(germany_core, "./package/legislatoR-data/data/deu_core")
 saveRDS(germany_political, "./package/legislatoR-data/data/deu_political")
 saveRDS(germany_history, "./package/legislatoR-data/data/deu_history")
-saveRDS(germany_traffic, "./package/legislatoR-data/data/deu_traffic")
+saveRDS(germany_traffic, "./package/legislatoR-data-v1.0.0/deu_traffic")
 saveRDS(germany_social, "./package/legislatoR-data/data/deu_social")
 saveRDS(germany_faces, "./package/legislatoR-data/data/deu_portrait")
 saveRDS(germany_positions, "./package/legislatoR-data/data/deu_office")
@@ -1230,15 +1231,15 @@ ireland_social <- readRDS("./data/ireland_social")
 ireland_positions <- readRDS("./data/ireland_positions")
 ireland_occupation <- readRDS("./data/ireland_occupation")
 ireland_id <- readRDS("./data/ireland_id")
-saveRDS(ireland_core, "./package/legislatoR-data/data/irl_core")
-saveRDS(ireland_political, "./package/legislatoR-data/data/irl_political")
-saveRDS(ireland_history, "./package/legislatoR-data/data/irl_history")
-saveRDS(ireland_traffic, "./package/legislatoR-data/data/irl_traffic")
-saveRDS(ireland_social, "./package/legislatoR-data/data/irl_social")
-saveRDS(ireland_faces, "./package/legislatoR-data/data/irl_portrait")
-saveRDS(ireland_positions, "./package/legislatoR-data/data/irl_office")
-saveRDS(ireland_occupation, "./package/legislatoR-data/data/irl_profession")
-saveRDS(ireland_id, "./package/legislatoR-data/data/irl_ids")
+saveRDS(ireland_core, "./package/legislatoR-data-v1.0.0/irl_core")
+saveRDS(ireland_political, "./package/legislatoR-data-v1.0.0/irl_political")
+saveRDS(ireland_history, "./package/legislatoR-data-v1.0.0/irl_history")
+saveRDS(ireland_traffic, "./package/legislatoR-data-v1.0.0/irl_traffic")
+saveRDS(ireland_social, "./package/legislatoR-data-v1.0.0/irl_social")
+saveRDS(ireland_faces, "./package/legislatoR-data-v1.0.0/irl_portrait")
+saveRDS(ireland_positions, "./package/legislatoR-data-v1.0.0/irl_office")
+saveRDS(ireland_occupation, "./package/legislatoR-data-v1.0.0/irl_profession")
+saveRDS(ireland_id, "./package/legislatoR-data-v1.0.0/irl_ids")
 
 # scottish parliament
 scotland_social <- readRDS("./data/scotland_social")
@@ -1248,7 +1249,7 @@ scotland_id <- readRDS("./data/scotland_id")
 saveRDS(scotland_core, "./package/legislatoR-data/data/sco_core")
 saveRDS(scotland_political, "./package/legislatoR-data/data/sco_political")
 saveRDS(scotland_history, "./package/legislatoR-data/data/sco_history")
-saveRDS(scotland_traffic, "./package/legislatoR-data/data/sco_traffic")
+saveRDS(scotland_traffic, "./package/legislatoR-data-v1.0.0/sco_traffic")
 saveRDS(scotland_social, "./package/legislatoR-data/data/sco_social")
 saveRDS(scotland_faces, "./package/legislatoR-data/data/sco_portrait")
 saveRDS(scotland_positions, "./package/legislatoR-data/data/sco_office")
@@ -1260,15 +1261,15 @@ uk_social <- readRDS("./data/uk_social")
 uk_positions <- readRDS("./data/uk_positions")
 uk_occupation <- readRDS("./data/uk_occupation")
 uk_id <- readRDS("./data/uk_id")
-saveRDS(uk_core, "./package/legislatoR-data/data/gbr_core")
-saveRDS(uk_political, "./package/legislatoR-data/data/gbr_political")
-saveRDS(uk_history, "./package/legislatoR-data/data/gbr_history")
-saveRDS(uk_traffic, "./package/legislatoR-data/data/gbr_traffic")
-saveRDS(uk_social, "./package/legislatoR-data/data/gbr_social")
-saveRDS(uk_faces, "./package/legislatoR-data/data/gbr_portrait")
-saveRDS(uk_positions, "./package/legislatoR-data/data/gbr_office")
-saveRDS(uk_occupation, "./package/legislatoR-data/data/gbr_profession")
-saveRDS(uk_id, "./package/legislatoR-data/data/gbr_ids")
+saveRDS(uk_core, "./package/legislatoR-data-v1.0.0/gbr_core")
+saveRDS(uk_political, "./package/legislatoR-data-v1.0.0/gbr_political")
+saveRDS(uk_history, "./package/legislatoR-data-v1.0.0/gbr_history")
+saveRDS(uk_traffic, "./package/legislatoR-data-v1.0.0/gbr_traffic")
+saveRDS(uk_social, "./package/legislatoR-data-v1.0.0/gbr_social")
+saveRDS(uk_faces, "./package/legislatoR-data-v1.0.0/gbr_portrait")
+saveRDS(uk_positions, "./package/legislatoR-data-v1.0.0/gbr_office")
+saveRDS(uk_occupation, "./package/legislatoR-data-v1.0.0/gbr_profession")
+saveRDS(uk_id, "./package/legislatoR-data-v1.0.0/gbr_ids")
 
 # united states house
 usah_social <- readRDS("./data/usah_social")
@@ -1278,7 +1279,7 @@ usah_id <- readRDS("./data/usah_id")
 saveRDS(usah_core, "./package/legislatoR-data/data/usa_house_core")
 saveRDS(usah_political, "./package/legislatoR-data/data/usa_house_political")
 saveRDS(usah_history, "./package/legislatoR-data/data/usa_house_history")
-saveRDS(usah_traffic, "./package/legislatoR-data/data/usa_house_traffic")
+saveRDS(usah_traffic, "./package/legislatoR-data-v1.0.0/usa_house_traffic")
 saveRDS(usah_social, "./package/legislatoR-data/data/usa_house_social")
 saveRDS(usah_faces, "./package/legislatoR-data/data/usa_house_portrait")
 saveRDS(usah_positions, "./package/legislatoR-data/data/usa_house_office")
@@ -1293,7 +1294,7 @@ usas_id <- readRDS("./data/usas_id")
 saveRDS(usas_core, "./package/legislatoR-data/data/usa_senate_core")
 saveRDS(usas_political, "./package/legislatoR-data/data/usa_senate_political")
 saveRDS(usas_history, "./package/legislatoR-data/data/usa_senate_history")
-saveRDS(usas_traffic, "./package/legislatoR-data/data/usa_senate_traffic")
+saveRDS(usas_traffic, "./package/legislatoR-data-v1.0.0/usa_senate_traffic")
 saveRDS(usas_social, "./package/legislatoR-data/data/usa_senate_social")
 saveRDS(usas_faces, "./package/legislatoR-data/data/usa_senate_portrait")
 saveRDS(usas_positions, "./package/legislatoR-data/data/usa_senate_office")
