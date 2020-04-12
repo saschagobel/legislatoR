@@ -65,7 +65,7 @@ devtools::install_github("saschagobel/legislatoR")
 
 ## Usage
 
-A working Internet connection is required to access the CLD in R. This is because the data are stored online and not installed together with the package. The package provides table-specific function calls. These functions are named after the respective table (see [above](#content-and-data-structure)) and preceded by `get_`. To fetch  the *Core* table, use the `get_core()` function, for the *Political* table, use the `get_political()` function. Call the package help file via `?legislatoR` to get an overview of all function calls. Tables are legislature-specific, so a three-letter country code must be passed as an argument to the function. Here is a breakdown of all country codes. You can also call the `cld_content()` function to get an overview of the CLD's scope and valid country codes.
+A working Internet connection is required to access the CLD in R. This is because the data are stored online and not installed together with the package. The package provides table-specific function calls. These functions are named after the respective table (see [above](#content-and-data-structure)) and preceded by `get_`. To fetch  the *Core* table, use the `get_core()` function, for the *Political* table, use the `get_political()` function. Call the package help file via `?legislatoR()` to get an overview of all function calls. Tables are legislature-specific, so a three-letter country code must be passed as an argument to the function. Here is a breakdown of all country codes. You can also call the `cld_content()` function to get an overview of the CLD's scope and valid country codes.
 
 | Legislature               | Code        | Legislature      | Code       | Legislature            | Code                     |
 | ------------------------- |:-----------:| ---------------- |:----------:| ---------------------- |:------------------------:|
@@ -74,7 +74,7 @@ A working Internet connection is required to access the CLD in R. This is becaus
 | Czech Poslanecka Snemovna | `cze`       | Scottish Parliament | `sco`   |                        |                          | 
 | French Assemblée          | `fra`       | Spanish Congreso | `esp`      |                        |                          |
 
-Tables can be joined and subsetted while being fetched and memory is only allocated by the parts of a table assigned into the environment. Basic fetching, joining, and subsetting of data are illustrated below. See the Vignette [Introducing legislatoR](...) for a detailed tutorial.
+Tables can be joined and subsetted while being fetched and memory is only allocated by the parts of a table assigned into the environment. Basic fetching, joining, and subsetting of data are illustrated below. See the Vignette [Introducing legislatoR](http://htmlpreview.github.com/?https://github.com/saschagobel/legislatoR/blob/master/vignettes/legislatoR.html) for a detailed tutorial.
 
 ```r
 # load and attach legislatoR and dplyr

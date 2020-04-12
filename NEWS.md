@@ -11,9 +11,9 @@
 * Spanish Congreso de los Diputados data integrated with ParlSpeech V2.
 * Austrian Nationalrat data integrated with ParlSpeech V2.
 * Daily Wikipedia page traffic now goes back to December 2007 (except for the US House, where file storage restrictions currently limit traffic to range back to July 2009 only).
-* New `cld_content` function that offers a quick overview of the CLD's scope and valid three-letter country codes, and helps to conventiently loop/map over legislatures and sessions.
-* New Logo/Hexsticker.
+* New `cld_content()` function that offers a quick overview of the CLD's scope and valid three-letter country codes, and helps to conventiently loop/map over legislatures and sessions.
 * "Introducing legislatoR" Vignette added.
+* New Logo/Hexsticker.
 
 
 # legislatoR 0.2.0
