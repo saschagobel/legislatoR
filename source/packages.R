@@ -15,7 +15,7 @@ suppressWarnings(if (!require("pacman")) install.packages("pacman"))
 pacman::p_load(stringr, lubridate, magrittr, plyr, dplyr, eeptools, httr,
                rvest, toOrdinal, mpoly, data.table, zoo, jsonlite, R.utils,
                WikidataR, tibble, pageviews, wikipediatrend, padr, gtools,readxl, haven,
-               tidyselect, reshape2, ggplot2, extrafont, finalfit,
+               tidyselect, reshape2, ggplot2, extrafont, finalfit, purrr, vroom,
                install = TRUE,
                update = FALSE)
 
