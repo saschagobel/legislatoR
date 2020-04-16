@@ -28,12 +28,12 @@ Fetches political and other offices of legislators for the specified legislature
 \examples{
 # Get entire 'Offices' table for the French Assemblée
 fra_offices <- get_office(legislature = "fra")
-tibble::glimpse(fra_offices)
+# tibble::glimpse(fra_offices)
 
 # Get 'Offices' table for male members of the French Assemblée
-fra_offices_subset <- dplyr::semi_join(x = fra_offices,
-                                       y = dplyr::filter(get_core(legislature = "fra"),
-                                                           sex == "female"),
-                                         by = "wikidataid")
-tibble::glimpse(fra_offices_subset)
+# fra_offices_subset <- dplyr::semi_join(x = fra_offices,
+#                                        y = dplyr::filter(get_core(legislature = "fra"),
+#                                                            sex == "female"),
+#                                          by = "wikidataid")
+# tibble::glimpse(fra_offices_subset)
 }
