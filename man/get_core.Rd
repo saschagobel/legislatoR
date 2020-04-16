@@ -39,7 +39,7 @@ A data frame with columns as specified above.
 Fetches sociodemographic data of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'Core' table for the German Bundestag
+\donttest{# Get entire 'Core' table for the German Bundestag
 deu_core <- get_core(legislature = "deu")
 tibble::glimpse(deu_core)
 
@@ -49,4 +49,5 @@ deu_core_subset <- dplyr::semi_join(x = deu_core,
                                                       session == 16),
                                     by = "pageid")
 tibble::glimpse(deu_core_subset)
+}
 }

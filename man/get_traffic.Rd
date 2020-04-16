@@ -26,7 +26,7 @@ A data frame with columns as specified above.
 Fetches daily user traffic on legislators' Wikipedia biographies for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'Traffic' table for the Scottish Parliament
+\donttest{# Get entire 'Traffic' table for the Scottish Parliament
 sco_traffic <- get_traffic(legislature = "sco")
 tibble::glimpse(sco_traffic)
 
@@ -36,4 +36,5 @@ sco_traffic_subset <- dplyr::inner_join(x = dplyr::select(get_core(legislature =
                                         y = sco_traffic,
                                         by = "pageid")
 tibble::glimpse(sco_traffic_subset)
+}
 }

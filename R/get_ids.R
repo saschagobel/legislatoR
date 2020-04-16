@@ -39,7 +39,7 @@
 #' \item{theyworkforyou: TheyWorkForYou ID (of class \sQuote{character}).}
 #' }
 #' @examples
-#' # Get entire 'IDs' table for the for the United States Senate
+#' \donttest{# Get entire 'IDs' table for the for the United States Senate
 #' usa_ids <- get_ids(legislature = "usa_senate")
 #' tibble::glimpse(usa_ids)
 #'
@@ -49,6 +49,7 @@
 #'                                     y = get_office(legislature = "usa_senate"),
 #'                                     by = "wikidataid")
 #' tibble::glimpse(usa_ids_subset)
+#' }
 #' @source
 #' Wikidata API, \url{https://www.wikidata.org/}
 #' @export

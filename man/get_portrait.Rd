@@ -25,7 +25,7 @@ A data frame with columns as specified above.
 Fetches portrait urls of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'Portraits' table for the United States Senate
+\donttest{# Get entire 'Portraits' table for the United States Senate
 usa_portraits <- get_portrait(legislature = "usa_senate")
 tibble::glimpse(usa_portraits)
 
@@ -35,4 +35,5 @@ usa_port_subset <- dplyr::semi_join(x = usa_portraits,
                                                                     party == "D"),
                                     by = "pageid")
 tibble::glimpse(usa_port_subset)
+}
 }

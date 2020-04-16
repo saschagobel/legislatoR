@@ -35,7 +35,7 @@ A data frame with columns as specified above.
 Fetches political data of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'Political' table for the Czech Poslanecka Snemovna
+\donttest{# Get entire 'Political' table for the Czech Poslanecka Snemovna
 cze_political <- get_political(legislature = "cze")
 tibble::glimpse(cze_political)
 
@@ -46,4 +46,5 @@ cze_political_subset <- dplyr::semi_join(x = dplyr::filter(cze_political,
                                                            sex == "female"),
                                          by = "pageid")
 tibble::glimpse(cze_political_subset)
+}
 }

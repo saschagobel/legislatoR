@@ -20,7 +20,7 @@
 #' \item{deathplace: Comma separated latitude and longitude of a legislator's place of death (of class \sQuote{character}).}
 #' }
 #' @examples
-#' # Get entire 'Core' table for the German Bundestag
+#' \donttest{# Get entire 'Core' table for the German Bundestag
 #' deu_core <- get_core(legislature = "deu")
 #' tibble::glimpse(deu_core)
 #'
@@ -30,6 +30,7 @@
 #'                                                       session == 16),
 #'                                     by = "pageid")
 #' tibble::glimpse(deu_core_subset)
+#' }
 #' @source
 #' Wikipedia, \url{https://wikipedia.org/} \cr
 #' Wikipedia API, \url{https://wikipedia.org/w/api.php} \cr

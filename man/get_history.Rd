@@ -30,7 +30,7 @@ A data frame with columns as specified above.
 Fetches full revision histories of legislators' Wikipedia biographies for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'History' table for the Austrian Nationalrat
+\donttest{# Get entire 'History' table for the Austrian Nationalrat
 aut_history <- get_history(legislature = "aut")
 tibble::glimpse(aut_history)
 
@@ -40,4 +40,5 @@ aut_history_subset <- dplyr::semi_join(x = aut_history,
                                                          party == "NEOS"),
                                        by = "pageid")
 tibble::glimpse(aut_history_subset)
+}
 }

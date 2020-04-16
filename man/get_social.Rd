@@ -30,7 +30,7 @@ A data frame with columns as specified above.
 Fetches social media handles and website URLs of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'Social' table forthe UK House of Commons
+\donttest{# Get entire 'Social' table forthe UK House of Commons
 gbr_social <- get_social(legislature = "gbr")
 tibble::glimpse(gbr_social)
 
@@ -40,4 +40,5 @@ gbr_social_subset <- dplyr::semi_join(x = gbr_social,
                                                         !is.na(theyworkforyou)),
                                       by = "wikidataid")
 tibble::glimpse(gbr_social_subset)
+}
 }

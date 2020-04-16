@@ -10,7 +10,7 @@
 #' \item{image_url: URL linking to a legislator's portrait on Wikimedia Commons (of class \sQuote{character}).}
 #' }
 #' @examples
-#' # Get entire 'Portraits' table for the United States Senate
+#' \donttest{# Get entire 'Portraits' table for the United States Senate
 #' usa_portraits <- get_portrait(legislature = "usa_senate")
 #' tibble::glimpse(usa_portraits)
 #'
@@ -20,6 +20,7 @@
 #'                                                                     party == "D"),
 #'                                     by = "pageid")
 #' tibble::glimpse(usa_port_subset)
+#' }
 #' @source
 #' Wikipedia API, \url{https://wikipedia.org/w/api.php} \cr
 #' Wikimedia Commons, \url{https://commons.wikimedia.org/}

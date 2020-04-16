@@ -16,7 +16,7 @@
 #' \item{website: Personal website URL (of class \sQuote{character}).}
 #' }
 #' @examples
-#' # Get entire 'Social' table forthe UK House of Commons
+#' \donttest{# Get entire 'Social' table forthe UK House of Commons
 #' gbr_social <- get_social(legislature = "gbr")
 #' tibble::glimpse(gbr_social)
 #'
@@ -26,6 +26,7 @@
 #'                                                         !is.na(theyworkforyou)),
 #'                                       by = "wikidataid")
 #' tibble::glimpse(gbr_social_subset)
+#' }
 #' @source
 #' Wikidata API, \url{https://www.wikidata.org/}
 #' @export

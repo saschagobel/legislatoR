@@ -19,7 +19,7 @@
 #' \item{leader (or similar): Indicator of a legislator's leader status in parliament (of class \sQuote{logical}). Further columns with extensions of this might exist.}
 #' }
 #' @examples
-#' # Get entire 'Political' table for the Czech Poslanecka Snemovna
+#' \donttest{# Get entire 'Political' table for the Czech Poslanecka Snemovna
 #' cze_political <- get_political(legislature = "cze")
 #' tibble::glimpse(cze_political)
 #'
@@ -30,6 +30,7 @@
 #'                                                            sex == "female"),
 #'                                          by = "pageid")
 #' tibble::glimpse(cze_political_subset)
+#' }
 #' @source
 #' Wikipedia, \url{https://wikipedia.org/} \cr
 #' Czech Republic Parliamentary Members Archive \url{http://public.psp.cz/sqw/fsnem.sqw?zvo=1} \cr

@@ -26,7 +26,7 @@ A data frame with columns as specified above.
 Fetches political and other offices of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'Offices' table for the United States Senate
+\donttest{# Get entire 'Offices' table for the United States Senate
 usa_offices <- get_office(legislature = "usa_senate")
 tibble::glimpse(usa_offices)
 
@@ -36,4 +36,5 @@ usa_offices_subset <- dplyr::semi_join(x = usa_offices,
                                                            sex == "female"),
                                          by = "wikidataid")
 tibble::glimpse(usa_offices_subset)
+}
 }

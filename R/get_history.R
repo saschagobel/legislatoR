@@ -16,7 +16,7 @@
 #' \item{comment: Revision comment (of class \sQuote{character}).}
 #' }
 #' @examples
-#' # Get entire 'History' table for the Austrian Nationalrat
+#' \donttest{# Get entire 'History' table for the Austrian Nationalrat
 #' aut_history <- get_history(legislature = "aut")
 #' tibble::glimpse(aut_history)
 #'
@@ -26,6 +26,7 @@
 #'                                                          party == "NEOS"),
 #'                                        by = "pageid")
 #' tibble::glimpse(aut_history_subset)
+#' }
 #' @source
 #' Wikipedia API, \url{https://wikipedia.org/w/api.php}
 #' @export

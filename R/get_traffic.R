@@ -11,7 +11,7 @@
 #' \item{traffic: Daily non-unique user visits (of class \sQuote{numeric}).}
 #' }
 #' @examples
-#' # Get entire 'Traffic' table for the Scottish Parliament
+#' \donttest{# Get entire 'Traffic' table for the Scottish Parliament
 #' sco_traffic <- get_traffic(legislature = "sco")
 #' tibble::glimpse(sco_traffic)
 #'
@@ -21,6 +21,7 @@
 #'                                         y = sco_traffic,
 #'                                         by = "pageid")
 #' tibble::glimpse(sco_traffic_subset)
+#' }
 #' @source
 #' Wikimedia API, \url{https://wikimedia.org/api/rest_v1/} \cr
 #' \url{http://petermeissner.de:8880/}

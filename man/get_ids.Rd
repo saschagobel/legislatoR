@@ -53,7 +53,7 @@ A data frame with columns as specified above.
 Fetches a range of IDs of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'IDs' table for the for the United States Senate
+\donttest{# Get entire 'IDs' table for the for the United States Senate
 usa_ids <- get_ids(legislature = "usa_senate")
 tibble::glimpse(usa_ids)
 
@@ -63,4 +63,5 @@ usa_ids_subset <- dplyr::inner_join(x = dplyr::filter(usa_ids,
                                     y = get_office(legislature = "usa_senate"),
                                     by = "wikidataid")
 tibble::glimpse(usa_ids_subset)
+}
 }

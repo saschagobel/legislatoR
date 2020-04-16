@@ -12,7 +12,7 @@
 #' \item{...}
 #' }
 #' @examples
-#' # Get entire 'Professions' table for the United States House
+#' \donttest{# Get entire 'Professions' table for the United States House
 #' usa_offices <- get_office(legislature = "usa_house")
 #' tibble::glimpse(usa_offices)
 #'
@@ -22,6 +22,7 @@
 #'                                                          sex == "female"),
 #'                                        by = "wikidataid")
 #' tibble::glimpse(usa_offices_subset)
+#' }
 #' @source
 #' Wikidata API, \url{https://www.wikidata.org/}
 #' @export
