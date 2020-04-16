@@ -39,16 +39,16 @@
 #' \item{theyworkforyou: TheyWorkForYou ID (of class \sQuote{character}).}
 #' }
 #' @examples
-#' # Get entire 'IDs' table for the Irish Dail
-#' irl_ids <- get_ids(legislature = "irl")
-#' tibble::glimpse(irl_ids)
+#' # Get entire 'IDs' table for the Austrian Nationalrat
+#' aut_ids <- get_ids(legislature = "aut")
+#' tibble::glimpse(aut_ids)
 #'
-#' # Get DPSI IDs and add 'Offices' table for the Irish Dail
-#' irl_ids_subset <- dplyr::inner_join(x = dplyr::filter(irl_ids,
-#'                                                       !is.na(dpsi)),
-#'                                     y = get_office(legislature = "irl"),
+#' # Get ParlSpeech IDs and add 'Offices' table for the Austrian Nationalrat
+#' aut_ids_subset <- dplyr::inner_join(x = dplyr::filter(aut_ids,
+#'                                                       !is.na(parlspeech)),
+#'                                     y = get_office(legislature = "aut"),
 #'                                     by = "wikidataid")
-#' tibble::glimpse(irl_ids_subset)
+#' tibble::glimpse(aut_ids_subset)
 #' @source
 #' Wikidata API, \url{https://www.wikidata.org/}
 #' @export
