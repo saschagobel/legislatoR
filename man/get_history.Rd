@@ -30,25 +30,14 @@ A data frame with columns as specified above.
 Fetches full revision histories of legislators' Wikipedia biographies for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-\donttest{## assign entire core dataset into the environment
-aut_politicians <- get_core(legislature = "aut")
+# Get entire 'History' table for the Austrian Nationalrat
+aut_history <- get_history(legislature = "aut")
+tibble::glimpse(aut_history)
 
-## assign only data for the 12th legislative session into the environment
-aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-                                           y = dplyr::filter(get_political(legislature = "aut"),
-                                                                     session == 8),
-                                           by = "pageid")
-
-## join aut_politicians_subset with respective history dataset
-aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-                                            y = get_history(legislature = "aut"),
-                                            by = "pageid")
-
-## assign only birthdate for members of the political party 'SdP' into the environment
-aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-                                                         pageid, birth),
+# Get 'History' table for NEOS party members of the Austrian Nationalrat
+aut_history_subset <- dplyr::semi_join(x = aut_history,
                                        y = dplyr::filter(get_political(legislature = "aut"),
-                                                                       party == "SdP"),
-                                       by = "pageid")$birth
-}
+                                                         party == "NEOS"),
+                                       by = "pageid")
+tibble::glimpse(aut_history_subset)
 }

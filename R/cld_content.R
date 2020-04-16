@@ -5,27 +5,13 @@
 #' @param legislature An optional character string specifying one or more legislatures. Currently one of \sQuote{aut}, \sQuote{can}, \sQuote{cze}, \sQuote{esp}, \sQuote{fra}, \sQuote{deu}, \sQuote{irl}, \sQuote{sco}, \sQuote{gbr}, \sQuote{usa_house}, or \sQuote{usa_senate}. If NULL (the default), a list with all legislatures and sessions available in the CLD is returned.
 #' @return A list with names being three-letter country codes and with each element containing a vector that shows the sessions available for a legislature.
 #' @examples
-#' \donttest{## assign entire core dataset into the environment
-#' aut_politicians <- get_core(legislature = "aut")
+#' # Get a list of three-letter country codes and available sessions for all countries
+#' overview <- cld_content()
+#' tibble::glimpse(overview)
 #'
-#' ## assign only data for the 12th legislative session into the environment
-#' aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-#'                                            y = dplyr::filter(get_political(legislature = "aut"),
-#'                                                                      session == 8),
-#'                                            by = "pageid")
-#'
-#' ## join aut_politicians_subset with respective history dataset
-#' aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-#'                                             y = get_history(legislature = "aut"),
-#'                                             by = "pageid")
-#'
-#' ## assign only birthdate for members of the political party 'SdP' into the environment
-#' aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-#'                                                          pageid, birth),
-#'                                        y = dplyr::filter(get_political(legislature = "aut"),
-#'                                                                        party == "SdP"),
-#'                                        by = "pageid")$birth
-#' }
+#' # Get a list of available sessions for the French Assemblée and the Irish Dail
+#' sessions <- cld_content(legislature = c("fra", "irl"))
+#' tibble::glimpse(sessions)
 #' @export
 cld_content <- function(legislature = NULL) {
   output <-  list(aut = 1:27, can = 1:43, cze = 1:8,

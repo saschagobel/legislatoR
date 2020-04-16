@@ -20,27 +20,16 @@
 #' \item{deathplace: Comma separated latitude and longitude of a legislator's place of death (of class \sQuote{character}).}
 #' }
 #' @examples
-#' \donttest{## assign entire core dataset into the environment
-#' aut_politicians <- get_core(legislature = "aut")
+#' # Get entire 'Core' table for the German Bundestag
+#' deu_core <- get_core(legislature = "deu")
+#' tibble::glimpse(deu_core)
 #'
-#' ## assign only data for the 12th legislative session into the environment
-#' aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-#'                                            y = dplyr::filter(get_political(legislature = "aut"),
-#'                                                                      session == 8),
-#'                                            by = "pageid")
-#'
-#' ## join aut_politicians_subset with respective history dataset
-#' aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-#'                                             y = get_history(legislature = "aut"),
-#'                                             by = "pageid")
-#'
-#' ## assign only birthdate for members of the political party 'SdP' into the environment
-#' aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-#'                                                          pageid, birth),
-#'                                        y = dplyr::filter(get_political(legislature = "aut"),
-#'                                                                        party == "SdP"),
-#'                                        by = "pageid")$birth
-#' }
+#' # Get 'Core' table for 16th session of the German Bundestag
+#' deu_core_subset <- dplyr::semi_join(x = deu_core,
+#'                                     y = dplyr::filter(get_political(legislature = "deu"),
+#'                                                       session == 16),
+#'                                     by = "pageid")
+#' tibble::glimpse(deu_core_subset)
 #' @source
 #' Wikipedia, \url{https://wikipedia.org/} \cr
 #' Wikipedia API, \url{https://wikipedia.org/w/api.php} \cr

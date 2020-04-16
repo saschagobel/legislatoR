@@ -25,25 +25,14 @@ A data frame with columns as specified above.
 Fetches portrait urls of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-\donttest{## assign entire core dataset into the environment
-aut_politicians <- get_core(legislature = "aut")
+# Get entire 'Portraits' table for the United States Senate
+usa_portraits <- get_portrait(legislature = "usa_senate")
+tibble::glimpse(usa_portraits)
 
-## assign only data for the 12th legislative session into the environment
-aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-                                           y = dplyr::filter(get_political(legislature = "aut"),
-                                                                     session == 8),
-                                           by = "pageid")
-
-## join aut_politicians_subset with respective history dataset
-aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-                                            y = get_history(legislature = "aut"),
-                                            by = "pageid")
-
-## assign only birthdate for members of the political party 'SdP' into the environment
-aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-                                                         pageid, birth),
-                                       y = dplyr::filter(get_political(legislature = "aut"),
-                                                                       party == "SdP"),
-                                       by = "pageid")$birth
-}
+# Get 'Portraits' table for Democratic members of the United States Senate
+usa_port_subset <- dplyr::semi_join(x = usa_portraits,
+                                    y = dplyr::filter(get_political(legislature = "usa_senate"),
+                                                                    party == "D"),
+                                    by = "pageid")
+tibble::glimpse(usa_port_subset)
 }

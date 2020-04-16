@@ -35,25 +35,15 @@ A data frame with columns as specified above.
 Fetches political data of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-\donttest{## assign entire core dataset into the environment
-aut_politicians <- get_core(legislature = "aut")
+# Get entire 'Political' table for the Czech Poslanecka Snemovna
+cze_political <- get_political(legislature = "cze")
+tibble::glimpse(cze_political)
 
-## assign only data for the 12th legislative session into the environment
-aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-                                           y = dplyr::filter(get_political(legislature = "aut"),
-                                                                     session == 8),
-                                           by = "pageid")
-
-## join aut_politicians_subset with respective history dataset
-aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-                                            y = get_history(legislature = "aut"),
-                                            by = "pageid")
-
-## assign only birthdate for members of the political party 'SdP' into the environment
-aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-                                                         pageid, birth),
-                                       y = dplyr::filter(get_political(legislature = "aut"),
-                                                                       party == "SdP"),
-                                       by = "pageid")$birth
-}
+# Get 'Political' table for female DSP party members of the Czech Poslanecka Snemovna
+cze_political_subset <- dplyr::semi_join(x = dplyr::filter(cze_political,
+                                                           party == "ODS"),
+                                         y = dplyr::filter(get_core(legislature = "cze"),
+                                                           sex == "female"),
+                                         by = "pageid")
+tibble::glimpse(cze_political_subset)
 }

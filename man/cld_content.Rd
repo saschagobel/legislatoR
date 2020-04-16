@@ -16,25 +16,11 @@ A list with names being three-letter country codes and with each element contain
 Returns a named list of legislatures and sessions available in the CLD. This provides a quick overview of the CLD's scope and valid three-letter country codes, and helps to conventiently loop/map over legislatures and sessions.
 }
 \examples{
-\donttest{## assign entire core dataset into the environment
-aut_politicians <- get_core(legislature = "aut")
+# Get a list of three-letter country codes and available sessions for all countries
+overview <- cld_content()
+tibble::glimpse(overview)
 
-## assign only data for the 12th legislative session into the environment
-aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-                                           y = dplyr::filter(get_political(legislature = "aut"),
-                                                                     session == 8),
-                                           by = "pageid")
-
-## join aut_politicians_subset with respective history dataset
-aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-                                            y = get_history(legislature = "aut"),
-                                            by = "pageid")
-
-## assign only birthdate for members of the political party 'SdP' into the environment
-aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-                                                         pageid, birth),
-                                       y = dplyr::filter(get_political(legislature = "aut"),
-                                                                       party == "SdP"),
-                                       by = "pageid")$birth
-}
+# Get a list of available sessions for the French Assemblée and the Irish Dail
+sessions <- cld_content(legislature = c("fra", "irl"))
+tibble::glimpse(sessions)
 }

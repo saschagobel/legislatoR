@@ -39,27 +39,16 @@
 #' \item{theyworkforyou: TheyWorkForYou ID (of class \sQuote{character}).}
 #' }
 #' @examples
-#' \donttest{## assign entire core dataset into the environment
-#' aut_politicians <- get_core(legislature = "aut")
+#' # Get entire 'IDs' table for the Spanish Congreso de los Diputados
+#' esp_ids <- get_ids(legislature = "esp")
+#' tibble::glimpse(esp_ids)
 #'
-#' ## assign only data for the 12th legislative session into the environment
-#' aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-#'                                            y = dplyr::filter(get_political(legislature = "aut"),
-#'                                                                      session == 8),
-#'                                            by = "pageid")
-#'
-#' ## join aut_politicians_subset with respective history dataset
-#' aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-#'                                             y = get_history(legislature = "aut"),
-#'                                             by = "pageid")
-#'
-#' ## assign only birthdate for members of the political party 'SdP' into the environment
-#' aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-#'                                                          pageid, birth),
-#'                                        y = dplyr::filter(get_political(legislature = "aut"),
-#'                                                                        party == "SdP"),
-#'                                        by = "pageid")$birth
-#' }
+#' # Get ParlSpeech IDs and add 'Offices' table for the Spanish Congreso de los Diputados
+#' esp_ids_subset <- dplyr::inner_join(x = dplyr::filter(esp_ids,
+#'                                                       !is.na(parlspeech)),
+#'                                     y = get_office(legislature = "esp"),
+#'                                     by = "wikidataid")
+#' tibble::glimpse(esp_ids_subset)
 #' @source
 #' Wikidata API, \url{https://www.wikidata.org/}
 #' @export

@@ -11,27 +11,16 @@
 #' \item{traffic: Daily non-unique user visits (of class \sQuote{numeric}).}
 #' }
 #' @examples
-#' \donttest{## assign entire core dataset into the environment
-#' aut_politicians <- get_core(legislature = "aut")
+#' # Get entire 'Traffic' table for the Scottish Parliament
+#' sco_traffic <- get_traffic(legislature = "sco")
+#' tibble::glimpse(sco_traffic)
 #'
-#' ## assign only data for the 12th legislative session into the environment
-#' aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-#'                                            y = dplyr::filter(get_political(legislature = "aut"),
-#'                                                                      session == 8),
-#'                                            by = "pageid")
-#'
-#' ## join aut_politicians_subset with respective history dataset
-#' aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-#'                                             y = get_history(legislature = "aut"),
-#'                                             by = "pageid")
-#'
-#' ## assign only birthdate for members of the political party 'SdP' into the environment
-#' aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-#'                                                          pageid, birth),
-#'                                        y = dplyr::filter(get_political(legislature = "aut"),
-#'                                                                        party == "SdP"),
-#'                                        by = "pageid")$birth
-#' }
+#' # Add Wikidataid to 'Traffic' table for the Scottish Parliament
+#' sco_traffic_subset <- dplyr::inner_join(x = dplyr::select(get_core(legislature = "sco"),
+#'                                                           pageid, wikidataid),
+#'                                         y = sco_traffic,
+#'                                         by = "pageid")
+#' tibble::glimpse(sco_traffic_subset)
 #' @source
 #' Wikimedia API, \url{https://wikimedia.org/api/rest_v1/} \cr
 #' \url{http://petermeissner.de:8880/}

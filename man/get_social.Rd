@@ -30,25 +30,14 @@ A data frame with columns as specified above.
 Fetches social media handles and website URLs of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-\donttest{## assign entire core dataset into the environment
-aut_politicians <- get_core(legislature = "aut")
+# Get entire 'Social' table forthe UK House of Commons
+gbr_social <- get_social(legislature = "gbr")
+tibble::glimpse(gbr_social)
 
-## assign only data for the 12th legislative session into the environment
-aut_politicians_subset <- dplyr::semi_join(x = get_core(legislature = "aut"),
-                                           y = dplyr::filter(get_political(legislature = "aut"),
-                                                                     session == 8),
-                                           by = "pageid")
-
-## join aut_politicians_subset with respective history dataset
-aut_politicians_history <- dplyr::left_join(x = aut_politicians_subset,
-                                            y = get_history(legislature = "aut"),
-                                            by = "pageid")
-
-## assign only birthdate for members of the political party 'SdP' into the environment
-aut_birthdates_SdP <- dplyr::semi_join(x = dplyr::select(get_core(legislature = "aut"),
-                                                         pageid, birth),
-                                       y = dplyr::filter(get_political(legislature = "aut"),
-                                                                       party == "SdP"),
-                                       by = "pageid")$birth
-}
+# Get 'Social' table for members of the UK House of Commons with available TheyWorkForYou ID
+gbr_social_subset <- dplyr::semi_join(x = gbr_social,
+                                      y = dplyr::filter(get_ids(legislature = "gbr"),
+                                                        !is.na(theyworkforyou)),
+                                      by = "wikidataid")
+tibble::glimpse(gbr_social_subset)
 }
