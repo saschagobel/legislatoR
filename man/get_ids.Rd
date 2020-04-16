@@ -53,14 +53,14 @@ A data frame with columns as specified above.
 Fetches a range of IDs of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'IDs' table for the Austrian Nationalrat
-aut_ids <- get_ids(legislature = "aut")
-tibble::glimpse(aut_ids)
+# Get entire 'IDs' table for the for the United States Senate
+usa_ids <- get_ids(legislature = "usa_senate")
+tibble::glimpse(usa_ids)
 
-# Get ParlSpeech IDs and add 'Offices' table for the Austrian Nationalrat
-#aut_ids_subset <- dplyr::inner_join(x = dplyr::filter(aut_ids,
-#                                                       !is.na(parlspeech)),
-#                                     y = get_office(legislature = "aut"),
-#                                     by = "wikidataid")
-# tibble::glimpse(aut_ids_subset)
+Get ICPSR IDs and add 'Offices' table for the United States House
+usa_ids_subset <- dplyr::inner_join(x = dplyr::filter(usa_ids,
+                                                      !is.na(icpsr)),
+                                    y = get_office(legislature = "usa_senate"),
+                                    by = "wikidataid")
+tibble::glimpse(usa_ids_subset)
 }
