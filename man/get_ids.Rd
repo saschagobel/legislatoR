@@ -57,7 +57,7 @@ Fetches a range of IDs of legislators for the specified legislature. Requires a 
 usa_ids <- get_ids(legislature = "usa_senate")
 tibble::glimpse(usa_ids)
 
-Get ICPSR IDs and add 'Offices' table for the United States House
+# Get ICPSR IDs and add 'Offices' table for the United States House
 usa_ids_subset <- dplyr::inner_join(x = dplyr::filter(usa_ids,
                                                       !is.na(icpsr)),
                                     y = get_office(legislature = "usa_senate"),
