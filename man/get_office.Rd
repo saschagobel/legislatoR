@@ -26,14 +26,14 @@ A data frame with columns as specified above.
 Fetches political and other offices of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'Offices' table for the French Assemblée
-fra_offices <- get_office(legislature = "fra")
-# tibble::glimpse(fra_offices)
+# Get entire 'Offices' table for the United States Senate
+usa_offices <- get_office(legislature = "usa_senate")
+tibble::glimpse(usa_offices)
 
-# Get 'Offices' table for male members of the French Assemblée
-# fra_offices_subset <- dplyr::semi_join(x = fra_offices,
-#                                        y = dplyr::filter(get_core(legislature = "fra"),
-#                                                            sex == "female"),
-#                                          by = "wikidataid")
-# tibble::glimpse(fra_offices_subset)
+# Get 'Offices' table for male members of the United States Senate
+usa_offices_subset <- dplyr::semi_join(x = usa_offices,
+                                       y = dplyr::filter(get_core(legislature = "usa_senate"),
+                                                           sex == "female"),
+                                         by = "wikidataid")
+tibble::glimpse(usa_offices_subset)
 }
