@@ -53,14 +53,14 @@ A data frame with columns as specified above.
 Fetches a range of IDs of legislators for the specified legislature. Requires a working Internet connection.
 }
 \examples{
-# Get entire 'IDs' table for the Spanish Congreso de los Diputados
-esp_ids <- get_ids(legislature = "esp")
-tibble::glimpse(esp_ids)
+# Get entire 'IDs' table for the Irish Dail
+irl_ids <- get_ids(legislature = "irl")
+tibble::glimpse(irl_ids)
 
-# Get ParlSpeech IDs and add 'Offices' table for the Spanish Congreso de los Diputados
-esp_ids_subset <- dplyr::inner_join(x = dplyr::filter(esp_ids,
-                                                      !is.na(parlspeech)),
-                                    y = get_office(legislature = "esp"),
+# Get DPSI IDs and add 'Offices' table for the Irish Dail
+irl_ids_subset <- dplyr::inner_join(x = dplyr::filter(irl_ids,
+                                                      !is.na(dpsi)),
+                                    y = get_office(legislature = "irl"),
                                     by = "wikidataid")
-tibble::glimpse(esp_ids_subset)
+tibble::glimpse(irl_ids_subset)
 }
