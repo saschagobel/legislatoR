@@ -44,11 +44,11 @@
 #' tibble::glimpse(aut_ids)
 #'
 #' # Get ParlSpeech IDs and add 'Offices' table for the Austrian Nationalrat
-#' aut_ids_subset <- dplyr::inner_join(x = dplyr::filter(aut_ids,
-#'                                                       !is.na(parlspeech)),
-#'                                     y = get_office(legislature = "aut"),
-#'                                     by = "wikidataid")
-#' tibble::glimpse(aut_ids_subset)
+#' #aut_ids_subset <- dplyr::inner_join(x = dplyr::filter(aut_ids,
+#'#                                                       !is.na(parlspeech)),
+#'#                                     y = get_office(legislature = "aut"),
+#'#                                     by = "wikidataid")
+#'# tibble::glimpse(aut_ids_subset)
 #' @source
 #' Wikidata API, \url{https://www.wikidata.org/}
 #' @export
