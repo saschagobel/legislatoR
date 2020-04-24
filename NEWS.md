@@ -1,4 +1,4 @@
-# legislatoR 1.0
+﻿# legislatoR 1.0
   
 * All legislative periods of Spain's Congreso de los Diputados added to the database (14 in total).
 * Ongoing session of the Austrian Nationalrat added to the database (27th) and concluded session updated (26th).
@@ -13,6 +13,7 @@
 * Daily Wikipedia page traffic now goes back to December 2007 (except for the US House, where file storage restrictions currently limit traffic to range back to July 2009 only).
 * New `cld_content()` function that offers a quick overview of the CLD's scope and valid three-letter country codes, and helps to conventiently loop/map over legislatures and sessions.
 * "Introducing legislatoR" Vignette added.
+* Now available via CRAN
 * New Logo/Hexsticker.
 
 

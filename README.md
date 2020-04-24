@@ -1,4 +1,4 @@
-# legislatoR: Interface to the Comparative <img src="images/sticker.jpg" width="160" align="right" /> <br /> Legislators Database
+﻿# legislatoR: Interface to the Comparative <img src="images/sticker.jpg" width="160" align="right" /> <br /> Legislators Database
 
 [![Travis-CI Build Status](https://travis-ci.org/saschagobel/legislatoR.svg?branch=master)](https://travis-ci.org/saschagobel/legislatoR)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -57,7 +57,13 @@ The CLD comes as a relational database. This means that all tables can be joined
 </p>
 
 ## Installation
-legislatoR is available through GitHub. To install the package in `R`, type:
+legislatoR is available through CRAN and GitHub. To install the package from CRAN, type:
+
+```r
+install.packages("legislatoR")
+```
+
+To install the package from Github, type:
 
 ```r
 devtools::install_github("saschagobel/legislatoR")
