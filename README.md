@@ -1,10 +1,12 @@
-﻿# legislatoR: Interface to the Comparative <img src="images/sticker.jpg" width="160" align="right" /> <br /> Legislators Database
+# Comparative Legislators Database <img style='background:white; border:none; box-shadow:none;' src='man/figures/sticker.jpg' width='175' align='right' />
 
+<!-- badges: start --> 
 [![Travis-CI Build Status](https://travis-ci.org/saschagobel/legislatoR.svg?branch=master)](https://travis-ci.org/saschagobel/legislatoR)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/legislatoR)](https://cran.r-project.org/package=legislatoR)
 [![GitHub release version](https://img.shields.io/github/release/saschagobel/legislatoR.svg?style=flat)](https://github.com/saschagobel/legislatoR/releases)
 [![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/grand-total/legislatoR)](https://cran.rstudio.com/web/packages/legislatoR/index.html)
+<!-- badges: end -->
 
 legislatoR is a package for the software environment R that facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 45,000 contemporary and historical politicians from ten countries.
 
@@ -54,7 +56,7 @@ Note that for some legislatures or legislative periods, tables may only hold inf
 The CLD comes as a relational database. This means that all tables can be joined with the *Core* table via one of two keys - the Wikipedia page ID or the Wikidata ID. These keys uniquely identify individual politicians. The figure below illustrates this structure and the CLD's content.
 
 <p align="center">
-  <img width="500" src="images/data-structure.png">
+  <img width="500" src="man/figures/data-structure.png">
 </p>
 
 ## Installation
