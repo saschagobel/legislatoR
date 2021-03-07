@@ -19,11 +19,11 @@ The CLD covers the following countries and time periods:
 | France (Assemblée)                   | all 15<br /> (1958-2017)    | 3,933                |                    |
 | Germany (Bundestag)                  | all 19<br /> (1949-2017)    | 4,075                | [BTVote data](https://dataverse.harvard.edu/dataverse/btvote) (Bergmann et al. 2018),<br /> [ParlSpeech V1](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/E4RSP9) (Rauh et al. 2017),<br /> [Reelection Prospects data](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/EBEDPI) (Stoffel/Sieberer 2017)   |
 | Ireland (Dail)                       | all 33<br /> (1918-2020)          | 1,408                |	[Database of Parliamentary Speeches in Ireland](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6MZN76) (Herzog/Mikhaylov 2017)	|
-| Scotland (Parliament)                | all 5<br /> (1999-2016)           | 305                  |       			 |
+| Scotland (Parliament)                | all 5<br /> (1999-2016)           | 305                  | [ParlScot](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/EQ9WBE) (Braby/Fraser 2021)      			 |
 | Spain (Congreso de los Diputados)    | all 14<br /> (1979-2019)          | 2634           | [ParlSpeech V2](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/L4OAKN) (Rauh/Schwalbach 2020)      |        
 | United Kingdom (House of Commons)    | all 58<br /> (1801-2019)          | 13,215               | [EggersSpirling data](https://github.com/ArthurSpirling/EggersSpirlingDatabase) (starting from <br /> 38th session, Eggers/Spirling 2014),<br /> [ParlSpeech V1](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/E4RSP9) (Rauh et al. 2017) | 
 | United States (House and Senate)     | all 116<br /> (1789-2019)         | 12,512               | [Voteview data](https://voteview.com/data) (Lewis et al. 2019), <br /> [Congressional Bills Project data](http://www.congressionalbills.org/) (Adler/Wilkserson 2018) |
-| **10**                                | **338**                     | **45,540**           | **11** 		       |
+| **10**                                | **338**                     | **45,540**           | **12** 		       |
 
 For each legislature, the CLD holds nine tables:
 
