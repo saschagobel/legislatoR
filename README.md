@@ -119,7 +119,7 @@ The CLD was predominantly built using automated data extraction techniques. See 
 ## Citation
 Thank you for using the CLD and legislatoR! Please consider citing:
 
-Göbel, Sascha and Simon Munzert. (2020). The Comparative Legislators Database. Source: https://github.com/saschagobel.
+Göbel, Sascha and Simon Munzert. "The Comparative Legislators Database". Forthcoming at *British Journal of Political Science*.
 
 ## Support
 The work on this package was in part funded by the Daimler and Benz Foundation (Funding period 2017/18; project "Citizen and Elite Activity on the Wikipedia Market Place of Political Information").
