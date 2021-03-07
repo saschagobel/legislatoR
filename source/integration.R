@@ -881,3 +881,14 @@ colnames(ireland_ids)[11] <- "dpsi"
 ireland_ids <- ireland_ids[-which(rowSums(is.na(ireland_ids)) == ncol(ireland_ids)-1),]
 saveRDS(ireland_ids, "./package/legislatoR-data-v1.0.0/irl_ids")
 
+
+#### INTEGRATE parlScot WITH LEGISLATOR =================================================
+parlScot <- vroom("./data/pol_sci_data/parlScotch_CLD.csv")
+scotland_ids <- readRDS("./package/legislatoR-data-v2.0.0/sco_ids")
+scotland_ids <- full_join(scotland_ids, parlScot[,c("parl_id", "wikidataid")], by = "wikidataid")
+colnames(scotland_ids)[9] <- "parlScot"
+saveRDS(scotland_ids, "./package/legislatoR-data-v2.0.0/sco_ids")
+
+
+
+
