@@ -5,7 +5,7 @@
 [![GitHub release version](https://img.shields.io/github/release/saschagobel/legislatoR.svg?style=flat)](https://github.com/saschagobel/legislatoR/releases)
 [![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/grand-total/legislatoR)](https://cran.rstudio.com/web/packages/legislatoR/index.html)
 
-legislatoR is a package for the software environment R that facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 67,000 contemporary and historical politicians from ten countries. Data is also available for download in .csv and .sqlite formats at the [CLD's Dataverse](https://dataverse.harvard.edu/dataverse/cld).
+legislatoR is a package for the software environment R that facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 67,000 contemporary and historical politicians from ten countries. Data are also available for download in .csv and .sqlite formats at the [CLD's Dataverse](https://dataverse.harvard.edu/dataverse/cld).
 
 ## Content and data structure
 The CLD covers the following countries and time periods:
