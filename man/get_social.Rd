@@ -17,7 +17,7 @@ Data frame with columns (varies by legislature):
 }
 }
 \source{
-Wikidata API, \url{https://www.wikidata.org/}
+Wikidata API, \url{https://www.wikidata.org/wiki/Wikidata:Main_Page}
 }
 \usage{
 get_social(legislature)

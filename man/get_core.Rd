@@ -21,12 +21,12 @@ Data frame with columns (varies by legislature):
 }
 }
 \source{
-Wikipedia, \url{https://wikipedia.org/} \cr
-Wikipedia API, \url{https://wikipedia.org/w/api.php} \cr
-Wikidata API, \url{https://www.wikidata.org/} \cr
-Wikimedia Commons, \url{https://commons.wikimedia.org/} \cr
+Wikipedia, \url{https://www.wikipedia.org/} \cr
+Wikipedia API, \url{https://en.wikipedia.org/w/api.php} \cr
+Wikidata API, \url{https://www.wikidata.org/wiki/Wikidata:Main_Page} \cr
+Wikimedia Commons, \url{https://commons.wikimedia.org/wiki/Main_Page} \cr
 Face++ Cognitive Services API, \url{https://www.faceplusplus.com/} \cr
-Germany Bundestag Open Data, \url{https://www.bundestag.de/service/opendata}
+Germany Bundestag Open Data, \url{https://www.bundestag.de/services/opendata}
 }
 \usage{
 get_core(legislature)

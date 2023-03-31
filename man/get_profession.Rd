@@ -13,7 +13,7 @@ Data frame in wide format with columns (varies by legislature):
 }
 }
 \source{
-Wikidata API, \url{https://www.wikidata.org/}
+Wikidata API, \url{https://www.wikidata.org/wiki/Wikidata:Main_Page}
 }
 \usage{
 get_profession(legislature)

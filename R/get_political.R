@@ -32,9 +32,9 @@
 #' tibble::glimpse(cze_political_subset)
 #' }
 #' @source
-#' Wikipedia, \url{https://wikipedia.org/} \cr
-#' Czech Republic Parliamentary Members Archive \url{http://public.psp.cz/sqw/fsnem.sqw?zvo=1} \cr
-#' Spain Parliamentary Members Archive \url{http://www.congreso.es/portal/page/portal/Congreso/Congreso/Diputados}
+#' Wikipedia, \url{https://www.wikipedia.org/} \cr
+#' Czech Republic Parliamentary Members Archive \url{https://public.psp.cz/sqw/fsnem.sqw?zvo=1} \cr
+#' Spain Parliamentary Members Archive \url{https://www.congreso.es/es/busqueda-de-diputados}
 #' @export
 #' @importFrom curl nslookup
 #' @import dplyr

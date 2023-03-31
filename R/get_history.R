@@ -28,7 +28,7 @@
 #' tibble::glimpse(aut_history_subset)
 #' }
 #' @source
-#' Wikipedia API, \url{https://wikipedia.org/w/api.php}
+#' Wikipedia API, \url{https://en.wikipedia.org/w/api.php}
 #' @export
 #' @importFrom curl nslookup
 #' @import dplyr

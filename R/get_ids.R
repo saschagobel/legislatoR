@@ -51,7 +51,7 @@
 #' tibble::glimpse(usa_ids_subset)
 #' }
 #' @source
-#' Wikidata API, \url{https://www.wikidata.org/}
+#' Wikidata API, \url{https://www.wikidata.org/wiki/Wikidata:Main_Page}
 #' @export
 #' @importFrom curl nslookup
 #' @import dplyr

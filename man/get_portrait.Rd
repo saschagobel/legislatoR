@@ -11,8 +11,8 @@ Data frame with columns (varies by legislature):
 }
 }
 \source{
-Wikipedia API, \url{https://wikipedia.org/w/api.php} \cr
-Wikimedia Commons, \url{https://commons.wikimedia.org/}
+Wikipedia API, \url{https://en.wikipedia.org/w/api.php} \cr
+Wikimedia Commons, \url{https://commons.wikimedia.org/wiki/Main_Page}
 }
 \usage{
 get_portrait(legislature)

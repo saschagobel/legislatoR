@@ -28,7 +28,7 @@
 #' tibble::glimpse(gbr_social_subset)
 #' }
 #' @source
-#' Wikidata API, \url{https://www.wikidata.org/}
+#' Wikidata API, \url{https://www.wikidata.org/wiki/Wikidata:Main_Page}
 #' @export
 #' @importFrom curl nslookup
 #' @import dplyr

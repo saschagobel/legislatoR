@@ -17,7 +17,7 @@ Data frame with columns:
 }
 }
 \source{
-Wikipedia API, \url{https://wikipedia.org/w/api.php}
+Wikipedia API, \url{https://en.wikipedia.org/w/api.php}
 }
 \usage{
 get_history(legislature)
