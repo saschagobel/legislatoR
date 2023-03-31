@@ -3,12 +3,14 @@
 \name{get_traffic}
 \alias{get_traffic}
 \title{Fetch Wikipedia 'Traffic' table}
-\format{Data frame with columns:
+\format{
+Data frame with columns:
 \itemize{
 \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
 \item{date: Date for which user traffic is recorded, from 2015-07-01 to 2018-12-31 UTC (of class \sQuote{POSIXct}).}
 \item{traffic: Daily non-unique user visits (of class \sQuote{numeric}).}
-}}
+}
+}
 \source{
 Wikimedia API, \url{https://wikimedia.org/api/rest_v1/} \cr
 \url{http://petermeissner.de:8880/}

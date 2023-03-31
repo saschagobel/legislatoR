@@ -32,9 +32,10 @@ get_traffic <- function(legislature) {
   if (length(legislature) > 1) {
     stop ("\n\nNo more than one legislature can be called at once. Please provide only one valid three-letter country code.")
   }
-  if (!(legislature %in% c("aut", "can", "cze",
-                           "esp", "fra", "deu",
-                           "irl", "sco", "gbr",
+  if (!(legislature %in% c("aut", "bra", "can", "cze",
+                           "deu", "esp", "fra", "gbr",
+                           "irl", "isr", "ita_house", "ita_senate",
+                           "jpn", "nld", "sco", "tur",
                            "usa_house", "usa_senate"))) {
     stop (paste0("\n\nPlease provide a valid three-letter country code. legislatoR does not recognize the country code or does not contain data for ",
                  paste0(
@@ -42,11 +43,13 @@ get_traffic <- function(legislature) {
                    collapse = ", "),
                  ". Use `legislatoR::cld_content()` to see country codes of available legislatures."))
   }
-  if (is.null(curl::nslookup("www.github.com", error = FALSE))) {
-    stop ("\n\nlegislatoR cannot establish a connection to GitHub. Please check your Internet connection and whether GitHub is online.")
+  if (is.null(curl::nslookup("www.harvard.edu", error = FALSE))) {
+    stop ("\n\nlegislatoR cannot establish a connection to Harvard Dataverse. Please check your Internet connection and whether Harvard Dataverse is online.")
   }
-  ghurl <- paste0("https://github.com/saschagobel/legislatoR-data/blob/master/data/", legislature, "_traffic?raw=true")
-  connect <- url(ghurl)
+  endpoint <- "https://dataverse.harvard.edu/api/access/datafile/"
+  file_id <- sysdata %>% filter(.data$table == "traffic" & .data$country == legislature)
+  dvurl <- paste0(endpoint, file_id$id)
+  connect <- url(dvurl)
   on.exit(close(connect))
   dataset <- readRDS(connect)
   return(dataset)

@@ -3,11 +3,13 @@
 \name{get_portrait}
 \alias{get_portrait}
 \title{Fetch 'Portrait' table}
-\format{Data frame with columns (varies by legislature):
+\format{
+Data frame with columns (varies by legislature):
 \itemize{
 \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
 \item{image_url: URL linking to a legislator's portrait on Wikimedia Commons (of class \sQuote{character}).}
-}}
+}
+}
 \source{
 Wikipedia API, \url{https://wikipedia.org/w/api.php} \cr
 Wikimedia Commons, \url{https://commons.wikimedia.org/}

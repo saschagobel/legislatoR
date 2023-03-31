@@ -3,7 +3,8 @@
 \name{get_ids}
 \alias{get_ids}
 \title{Fetch 'IDs' table}
-\format{Data frame with columns (varies by legislature):
+\format{
+Data frame with columns (varies by legislature):
 \itemize{
 \item{wikidataid: Wikidata ID identifying a legislator's Wikidata entry (of class \sQuote{character}).}
 \item{parlid: Parliamentary website or website ID  (of class \sQuote{character}).}
@@ -36,7 +37,8 @@
 \item{hansard: Hansard (1803-2005) ID (of class \sQuote{character}).}
 \item{publicwhip: PublicWhip ID (of class \sQuote{character}).}
 \item{theyworkforyou: TheyWorkForYou ID (of class \sQuote{character}).}
-}}
+}
+}
 \source{
 Wikidata API, \url{https://www.wikidata.org/}
 }

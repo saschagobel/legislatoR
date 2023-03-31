@@ -3,7 +3,8 @@
 \name{get_political}
 \alias{get_political}
 \title{Fetch 'Political' table}
-\format{Data frame in long format with columns (varies by legislature):
+\format{
+Data frame in long format with columns (varies by legislature):
 \itemize{
 \item{pageid: Wikipedia page ID identifying a legislator's Wikipedia biography (of class \sQuote{integer}).}
 \item{session: Legislative period (of class \sQuote{integer}).}
@@ -16,7 +17,8 @@
 \item{service: A legislator's period of service in days during the respective session (of class \sQuote{integer})}
 \item{government (or similar): Indicator of a legislator's majority status in parliament (of class \sQuote{logical}). Further columns with extensions of this might exist.}
 \item{leader (or similar): Indicator of a legislator's leader status in parliament (of class \sQuote{logical}). Further columns with extensions of this might exist.}
-}}
+}
+}
 \source{
 Wikipedia, \url{https://wikipedia.org/} \cr
 Czech Republic Parliamentary Members Archive \url{http://public.psp.cz/sqw/fsnem.sqw?zvo=1} \cr

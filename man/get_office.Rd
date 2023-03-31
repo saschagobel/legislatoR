@@ -3,13 +3,15 @@
 \name{get_office}
 \alias{get_office}
 \title{Fetch 'Offices' table}
-\format{Data frame in wide format with columns (varies by legislature):
+\format{
+Data frame in wide format with columns (varies by legislature):
 \itemize{
 \item{wikidataid: Wikidata ID identifying a legislator's Wikidata entry (of class \sQuote{character}).}
 \item{office_1: political or other office held by a legislator (of class \sQuote{logical}).}
 \item{office_2: ... (of class \sQuote{logical}).}
 \item{...}
-}}
+}
+}
 \source{
 Wikidata API, \url{https://www.wikidata.org/}
 }

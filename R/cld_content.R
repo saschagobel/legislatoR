@@ -14,20 +14,23 @@
 #' tibble::glimpse(sessions)
 #' @export
 cld_content <- function(legislature = NULL) {
-  output <-  list(aut = 1:27, can = 1:43, cze = 1:8,
-                  esp = 1:15, fra = 1:15, deu = 1:19,
-                  irl = 1:33, sco = 1:5, gbr = 1:58,
-                  usa_house = 1:116, usa_senate = 1:116)
+  output <-  list(aut = 1:27, bra = 38:57, can = 1:44, cze = 1:9,
+                  deu = 1:20, esp = 1:14, fra = 1:16, gbr = 1:58,
+                  irl = 1:33, isr = 1:25, ita_house = 1:19, ita_senate = 1:19,
+                  jpn = 1:49, nld = 1:65, sco = 1:6, tur = 1:27,
+                  usa_house = 1:117, usa_senate = 1:117)
   if (is.null(legislature)) {
     return(output)
   } else {
-    if (any(!(legislature %in% c("aut", "can", "cze",
-                                 "esp", "fra", "deu",
-                                 "irl", "sco", "gbr",
+    if (any(!(legislature %in% c("aut", "bra", "can", "cze",
+                                 "deu", "esp", "fra", "gbr",
+                                 "irl", "isr", "ita_house", "ita_senate",
+                                 "jpn", "nld", "sco", "tur",
                                  "usa_house", "usa_senate")))) {
-      legislature <- legislature[which(!(legislature %in% c("aut", "can", "cze",
-                                                            "esp", "fra", "deu",
-                                                            "irl", "sco", "gbr",
+      legislature <- legislature[which(!(legislature %in% c("aut", "bra", "can", "cze",
+                                                            "deu", "esp", "fra", "gbr",
+                                                            "irl", "isr", "ita_house", "ita_senate",
+                                                            "jpn", "nld", "sco", "tur",
                                                             "usa_house", "usa_senate")))]
       stop (paste0("\n\nPlease provide valid three-letter country codes. legislatoR does not recognize the country code or does not contain data for ",
                    paste0(

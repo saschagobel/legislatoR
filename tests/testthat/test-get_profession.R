@@ -21,7 +21,7 @@ test_that("Professions table is returned appropriately for each legislature", {
   expect_identical(class(get_profession("usa_house")), "data.frame")
   Sys.sleep(1)
   expect_identical(class(get_profession("usa_senate")), "data.frame")
-  Sys.sleep(1)
+  Sys.sleep(100)
 
   expect_true(all(dim(get_profession("aut")) > 0))
   Sys.sleep(1)
@@ -44,7 +44,7 @@ test_that("Professions table is returned appropriately for each legislature", {
   expect_true(all(dim(get_profession("usa_house")) > 0))
   Sys.sleep(1)
   expect_true(all(dim(get_profession("usa_senate")) > 0))
-  Sys.sleep(1)
+  Sys.sleep(100)
 
   expect_identical(colnames(get_profession("aut"))[1], c("wikidataid"))
   Sys.sleep(1)
@@ -67,5 +67,5 @@ test_that("Professions table is returned appropriately for each legislature", {
   expect_identical(colnames(get_profession("usa_house"))[1], c("wikidataid"))
   Sys.sleep(1)
   expect_identical(colnames(get_profession("usa_senate"))[1], c("wikidataid"))
-  Sys.sleep(1)
+  Sys.sleep(100)
 })

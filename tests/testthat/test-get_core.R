@@ -21,7 +21,7 @@ test_that("Core table is returned appropriately for each legislature", {
   expect_identical(class(get_core("usa_house")), "data.frame")
   Sys.sleep(1)
   expect_identical(class(get_core("usa_senate")), "data.frame")
-  Sys.sleep(1)
+  Sys.sleep(100)
 
   expect_true(all(dim(get_core("aut")) > 0))
   Sys.sleep(1)
@@ -44,7 +44,7 @@ test_that("Core table is returned appropriately for each legislature", {
   expect_true(all(dim(get_core("usa_house")) > 0))
   Sys.sleep(1)
   expect_true(all(dim(get_core("usa_senate")) > 0))
-  Sys.sleep(1)
+  Sys.sleep(100)
 
   expect_identical(colnames(get_core("aut"))[1:3], c("country", "pageid", "wikidataid"))
   Sys.sleep(1)
@@ -67,7 +67,7 @@ test_that("Core table is returned appropriately for each legislature", {
   expect_identical(colnames(get_core("usa_house"))[1:3], c("country", "pageid", "wikidataid"))
   Sys.sleep(1)
   expect_identical(colnames(get_core("usa_senate"))[1:3], c("country", "pageid", "wikidataid"))
-  Sys.sleep(1)
+  Sys.sleep(100)
 
   expect_identical(sample(get_core("aut")$country, 1), "AUT")
   Sys.sleep(1)
@@ -90,5 +90,5 @@ test_that("Core table is returned appropriately for each legislature", {
   expect_identical(sample(get_core("usa_house")$country, 1), "USA-H")
   Sys.sleep(1)
   expect_identical(sample(get_core("usa_senate")$country, 1), "USA-S")
-  Sys.sleep(1)
+  Sys.sleep(100)
 })

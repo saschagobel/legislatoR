@@ -3,13 +3,15 @@
 \name{get_profession}
 \alias{get_profession}
 \title{Fetch 'Professions' table}
-\format{Data frame in wide format with columns (varies by legislature):
+\format{
+Data frame in wide format with columns (varies by legislature):
 \itemize{
 \item{wikidataid: Wikidata ID identifying a legislator's Wikidata entry (of class \sQuote{character}).}
 \item{occupation_1: occupation a legislator practiced or was trained in (of class \sQuote{logical}).}
 \item{occupation_2: ... (of class \sQuote{logical}).}
 \item{...}
-}}
+}
+}
 \source{
 Wikidata API, \url{https://www.wikidata.org/}
 }

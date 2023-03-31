@@ -1,16 +1,15 @@
 Package: legislatoR
 Title: Interface to the Comparative Legislators Database
-Description: Facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 45,000 contemporary and historical politicians from ten countries.
-Version: 1.0
+Description: Facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 67,000 contemporary and historical politicians from ten countries.
+Version: 1.1
 Authors@R: c(
-    person("Sascha", "Goebel", email = "sascha.goebel@uni-konstanz.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9032-5874")),
+    person("Sascha", "Goebel", email = "sascha.goebel@soz.uni-frankfurt.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9032-5874")),
     person("Simon", "Munzert", role = "aut"))
 URL: https://github.com/saschagobel/legislatoR
 BugReports: https://github.com/saschagobel/legislatoR/issues
 License: GPL-3
-LazyData: true
 Depends:
-    R (>= 3.4.0)
+    R (>= 3.5.0)
 Imports:
     curl (>= 3.0),
     dplyr (>= 0.7.4)
@@ -25,4 +24,4 @@ Suggests:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.2

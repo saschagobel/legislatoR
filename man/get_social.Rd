@@ -3,7 +3,8 @@
 \name{get_social}
 \alias{get_social}
 \title{Fetch 'Social' table}
-\format{Data frame with columns (varies by legislature):
+\format{
+Data frame with columns (varies by legislature):
 \itemize{
 \item{wikidataid: Wikidata ID identifying a legislator's Wikidata entry (of class \sQuote{character}).}
 \item{twitter: Twitter handle (of class \sQuote{character}).}
@@ -13,7 +14,8 @@
 \item{instagram: Instagram handle (of class \sQuote{character}).}
 \item{linkedin: LinkedIn ID (of class \sQuote{character}).}
 \item{website: Personal website URL (of class \sQuote{character}).}
-}}
+}
+}
 \source{
 Wikidata API, \url{https://www.wikidata.org/}
 }

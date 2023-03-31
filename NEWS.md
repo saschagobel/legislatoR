@@ -1,4 +1,11 @@
-﻿# legislatoR 1.0
+# legislatoR 1.1
+
+* Data for Canada, Czech Republic, France, Germany, Scotland, and USA updated
+* Data for Brazil, Israel, Italy, Japan, Netherlands, and Turkey newly added
+* All data moved to Harvard Dataverse
+
+
+# legislatoR 1.0
   
 * All legislative periods of Spain's Congreso de los Diputados added to the database (14 in total).
 * Ongoing session of the Austrian Nationalrat added to the database (27th) and concluded session updated (26th).

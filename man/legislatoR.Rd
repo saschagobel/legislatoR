@@ -3,7 +3,6 @@
 \docType{package}
 \name{legislatoR}
 \alias{legislatoR}
-\alias{legislatoR-package}
 \title{legislatoR}
 \description{
 Facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 45,000 contemporary and historical politicians from ten countries.

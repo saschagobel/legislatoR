@@ -21,7 +21,7 @@ test_that("Wikipedia History table is returned appropriately for each legislatur
   expect_identical(class(get_history("usa_house")), "data.frame")
   Sys.sleep(1)
   expect_identical(class(get_history("usa_senate")), "data.frame")
-  Sys.sleep(1)
+  Sys.sleep(100)
 
   expect_true(all(dim(get_history("aut")) > 0))
   Sys.sleep(1)
@@ -44,7 +44,7 @@ test_that("Wikipedia History table is returned appropriately for each legislatur
   expect_true(all(dim(get_history("usa_house")) > 0))
   Sys.sleep(1)
   expect_true(all(dim(get_history("usa_senate")) > 0))
-  Sys.sleep(1)
+  Sys.sleep(100)
 
   expect_identical(colnames(get_history("aut"))[1], c("pageid"))
   Sys.sleep(1)
@@ -67,5 +67,5 @@ test_that("Wikipedia History table is returned appropriately for each legislatur
   expect_identical(colnames(get_history("usa_house"))[1], c("pageid"))
   Sys.sleep(1)
   expect_identical(colnames(get_history("usa_senate"))[1], c("pageid"))
-  Sys.sleep(1)
+  Sys.sleep(100)
 })
