@@ -1,7 +1,7 @@
 Package: legislatoR
 Title: Interface to the Comparative Legislators Database
 Description: Facilitates access to the Comparative Legislators Database (CLD). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 67,000 contemporary and historical politicians from ten countries.
-Version: 1.1
+Version: 1.1.0
 Authors@R: c(
     person("Sascha", "Goebel", email = "sascha.goebel@soz.uni-frankfurt.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9032-5874")),
     person("Simon", "Munzert", role = "aut"))
