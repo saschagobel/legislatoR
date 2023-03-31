@@ -30,7 +30,7 @@ The CLD covers the following countries and time periods:
 | United States (House and Senate)     | all 117<br /> (1789-2021)         | 12,593               | [Voteview data](https://voteview.com/data) (Lewis et al. 2019), <br /> [Congressional Bills Project data](http://www.congressionalbills.org/) (Adler/Wilkserson 2018) |
 | **16**                                | **529**                     | **67,945**           | **12** 		       |
 
-\* We only count legislators with a unique Wikipedia page or Wikidata ID. Sometimes legislators do not have either. Such cases are indicated by the string "miss" in the wikidata or pageid.
+\* We only count legislators with a unique Wikipedia page or Wikidata ID. Sometimes legislators do not have either. Such cases are indicated by the string "miss" in the wikidataid or pageid.
 
 For each legislature, the CLD holds nine tables:
 
