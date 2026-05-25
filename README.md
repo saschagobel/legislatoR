@@ -5,6 +5,13 @@
 [![GitHub release version](https://img.shields.io/github/release/saschagobel/legislatoR.svg?style=flat)](https://github.com/saschagobel/legislatoR/releases)
 [![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/grand-total/legislatoR)](https://cran.rstudio.com/web/packages/legislatoR/index.html)
 
+> [!NOTE]
+> `legislatoR` remains available and usable, but is currently not under active development.
+>
+> The package was originally built to provide convenient access to the Comparative Legislators Database (CLD) from R. While the current data representation works for this use case, future development of the broader data infrastructure should revisit schema design and automated data collection workflows.
+>
+> There is preliminary, currently inactive work in this direction in a separate private repository. If you are interested in contributing to `legislatoR` or the associated data infrastructure, feel free to reach out.
+
 legislatoR is a package for the software environment R that facilitates access to the [Comparative Legislators Database (CLD)](https://complegdatabase.com/). The CLD includes political, sociodemographic, career, online presence, public attention, and visual information for over 67,000 contemporary and historical politicians from 16 countries. Data are also available for download in .csv and .sqlite formats at the [CLD's Dataverse](https://dataverse.harvard.edu/dataverse/cld).
 
 ## Content and data structure
@@ -135,14 +142,3 @@ The work on this package was in part funded by the Daimler and Benz Foundation (
 
 Many thanks to Anna Wunderling for designing legislatoR's logo.
 
-## Author information
-
-**Sascha Göbel** (corresponding author and repository maintainer) <br />
-Goethe University Frankfurt <br />
-Faculty of Social Sciences <br />
-Theodor-W.-Adorno-Platz 6 <br />
-60323 Frankfurt am Main, Germany <br />
-Email: sascha.goebel@soz.uni-frankfurt.de
-
-**Simon Munzert** <br />
-Hertie School
